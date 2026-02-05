@@ -1,115 +1,19 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-  
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>シイタケ劇場－シイタケガーデン：作物管理スケジュール</title>
-  <link rel="stylesheet" href="styles.css" />
-  <meta name="color-scheme" content="light dark" />
-  
- <!-- ▼▼ AdSense申請用（審査コード) ▼▼ -->
-<!--  https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-あなたのID</script> -->
-  <!-- ▲▲ ここまで ▲▲ -->
+---
+layout: default
+title: トップ
+description: 園芸を楽しみ、家庭果樹の管理を楽にするための情報サイト
+---
 
-</head>
-  
-<body>
-  <header>
-    <h1>作物管理スケジュール</h1>
-    <p class="subtitle">
-      共通フォーマット：作物 / 栽培形態 / 月 / 作業 / 施肥_種類 / N(g) / P(g) / K(g) / 施肥基準 / 施肥_メモ / 薬剤
-    </p>
-  </header>
+<section>
+  <h2>このサイトについて</h2>
+  <p>このサイトは、「園芸を楽しむこと」と「家庭果樹の管理を楽にすること」を目的に運営しています。</p>
+</section>
 
-  <section class="notice" aria-labelledby="region-note-title">
-    <h2 id="region-note-title">地域の読み替えガイド（表外の注意書き）</h2>
-    <p>
-      本表は <strong>暖地（静岡西部）</strong> をおおむね基準にしています。お住まいの地域がより寒冷（または温暖）な場合、
-      <strong>作業時期を±1〜3週間</strong> 程度シフトして運用してください。特に「遅霜対策」「開花・結実管理」「高温期の水管理」「防寒」は地域差が大きいので、
-      現地の気象に合わせて調整しましょう。
-    </p>
-  </section>
-
-  <section class="controls" aria-labelledby="controls-title">
-        
-    <h2 id="controls-title" class="sr-only">操作</h2>
-
-    <div class="upload">
-      <label for="csvFile">条件設定：</label>
-      <input type="file" id="csvFile" accept=".csv" style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;" aria-hidden="true" />
-      <!--<input type="file" id="csvFile" accept=".csv" />-->
-    <!-- <button id="loadSample" type="button">サンプルCSVを読み込む</button>-->
-      <button id="loadSample" type="button" hidden style="display:none">サンプルCSVを読み込む</button>
-    </div>
-
-    <div class="filters" role="group" aria-label="フィルタ">
-      <label>作物：
-        <select id="cropFilter" aria-label="作物フィルタ">
-          <option value="">（すべて）</option>
-        </select>
-      </label>
-      <label>月：
-        <select id="monthFilter" aria-label="月フィルタ">
-          <option value="">（すべて）</option>
-        </select>
-      </label>
-      <label>キーワード：
-        <input type="text" id="keyword" placeholder="作業・施肥・薬剤など" />
-      </label>
-      <button id="clearFilters" type="button">フィルタ解除</button>
-      <button id="exportCsv" type="button">表示中をCSV保存</button>
-    </div>
-    
-    <!-- 施肥以降の詳細列を表示/非表示するスイッチ -->
-    <label style="margin-left:8px;">
-      <input type="checkbox" id="toggleDetails" />
-      施肥・基準・薬剤などの詳細を表示
-    </label>
-
-    
-    <p id="status" class="status" role="status" aria-live="polite">
-      🔄 CSV未読込：上の「サンプルCSVを読み込む」か「CSVを読み込む」を実行してください。
-    </p>
-    <!-- 任意：画面で原因切り分けしやすい簡易ログ -->
-    <pre id="debugLog" style="white-space:pre-wrap;background:#fff;border:1px solid #e6e6ef;padding:8px;margin:8px 20px;"></pre>
-  </section>
-
-  <section class="table-wrap" aria-labelledby="table-title">
-    <h2 id="table-title" class="sr-only">作物管理表</h2>
-    <table id="schedule">
-      <thead>
-        <tr>
-          <th scope="col">作物</th>
-          <th scope="col">栽培形態</th>
-          <th scope="col">月</th>
-          <th scope="col">作業</th>
-          <th scope="col">施肥_種類</th>
-          <th scope="col">N(g)</th>
-          <th scope="col">P(g)</th>
-          <th scope="col">K(g)</th>
-          <th scope="col">施肥基準</th>
-          <th scope="col">施肥_メモ</th>
-          <th scope="col">薬剤</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </section>
-
-<footer>
-  <p>
-    © ＜シイタケ劇場＞シイタケガーデン：作物管理スケジュール /
-    CSVローカル読込対応（データはブラウザ内で処理、外部送信なし）
-  </p>  
-  <p>
-    <a href="./privacy.html">プライバシーポリシー</a>  <a>|</a> 
-    <a href="./contact.html">お問い合わせ</a> 
-  </p>
-</footer>
-
-  
-  <!-- 安心版 app.js（フォールバック・ヘッダー診断・1〜12月固定・ログ） -->
-  <script src="app.js?v=20260204"></script>
-</body>
-</html>
+<section>
+  <h2>コンテンツ</h2>
+  <ul>
+    <li><strong>管理スケジュール</strong> — /plant-care/こちら</a></li>
+    <li><strong>ガーデンオブジェの作り方（予定）</strong></li>
+    <li><strong>関連YouTube動画</strong></li>
+  </ul>
+</section>
