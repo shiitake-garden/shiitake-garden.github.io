@@ -22,5 +22,12 @@
     {{ content }}
   </main>
   {% include footer.html %}
+
+  {% if page.scripts %}
+    {% for s in page.scripts %}
+      {{ s }}</script>
+    {% endfor %}
+  {% endif %}
+  
 </body>
 </html>
