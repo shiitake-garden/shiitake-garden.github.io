@@ -26,7 +26,8 @@ h2{border-left:6px solid var(--brand); padding-left:10px}
 }
 
 .for-you li {
-  padding: 8px 0 8px 18px;
+  padding: 4px 0 4px 24px;
+  line-height: 1.4;
   position: relative;
 }
 
