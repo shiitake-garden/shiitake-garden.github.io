@@ -119,3 +119,18 @@ footer a {
 footer a:hover {
   text-decoration: underline;
 }
+/* === 管理スケジュール：詳細列の初期非表示 === */
+/* 例：5=施肥 / 6=基準 / 7=薬剤（必要に応じて数字を直してください） */
+.schedule-table.hide-details th:nth-child(5),
+.schedule-table.hide-details td:nth-child(5),
+.schedule-table.hide-details th:nth-child(6),
+.schedule-table.hide-details td:nth-child(6),
+.schedule-table.hide-details th:nth-child(7),
+.schedule-table.hide-details td:nth-child(7) {
+  display: none !important; /* 他のtableルールに勝つため保険で !important */
+}
+
+/* スマホ等で横スクロールを許可（任意） */
+.schedule-wrapper {
+  overflow-x: auto;
+}
