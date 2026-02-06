@@ -50,7 +50,7 @@ h1 {
 /*ヘッダー部分のスタイル*/
 .site-header {
   position: relative;
-  background-image: url('/assets/header-bg.jpg'); /* ← 横長の自然写真を置く */
+  background-image: url('/assets/header-bg.png'); /* ← 横長の自然写真を置く */
   background-size: cover;
   background-position: center;
   padding: 40px 20px;
