@@ -47,6 +47,14 @@ h1 {
   margin: 40px 0 25px;
   letter-spacing: 1px;
 }
+h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #3a5f0b; /* 落ち着いた緑 */
+  text-align: center;
+  margin: 20px 0 10px;
+  letter-spacing: 1px;
+}
 /*ヘッダー部分のスタイル*/
 .site-header {
   position: relative;
