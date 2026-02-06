@@ -1,5 +1,4 @@
 ---
-layout: none
 ---
 
 <!DOCTYPE html>
@@ -7,18 +6,10 @@ layout: none
 <head>
   <meta charset="UTF-8">
 
-  <!-- ★ AdSense 自動広告コード -->
-  <!--
-  <script async
-    src="https://pagead2.googlesyndication.com/pageient=ca-pub-xxxxxxxxxxxxxxx
-  </script>
-  -->
-
-  
   <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.description | default: site.description }}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/assets/css/site.css" />
+  <link rel="stylesheet" href="/assets/css/site.css">
 </head>
 <body>
   {% include header.html %}
