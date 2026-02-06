@@ -2,6 +2,7 @@
 
 body {
     background-color: #f0f8ff;
+    max-width: 1080px;
     font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
     line-height: 1.6;
     color: #333;
