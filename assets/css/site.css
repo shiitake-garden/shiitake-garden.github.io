@@ -55,6 +55,20 @@ h3 {
   margin: 20px 0 10px;
   letter-spacing: 1px;
 }
+.for-you ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2列 */
+  gap: 0.4rem 1rem; /* 行間・列間の調整 */
+  padding-left: 0; /* 左の余白を消す（任意） */
+  list-style-position: inside; /* ●を内側に */
+  font-size: 0.85rem; /* 文字を小さく */
+}
+
+.for-you li {
+  margin: 0.2rem 0;
+}
+
+
 /*ヘッダー部分のスタイル*/
 .site-header {
   position: relative;
