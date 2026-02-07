@@ -41,7 +41,7 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
 }
 
 .for-you li {
-  padding: 4px 0 4px 8px;
+  padding: 4px 0 4px 38px;
   line-height: 1.4;
   position: relative;
 }
