@@ -23,9 +23,16 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
   line-height: 1.2;       /* 行間を詰める */
   margin-bottom: 4px;     /* タイトルとの隙間を最小限に */
 }
+site-footer a,
+.site-footer a:visited {
+  color: #f8f8f8;     /* 明るい白系に固定 */
+  text-decoration: none;
+}
 
-
-
+.site-footer a:hover {
+  color: #ffffff;     /* ホバー時はさらに白く */
+  text-decoration: underline;
+}
 
 /* ---- こんな方に向いています ---- */
 .for-you {
