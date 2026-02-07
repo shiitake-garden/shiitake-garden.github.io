@@ -93,6 +93,16 @@ footer {
   color: #ffffff;     /* ホバー時はさらに白く */
   text-decoration: underline;
 }
+.site-header .header-note {
+  font-size: 0.75rem;     /* 現在の本文より小さく */
+  color: #666;            /* 控えめなグレー */
+  line-height: 1.2;       /* 行間を詰める */
+  margin-bottom: 4px;     /* タイトルとの隙間を最小限に */
+}
+
+/*ここまでフッター*/
+
+
 
   :root {
     --c-muted:#666; --c-border:#ddd; --c-chip-bg:#eef;
