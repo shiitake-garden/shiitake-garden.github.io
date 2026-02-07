@@ -10,7 +10,7 @@ title: 園芸データ検索
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>シイタケ劇場-シイタケガーデン：園芸データ検索（作物・害虫・症状・薬剤）</title>
+<title>Cultivation Lab:Shiitake-Garden：植物の病気データ検索（作物・病気・症状・薬剤）</title>
 <!--<link rel="stylesheet" href="./assets/style_care.css">-->
  
   <!--
@@ -57,7 +57,7 @@ title: 園芸データ検索
 </head>
 <body>
 <div class="wrap">
-  <h1>園芸データ検索（作物・害虫・症状・薬剤）</h1>
+  <h1>植物の病気データ検索（作物・病気・症状・薬剤）</h1>
   <p class="muted">CSV：<code>/data/pest_data.csv</code> または <code>/plant-care/data/pest_data.csv</code> を自動探索して読み込みます。未選択／未入力はワイルドカード扱いです。</p>
 
   <!-- フィルタ -->
@@ -72,9 +72,9 @@ title: 園芸データ検索
     </div>
 
     <div class="field">
-      <label for="pestText">害虫（テキストで候補を絞り込み）</label>
-      <input id="pestText" type="text" placeholder="例）あぶ（アブラムシ類）／はだ（ハダニ類）" />
-      <select id="pestSelect" aria-label="害虫一覧">
+      <label for="pestText">病気（テキストで候補を絞り込み）</label>
+      <input id="pestText" type="text" placeholder="例）うど（うどんこ病）／モザ（モザイク病）" />
+      <select id="pestSelect" aria-label="病気一覧">
         <option value="">（すべて）</option>
       </select>
       <div class="muted">未入力＝全候補。入力で「前方一致」優先＋「部分一致」も表示。</div>
@@ -82,7 +82,7 @@ title: 園芸データ検索
 
     <div class="field">
       <label for="symptomText">症状（テキストで候補を絞り込み）</label>
-      <input id="symptomText" type="text" placeholder="例）黄化／かすれ／ベタつき など" />
+      <input id="symptomText" type="text" placeholder="例）カビ／萎れ／斑点 など" />
       <select id="symptomSelect" aria-label="症状一覧">
         <option value="">（すべて）</option>
       </select>
@@ -91,7 +91,7 @@ title: 園芸データ検索
 
     <div class="field">
       <label for="productText">薬剤（テキストで候補を絞り込み）</label>
-      <input id="productText" type="text" placeholder="例）プレオ／モスピラン など" />
+      <input id="productText" type="text" placeholder="例）トップジンM／ダコニール など" />
       <select id="productSelect" aria-label="薬剤一覧">
         <option value="">（すべて）</option>
       </select>
@@ -236,7 +236,7 @@ function renderTable(rows){
   const html = `
     <p><span class="count">${rows.length}</span> 件ヒット</p>
     <table aria-label="検索結果">
-      <thead><tr><th>作物</th><th>害虫</th><th>症状</th><th>薬剤（例）</th></tr></thead>
+      <thead><tr><th>作物</th><th>病気</th><th>症状</th><th>薬剤（例）</th></tr></thead>
       <tbody>
         ${rows.map(r=>`
           <tr>
@@ -285,13 +285,13 @@ async function loadCSVWithFallback(){
   // 期待列名の決定（BOM除去／全角半角・空白無視）
   const H = headers.map(h => h.replace(/\s/g,""));
   COL.crop    = pickColumn(headers,   ['作物','crop']);
-  COL.pest    = pickColumn(headers,   ['害虫','pest']);
+  COL.pest    = pickColumn(headers,   ['病気','pest']);
   COL.symptom = pickColumn(headers,   ['症状','symptom']);
   COL.product = pickColumn(headers,   ['薬剤','products','薬剤（最大5）','効果のある農薬商品名（最大5）']);
 
   if(!(COL.crop && COL.pest && COL.symptom && COL.product)){
     throw new Error(`列名が見つかりません（見つかったヘッダ：${headers.join(' / ')}）。`+
-      ` 期待：作物/害虫/症状/薬剤`);
+      ` 期待：作物/病気/症状/薬剤`);
   }
 
   // 整形（薬剤配列を付与）
@@ -352,7 +352,7 @@ async function loadCSVWithFallback(){
 //ここからダウンロード
 function exportRowsToCSV(rows) {
   // 表頭
-  const head = ['作物','害虫','症状','薬剤'];
+  const head = ['作物','病気','症状','薬剤'];
   const csv = [
     head.join(','),
     ...rows.map(r => {
