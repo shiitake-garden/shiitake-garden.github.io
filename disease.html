@@ -343,7 +343,7 @@ async function loadCSVWithFallback(){
 
   }catch(err){
     resultEl.innerHTML = `<p style="color:#b00;">初期化エラー：${String(err)}</p>
-      <p class="muted">CSVの配置場所を <code>/data/pest_data.csv</code> または <code>/plant-care/data/pest_data.csv</code> に置き、
+      <p class="muted">CSVの配置場所を <code>/data/disease_data.csv</code> または <code>/plant-care/data/disease_data.csv</code> に置き、
       先頭BOMの付与/非付与を確認してください（UTF-8保存推奨）。</p>`;
     console.error(err);
   }
