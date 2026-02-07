@@ -135,7 +135,8 @@ section .content-list {
 section .content-list li {
   padding: 0.6rem 0.8rem;
   margin: 0.4rem 0;
-  background: #f7f7f7;
+  /*background: #f7f7f7;*/
+  background: #fde7ef;
   border-radius: 6px;
   border: 1px solid #e0e0e0;
   display: flex;
