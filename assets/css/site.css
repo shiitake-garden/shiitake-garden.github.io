@@ -122,5 +122,44 @@ h3 {
   border-color: #fff;
 }
 
+/*コンテンツとリンクについて*/
+/* コンテンツ全体のスタイル */
+section .content-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
 
+/* 各項目をカード風に */
+section .content-list li {
+  padding: 0.6rem 0.8rem;
+  margin: 0.4rem 0;
+  background: #f7f7f7;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+/* strong をタイトルっぽく */
+section .content-list li strong {
+  font-weight: 600;
+  color: #333;
+}
+
+/* リンクの装飾を消す＋色固定 */
+section .content-list a {
+  text-decoration: none;
+  color: #0066cc;
+  font-weight: 500;
+}
+
+section .content-list a:visited {
+  color: #0066cc; /* visited 色を同じに */
+}
+
+section .content-list a:hover {
+  opacity: 0.7;
+}
