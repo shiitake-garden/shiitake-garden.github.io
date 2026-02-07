@@ -243,7 +243,7 @@ function renderTable(rows){
             <td>${r[COL.crop]}</td>
             <td>${r[COL.pest]}</td>
             <td>${r[COL.symptom]}</td>
-            // <td>${r._products.map(p=>`<span class="chip">${p}</span>`).join(" ")}</td>
+            
             <td>${
                 r._products.map(p=>{
                   const url = pesticideLinks[p];
@@ -254,6 +254,8 @@ function renderTable(rows){
                   }
                 }).join(" ")
               }</td>
+
+              
           </tr>
         `).join("")}
       </tbody>
