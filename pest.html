@@ -393,9 +393,25 @@ document.getElementById('btnExport').addEventListener('click', () => {
 
   exportRowsToCSV(rows);
 });
-
-
-  
+//ここからアマゾンリンクの処理 
 </script>
+ <script>
+const pesticideLinks = {
+  "アミスター": "https://www.amazon.co.jp/dp/XXXX?tag=あなたのID",
+  "ダコニール": "https://www.amazon.co.jp/dp/YYYY?tag=あなたのID",
+  "トップジンM": "https://www.amazon.co.jp/dp/ZZZZ?tag=あなたのID"
+};
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".pesticide").forEach(el => {
+    const name = el.textContent.trim();
+    if (pesticideLinks[name]) {
+      el.innerHTML = `<a href="${pesticideLinks[name]}" target="_blank">${name}</a>`;
+    }
+  });
+});
+</script>
+//ここまでアマゾンリンクの処理
 </body>
 </html>
