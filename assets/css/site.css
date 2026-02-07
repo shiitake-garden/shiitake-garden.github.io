@@ -59,7 +59,7 @@ h1 {
   font-weight: 700;
   color: #3a5f0b; /* 落ち着いた緑 */
   text-align: center;
-  margin: 20px 0 25px;
+  margin: 20px 0 20px;
   letter-spacing: 1px;
 }
 h4 {
@@ -82,7 +82,7 @@ h3 {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2列 */
   gap: 0.2rem 0.6rem; /* 行間・列間の調整 */
-  padding-left: 0; /* 左の余白を消す（任意） */
+  padding-left: 5; /* 左の余白を消す（任意） */
   list-style-position: inside; /* ●を内側に */
   font-size: 0.85rem; /* 文字を小さく */
 }
