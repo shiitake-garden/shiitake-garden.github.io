@@ -18,6 +18,21 @@ header {
     padding: 1rem;
     text-align: center;
 }
+.site-header a,
+.site-header a:visited {
+  color: #f8f8f8;     /* 明るい色で固定 */
+  text-decoration: none;
+}
+
+.site-header a:hover {
+  color: #ffffff;     /* ホバー時はさらに白く */
+  text-decoration: underline;
+}
+/*ここまでヘッダー*/
+
+
+
+
 
 main {
     max-width: 1080px;
@@ -68,6 +83,17 @@ footer {
 .nav-link:hover {
     text-decoration: underline;
 }
+.site-footer a,
+.site-footer a:visited {
+  color: #f8f8f8;     /* 明るい白系に固定 */
+  text-decoration: none;
+}
+
+.site-footer a:hover {
+  color: #ffffff;     /* ホバー時はさらに白く */
+  text-decoration: underline;
+}
+
   :root {
     --c-muted:#666; --c-border:#ddd; --c-chip-bg:#eef;
     --fs-base:16px;       /* モバイル既定（iOSの自動ズーム回避） */
