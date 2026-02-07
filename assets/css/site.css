@@ -7,17 +7,6 @@ body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
 }
 .site-title{background:rgba(0,0,0,.45); display:inline-block; padding:16px 24px; border-radius:8px; font-size:clamp(20px,4vw,36px)}
 .container{max-width:900px; margin:40px auto; padding:0 20px}
-.site-header a,
-.site-header a:visited {
-  color: #f8f8f8;     /* 明るい色で固定 */
-  text-decoration: none;
-}
-
-.site-header a:hover {
-  color: #ffffff;     /* ホバー時はさらに白く */
-  text-decoration: underline;
-}
-
 
 h2{border-left:3px solid var(--brand); padding-left:10px}
 .site-footer{background:var(--soft); text-align:center; padding:10px; font-size:.95em}
@@ -45,6 +34,7 @@ site-footer a,
   color: #ffffff;     /* ホバー時はさらに白く */
   text-decoration: underline;
 }
+
 
 /* ---- こんな方に向いています ---- */
 .for-you {
