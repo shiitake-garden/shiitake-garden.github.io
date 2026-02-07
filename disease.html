@@ -266,9 +266,9 @@ function clearFilters(){
 /* ===== CSVロード（パス自動フォールバック + BOM/列名ゆれ対応） ===== */
 async function loadCSVWithFallback(){
   const tryUrls = [
-    'data/pest_data.csv',               // /plant-care/data/...
-    '/data/pest_data.csv',              // ルート直下
-    './pest_data.csv'                   // 同階層
+    'data/disease_data.csv',               // /plant-care/data/...
+    '/data/disease_data.csv',              // ルート直下
+    './disease_data.csv'                   // 同階層
   ];
   let ok = null, lastErr = null, usedUrl = null;
   for(const url of tryUrls){
