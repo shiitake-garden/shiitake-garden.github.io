@@ -93,7 +93,7 @@ footer {
   color: #ffffff;     /* ホバー時はさらに白く */
   text-decoration: underline;
 }
-.site-header .header-note {
+.site-footer .footer-note {
   font-size: 0.75rem;     /* 現在の本文より小さく */
   color: #666;            /* 控えめなグレー */
   line-height: 1.2;       /* 行間を詰める */
