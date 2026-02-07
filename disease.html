@@ -243,7 +243,20 @@ function renderTable(rows){
             <td>${r[COL.crop]}</td>
             <td>${r[COL.pest]}</td>
             <td>${r[COL.symptom]}</td>
-            <td>${r._products.map(p=>`<span class="chip">${p}</span>`).join(" ")}</td>
+ 
+
+            <td>${
+              r._products.map(p=>{
+                const url = pesticideLinks[p];
+                if(url){
+                  return `<span class="chip"><a href="${url}" target="_blank">${p}</a></span>`;
+                } else {
+                  return `<span class="chip">${p}</span>`;
+                }
+              }).join(" ")
+            }</td>
+
+            
           </tr>
         `).join("")}
       </tbody>
@@ -392,10 +405,29 @@ document.getElementById('btnExport').addEventListener('click', () => {
   if (pTextQ)   rows = rows.filter(r => r._productsNorm.some(p => p.includes(pTextQ)));
 
   exportRowsToCSV(rows);
-});
-
-
-  
+});  
 </script>
+//ここからアマゾンリンクの処理 
+</script>
+ <script>
+const pesticideLinks = {
+  "スミチオン": "https://www.amazon.co.jp/dp/XXXX?tag=あなたのID",
+  "ダコニール": "https://www.amazon.co.jp/dp/YYYY?tag=あなたのID",
+  "トップジンM": "https://www.amazon.co.jp/dp/ZZZZ?tag=あなたのID"
+};
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".pesticide").forEach(el => {
+    const name = el.textContent.trim();
+    if (pesticideLinks[name]) {
+      el.innerHTML = `<a href="${pesticideLinks[name]}" target="_blank">${name}</a>`;
+    }
+  });
+});
+</script>
+//ここまでアマゾンリンクの処理
+
+ 
 </body>
 </html>
