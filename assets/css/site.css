@@ -13,11 +13,17 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
 .site-footer {
   line-height: 1.8;   /* 全体の行間を詰める */
 }
-
 .site-footer p,
 .site-footer a {
   margin: 2px 0;      /* 各行の上下余白を小さく */
 }
+.site-footer .footer-note {
+  font-size: 0.75rem;     /* 現在の本文より小さく */
+  color: #666;            /* 控えめなグレー */
+  line-height: 1.2;       /* 行間を詰める */
+  margin-bottom: 4px;     /* タイトルとの隙間を最小限に */
+}
+
 
 
 
