@@ -95,7 +95,7 @@ footer {
 }
 .site-footer .footer-note {
   font-size: 0.75rem;     /* 現在の本文より小さく */
-  color: #666;            /* 控えめなグレー */
+  color: #d6c46a;            /* 控えめなグレー */
   line-height: 1.2;       /* 行間を詰める */
   margin-bottom: 4px;     /* タイトルとの隙間を最小限に */
 }
