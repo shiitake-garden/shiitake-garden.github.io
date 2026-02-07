@@ -164,3 +164,18 @@ section .content-list a:visited {
 section .content-list a:hover {
   opacity: 0.7;
 }
+.content-list .item-desc {
+  margin: 2px 0 6px 0;   /* 上下の余白を小さく */
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.35;
+}
+.content-list .item-desc::before {
+  content: "・";
+  margin-right: 4px;
+  color: #cc6699;   /* 少し淡いピンク系にしても良い */
+  font-size: 0.9em;
+}
+
+
+
