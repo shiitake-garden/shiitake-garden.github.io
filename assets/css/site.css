@@ -10,6 +10,17 @@ body{margin:0;font-family:"Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
 h2{border-left:3px solid var(--brand); padding-left:10px}
 .site-footer{background:var(--soft); text-align:center; padding:10px; font-size:.95em}
 .site-footer a{color:inherit; text-decoration:underline; margin:0 8px}
+.site-footer {
+  line-height: 1.2;   /* 全体の行間を詰める */
+}
+
+.site-footer p,
+.site-footer a {
+  margin: 2px 0;      /* 各行の上下余白を小さく */
+}
+
+
+
 /* ---- こんな方に向いています ---- */
 .for-you {
   background: #f6f8f3;           /* 土・紙っぽい淡色 */
