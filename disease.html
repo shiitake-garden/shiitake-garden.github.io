@@ -111,11 +111,12 @@ title: 園芸データ検索
   
   </div>
 
-  
+  <div>薬剤はアマゾンにリンクしています。</div>
+   
   <!-- 結果 -->
   <div class="result" id="result"></div>
 </div>
-<div>薬剤はアマゾンにリンクしています。</div>
+
 <script>
 /* ===== ユーティリティ ===== */
 const normalize = (s)=> (s??"").toString().replace(/\uFEFF/g,"").trim().normalize("NFKC").toLowerCase();
@@ -407,7 +408,7 @@ document.getElementById('btnExport').addEventListener('click', () => {
   exportRowsToCSV(rows);
 });  
 </script>
-//ここからアマゾンリンクの処理 
+//　ここからアマゾンリンクの処理 
 </script>
  <script>
 const pesticideLinks = {
@@ -433,8 +434,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
-//ここまでアマゾンリンクの処理
-
  
 </body>
 </html>
