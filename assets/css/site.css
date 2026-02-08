@@ -115,7 +115,7 @@ h3 {
   margin: 7px 0 10px;
   letter-spacing: 1px;
 }
-.for-you ul {
+.for-you-main ul {
   display: grid;
   grid-template-columns: repeat(1, 1fr); /* 2列 */
   gap: 0.04rem 0.1rem; /* 行間・列間の調整 */
@@ -132,7 +132,7 @@ h3 {
   position: relative;
   padding-left: 1.6em;
 }
-.for-you ul li::before {
+.for-you-main ul li::before {
   content: "☑";
   position: absolute;
   left: 0;
