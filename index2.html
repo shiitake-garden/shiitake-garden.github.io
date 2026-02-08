@@ -1,68 +1,80 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultivation Lab：Shiitake-Garden</title>
-    <link rel="stylesheet" href="style2.css"> </head>
-<body>
+---
+layout: default
+title: 園芸データ検索
+---
 
-<header>
-    <h1>Cultivation Lab</h1>
-    <p>園芸をもっと楽しくする園芸総合情報サイト</p>
-</header>
 
-<div class="wrapper">
-    <main class="main-content">
-        <section id="about">
-            <h2>このサイトについて</h2>
-            <p>「園芸を楽しむこと」と「家庭果樹の管理を楽にすること」を目的に運営しています。</p>
-        </section>
+<section>
+<h1>園芸をもっと楽しくする園芸総合情報サイト</h1>
+<h4>カルティベージョンラボ：Shiitake-Garden</h4>
+</section>
 
-        <section id="contents">
-            <h2>メインコンテンツ</h2>
-            <div class="card-grid">
-                <a href="./schedule.html" class="card">果樹管理スケジュール</a>
-                <a href="./pest.html" class="card">害虫被害と農薬辞典</a>
-                <a href="./disease.html" class="card">病気被害と農薬辞典</a>
-            </div>
-        </section>
-    </main>
+<section>
+  <h2>このサイトについて</h2>
+  <p>このサイトは、「園芸を楽しむこと」と「家庭果樹の管理を楽にすること」を目的に運営しています。</p>
+</section>
 
-    <aside class="sidebar">
-        <h2>コラム・役立つ知識</h2>
-        <ul class="column-list">
-            <li>
-                <a href="#">
-                    <span class="date">2024.02.01</span>
-                    <p>冬の剪定で失敗しないための3つのポイント</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="date">2024.01.15</span>
-                    <p>初心者におすすめの家庭果樹5選</p>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span class="date">2024.01.05</span>
-                    <p>無農薬栽培に挑戦！コンパニオンプランツ活用術</p>
-                </a>
-            </li>
-        </ul>
-        
-        <div class="banner">
-            <a href="https://www.youtube.com/channel/UCrtw70zncgFarJrSXo7ztjg">
-                <p>YouTube「シイタケ劇場」で動画公開中！</p>
-            </a>
-        </div>
-    </aside>
-</div>
+<section class="for-you">
+  <h3>次のような方に、きっと役立つ内容です。</h3>
+  <ul>
+    <li>家庭で果樹や野菜を育てている</li>
+    <li>毎年「今月なにをするんだっけ？」と迷ってしまう</li>
+    <li>本を買うほどではないけれど、要点は知りたい</li>
+    <li>作業を忘れないための一覧が欲しい</li>
+    <li>野菜の生育不良の原因と対策を知りたい</li>
+    <li>病害虫の症状や農薬を簡単に知りたい</li>
+    <li>お庭を楽しく飾りたい！</li>
+  </ul>
+</section>
 
-<footer>
-    <p>© 2026 Cultivation Lab：Shiitake-Garden</p>
-</footer>
+<section>
+  <h2>コンテンツ</h2>
+  <ul class="content-list">
+    <li><a href="./schedule.html"><strong>果樹管理スケジュール </strong><span>Click</span></a></li>
+    <p class="item-desc">年間を通した果樹の管理ポイントをまとめたページです。</p>
+    <li><a href="./pest.html"><strong>害虫被害と農薬辞典（野菜） </strong><span>Click</span></a></li>
+    <p class="item-desc">家庭菜園でよく作られる野菜別に、害虫と症状、効果がある薬剤が簡単に調べられます。</p>
+    <li><a href="./disease.html"><strong>病気被害と農薬辞典（野菜） </strong><span>Click</span></a></li>
+    <p class="item-desc">家庭菜園でよく作られる野菜別に、病気と症状、効果がある薬剤が簡単に調べられます。</p>
+    <li><a href="https://www.youtube.com/channel/UCrtw70zncgFarJrSXo7ztjg"><strong>ガーデンオブジェを自作しよう！(準備中) </strong><span>Click</span></a></li>
+    <p class="item-desc">スタイロフォームを使ったかわいいオブジェの紹介</p>
+    <li><a href="https://www.youtube.com/channel/UCrtw70zncgFarJrSXo7ztjg"><strong>＜YouTubeチャンネル＞シイタケ劇場 </strong><span>Click</span></a></li>
+    <p class="item-desc">園芸、料理、釣り関連の動画がたくさんあります！</p>
+  </ul>
+ 
+</section>
 
-</body>
-</html>
+<section class="content-wrapper">
+  <div class="main-content">
+    <h2>コンテンツ</h2>
+    <ul class="content-list">
+    <!-- 既存のコンテンツ項目 -->
+    <li><a href="./schedule.html"><strong>果樹管理スケジュール </strong><span>Click</span></a></li>
+    <p class="item-desc">年間を通した果樹の管理ポイントをまとめたページです。</p>
+    <li><a href="./pest.html"><strong>害虫被害と農薬辞典（野菜） </strong><span>Click</span></a></li>
+    <p class="item-desc">家庭菜園でよく作られる野菜別に、害虫と症状、効果がある薬剤が簡単に調べられます。</p>
+    <li><a href="./disease.html"><strong>病気被害と農薬辞典（野菜） </strong><span>Click</span></a></li>
+    <p class="item-desc">家庭菜園でよく作られる野菜別に、病気と症状、効果がある薬剤が簡単に調べられます。</p>
+    <li><a href="https://www.youtube.com/channel/UCrtw70zncgFarJrSXo7ztjg"><strong>ガーデンオブジェを自作しよう！(準備中) </strong><span>Click</span></a></li>
+    <p class="item-desc">スタイロフォームを使ったかわいいオブジェの紹介</p>
+    <li><a href="https://www.youtube.com/channel/UCrtw70zncgFarJrSXo7ztjg"><strong>＜YouTubeチャンネル＞シイタケ劇場 </strong><span>Click</span></a></li>
+    <p class="item-desc">園芸、料理、釣り関連の動画がたくさんあります！</p>
+    </ul>
+  </div>
+
+  <aside class="sidebar">
+    <h3>コラム</h3>
+    <ul class="sidebar-list">
+      <li><a href="#">果樹管理の科学コラム</a></li>
+      <li><a href="#">土壌改良の深い話</a></li>
+      <li><a href="#">病害虫のメカニズム解説</a></li>
+      <li><a href="#">剪定の理論と実践</a></li>
+    </ul>
+  </aside>
+</section>
+
+
+
+
+
+
