@@ -63,7 +63,14 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
 .for-you-main {
   flex: 1;
 }
-
+.for-you-main li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  color: #6a9f58;
+  font-weight: bold;
+}
 .for-you-sidebar {
   width: 280px; /* サイドバーの幅は自由に調整可能 */
   flex-shrink: 0;
