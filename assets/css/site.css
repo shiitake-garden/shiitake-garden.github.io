@@ -120,12 +120,17 @@ h3 {
   grid-template-columns: repeat(1, 1fr); /* 2列 */
   gap: 0.04rem 0.1rem; /* 行間・列間の調整 */
   padding-left: 5; /* 左の余白を消す（任意） */
-  list-style-position: inside; /* ●を内側に */
+ /* list-style-position: inside; /* ●を内側に */
+  list-style: none;
   font-size: 0.85rem; /* 文字を小さく */
 }
 
 .for-you li {
   margin: 0.2rem 0;
+}
+.for-you ul li {
+  position: relative;
+  padding-left: 1.6em;
 }
 .for-you ul li::before {
   content: "☑";
