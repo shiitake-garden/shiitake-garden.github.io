@@ -54,6 +54,39 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
   color: #6a9f58;
   font-weight: bold;
 }
+.for-you-wrapper {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.for-you-main {
+  flex: 1;
+}
+
+.for-you-sidebar {
+  width: 280px; /* サイドバーの幅は自由に調整可能 */
+  flex-shrink: 0;
+  background: #f7f7f7;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* スマホでは縦並び */
+@media (max-width: 768px) {
+  .for-you-wrapper {
+    flex-direction: column;
+  }
+
+  .for-you-sidebar {
+    width: 100%;
+  }
+}
+
+
+
+
+/*汎用囲い*/
 h1 {
   font-size: 1.4rem;
   font-weight: 700;
