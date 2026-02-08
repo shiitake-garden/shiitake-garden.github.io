@@ -1,119 +1,63 @@
-
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Noto Sans JP',sans-serif;margin:20px;line-height:1.6}
-label{margin-right:12px}
-select,input{padding:6px 8px;margin-right:8px}
-.status{margin:8px 0;color:#555}
-.table{border-collapse:collapse;width:100%;margin-top:12px}
-.table th,.table td{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:top}
-.table th{background:#f6f7fb}
-.bad{color:#b91c1c}
-.good{color:#166534}
-/* --- レイアウト強化 --- */
-.container { max-width: 1100px; margin: 20px auto; padding: 0 16px; }
-.header { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; flex-wrap:wrap; margin: 8px 0 12px; }
-.header h1 { margin:0; font-size: clamp(18px, 3.2vw, 24px); }
-
-.controls-card {
-  position: sticky; top: 0; z-index: 10;
-  background: #fff; border: 1px solid #e5e7eb; border-radius: 10px;
-  padding: 12px; margin: 8px 0 14px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.05);
-}
-.controls-row { display:flex; flex-wrap:wrap; gap: 12px; align-items: end; }
-.controls-row label { display: grid; gap: 6px; font-size: 12px; color: #6b7280; }
-.controls-row select, .controls-row input[type="search"] {
-  min-width: 180px; padding: 10px 12px; border:1px solid #d1d5db; border-radius:8px; outline: none;
-}
-.controls-row select:focus, .controls-row input:focus { border-color:#3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
-.stat { color:#4b5563; font-size: 12px; padding: 8px 0; }
-
-/* --- テーブル体裁 --- */
-.table { width: 100%; border-collapse: collapse; }
-.table thead th { position: sticky; top: 72px; background:#f8fafc; z-index: 5; /* controls-card高さの概算 */ }
-.table th, .table td { border-bottom:1px solid #e5e7eb; padding: 8px 10px; text-align:left; vertical-align: top; }
-.table th { font-weight:600; color:#374151; }
-.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
-
-/* 施肥列に付ける共通クラス */
-.fert { }
-
-/* デフォルト非表示 */
-.hide-fert .fert { display: none; }
-
-/* モバイル“カード化”でも効くように */
-@media (max-width: 720px) {
-  .hide-fert .fert { display:none; }
+/* 基本スタイル */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    background-color: #f9fbf9; /* 優しい緑がかった白 */
 }
 
-
-/* --- モバイルでの“カード化” --- */
-@media (max-width: 720px) {
-  .hide-fert .fert { display:none; }  
-  .table thead { display:none; }
-  .table tr { display:block; border:1px solid #e5e7eb; border-radius:8px; padding:8px; margin-bottom:10px; }
-  .table td { display:grid; grid-template-columns: 110px 1fr; gap:6px; border:none !important; }
-  .table td::before { content: attr(data-label); font-weight:600; color:#374151; }
-}
-/* =========================
-   印刷用スタイル（A4縦）
-   ========================= */
-@media print {
-  /* 操作パネルは印刷では不要 */
-  .controls-card,
-  .status {
-    display: none;
-  }
-
-  /* テーブルは全幅で */
-  .table {
-    width: 100%;
-    font-size: 10.5pt;
-  }
-
-  /* sticky を解除（印刷では不要） */
-  .table thead th {
-    position: static;
-  }
-
-  /* 余白調整 */
-  body {
-    margin: 10mm;
-  }
-
-  /* 改ページ対策（行途中で切れない） */
-  tr {
-    page-break-inside: avoid;
-  }
+.wrapper {
+    display: flex;
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 0 15px;
+    gap: 30px; /* カラム間の隙間 */
 }
 
-
-:root {
-  --bg:#ffffff; --text:#111827; --muted:#6b7280; --border:#e5e7eb; --card:#ffffff; --brand:#2563eb;
-}
-body { background: var(--bg); color: var(--text); }
-.controls-card, .table { background: var(--card); border-color: var(--border); }
-a { color: var(--brand); }
-
-/* 「作物」列の幅を広く（デスクトップ） */
-.table th.col-crop,
-.table td.col-crop {
-  width: 260px;          /* 例: 260px */
-  max-width: 320px;      /* 任意: 伸び過ぎ防止 */
-  white-space: nowrap;   /* 改行させたくない場合は有効／折り返したいなら削除 */
-  text-overflow: ellipsis;
-  overflow: hidden;      /* はみ出しを省略記号に */
+/* メインコンテンツ（左） */
+.main-content {
+    flex: 2; /* 比率：2 */
 }
 
-/* モバイルの“カード表示”時（thead非表示）でも効かせる */
-@media (max-width: 720px) {
-  .table td.col-crop {
-    white-space: normal;   /* スマホでは折返しOKに戻す例 */
-    max-width: none;
-  }
+/* サイドバー（右） */
+.sidebar {
+    flex: 1; /* 比率：1 */
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
+/* サイドバー内のリスト */
+.column-list {
+    list-style: none;
+    padding: 0;
+}
 
+.column-list li {
+    margin-bottom: 15px;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 10px;
+}
 
+.column-list a {
+    text-decoration: none;
+    color: #444;
+}
 
+.column-list .date {
+    font-size: 0.8rem;
+    color: #888;
+}
 
-
+/* レスポンシブ対応（スマホ表示） */
+@media (max-width: 768px) {
+    .wrapper {
+        flex-direction: column; /* 縦並びに変更 */
+    }
+    
+    .sidebar {
+        order: 2; /* メインの下に配置 */
+    }
+}
