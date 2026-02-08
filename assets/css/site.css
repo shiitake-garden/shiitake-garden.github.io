@@ -209,7 +209,7 @@ section .content-list a:hover {
 
 /* メインとサイドバーの幅 */
 .main-content {
-  flex: 3;
+  flex: 2;
 }
 
 .sidebar {
