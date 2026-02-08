@@ -199,6 +199,29 @@ section .content-list a:hover {
   color: #cc6699;   /* 少し淡いピンク系にしても良い */
   font-size: 0.9em;
 }
+/*コンテンツ領域と右側の外観*/
 
+.content-wrapper {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
 
+/* メインとサイドバーの幅 */
+.main-content {
+  flex: 3;
+}
 
+.sidebar {
+  flex: 1;
+  background: #f7f7f7;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* スマホ時は縦並びに変更 */
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+}
