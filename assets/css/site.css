@@ -81,7 +81,7 @@ h3 {
 .for-you ul {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2列 */
-  gap: 0.1rem 0.3rem; /* 行間・列間の調整 */
+  gap: 0.04rem 0.1rem; /* 行間・列間の調整 */
   padding-left: 5; /* 左の余白を消す（任意） */
   list-style-position: inside; /* ●を内側に */
   font-size: 0.85rem; /* 文字を小さく */
