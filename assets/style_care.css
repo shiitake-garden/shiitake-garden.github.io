@@ -199,5 +199,54 @@ footer {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
+.article-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+}
 
+.article-main {
+  flex: 1;
+  max-width: 720px;
+}
+
+.article-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.sidebar-block {
+  background: #f7f7f7;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+}
+
+figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+figure {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+figcaption {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.5rem;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+  .article-layout {
+    flex-direction: column;
+  }
+
+  .article-sidebar {
+    width: 100%;
+  }
+}
 
