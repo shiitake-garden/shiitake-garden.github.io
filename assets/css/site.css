@@ -71,7 +71,7 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
   position: relative;
 }
 .for-you-main ul li::before {
-  content: "☑";
+  content: "✔";
   position: absolute;
   left: 0;
   top: 0;
