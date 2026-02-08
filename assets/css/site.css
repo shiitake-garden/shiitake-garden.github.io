@@ -30,7 +30,7 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
   background: #f6f8f3;           /* 土・紙っぽい淡色 */
   border-left: 6px solid #6a9f58; /* 既存のグリーン系と統一 */
   padding: 10px 6px;
-  margin: 10px 0;
+  margin: 5px 0;
   border-radius: 4px;
 }
 
