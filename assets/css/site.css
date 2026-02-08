@@ -132,6 +132,17 @@ h3 {
   position: relative;
   padding-left: 1.6em;
 }
+.for-you-main ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.for-you-main li {
+  padding: 4px 0 4px 18px;
+  line-height: 1.4;
+  position: relative;
+}
 .for-you-main ul li::before {
   content: "☑";
   position: absolute;
