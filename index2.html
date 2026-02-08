@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>シイタケ劇場：シイタケガーデン</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>果樹の年間管理スケジュール</h1>
+    <div class="status">初期化待ち</div>
+  </div>
+
+  <div class="controls-card">
+    <div class="controls-row">
+      <label for="crop">果物の種類
+        <select id="crop"></select>
+      </label>
+      <label for="month">月
+        <select id="month"></select>
+      </label>
+      <label for="search">検索
+        <input id="search" type="search" placeholder="作業・資材・メモで検索" />
+      </label>
+    
+      <label style="display:inline-flex; gap:6px; align-items:center; margin-left: auto;">
+        <input type="checkbox" id="toggleFert" />
+        施肥列を表示
+      </label>
+
+      <div class="stat">件数: <span id="count" class="mono">0</span></div>
+    </div>
+  </div>
+
+  <table id="result" class="table">
+    <thead>
+      <tr><th>作物</th>
+      <th>栽培形態</th>
+      <th>月</th>
+      <th>作業</th>
+      <th>施肥_種類</th>
+      <th>N(g)</th>
+      <th>P2O5(g)</th>
+      <th>K2O(g)</th>
+      <th>施肥_単位</th>
+      <th>施肥_メモ</th>
+</tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <p>データURLが 200で開けるか確認: <a href="data/test.json" target="_blank">data/test.json</a></p>
+
+  <script src="assets/app.js?v=20260203b"></script>
+</body>
+</html>
