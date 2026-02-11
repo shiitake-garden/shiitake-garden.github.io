@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // あなたのアソシエイトタグをここに入れてください
-  const associateTag = "あなたのアソシエイトタグ"; 
+  const associateTag = "loadmap-22"; 
 
   document.querySelectorAll(".pesticide").forEach(el => {
     const name = el.textContent.trim();
