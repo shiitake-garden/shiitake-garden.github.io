@@ -1,4 +1,3 @@
-document.querySelectorAll(".pesticide").forEach(el => console.log(JSON.stringify(el.textContent)));
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".pesticide").forEach(el => {
     const name = el.textContent.trim();
