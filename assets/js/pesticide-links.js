@@ -31,6 +31,6 @@ const pesticideLinks = {
   "リドミル": "https://amzn.to/4a3hx4G",
   "オーソサイド": "https://amzn.to/45Vgi55",
   "ベンレート": "https://amzn.to/4a3BoRh", 
-  "XXXXX": "https://amzn.to/4ktkZJx",
+  "ベニカXネクストスプレー": "https://amzn.to/4ktkZJx",
   "トップジンM": "https://amzn.to/3Mt4nF6" 
 };
