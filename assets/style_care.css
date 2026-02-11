@@ -63,6 +63,15 @@ ul {
     padding-left: 20px;
 }
 
+
+.amazon-link::after {
+  content: " 🛒"; /* お好みの絵文字に。 📦 や 🔗 でもOK */
+  font-size: 0.9em;
+  text-decoration: none; /* アイコンには下線を引かない */
+  display: inline-block;
+}
+
+
 footer {
     text-align: center;
     padding: 1rem;
