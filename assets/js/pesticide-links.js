@@ -23,5 +23,13 @@ const pesticideLinks = {
   "ダニトロン": "https://amzn.to/4qob616",
   "オルトラン粒剤": "https://amzn.to/3Zkduea",
   "ダイアジノン": "https://amzn.to/4algR9E",
-  "トップジンM": "https://amzn.to/46EAKYb"
+  "カリグリーン": "https://amzn.to/4qjUXcL",
+  "アミスター": "https://amzn.to/4r50sNG",
+  "ベルクート": "https://amzn.to/4r80sN8",
+  "フルピカフロアブル": "https://amzn.to/4krVXuf",
+  "ロブラール": "https://amzn.to/4rISsSJ",
+  "リドミル": "https://amzn.to/4a3hx4G",
+  "オーソサイド": "https://amzn.to/45Vgi55",
+  "ベンレート": "https://amzn.to/4a3BoRh", 
+  "トップジンM": "https://amzn.to/3Mt4nF6" 
 };
