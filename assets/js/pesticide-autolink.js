@@ -10,7 +10,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const name = el.textContent.replace(/^\s+|\s+$/g, ''); 
     
     if (window.pesticideLinks[name]) {
-      el.innerHTML = `<a href="${window.pesticideLinks[name]}" target="_blank" rel="noopener noreferrer">${name}</a>`;
+      //el.innerHTML = `<a href="${window.pesticideLinks[name]}" target="_blank" rel="noopener noreferrer">${name}</a>`;
+      // aタグに 「amazon-link」 というクラスを追加します
+      el.innerHTML = `<a href="${window.pesticideLinks[name]}" target="_blank" rel="noopener noreferrer" class="amazon-link">${name}</a>`;
     } else {
       // リンクがつかない場合、コンソールに名前を出して確認できるようにする
       console.log("辞書に未登録の商品名:", name);
