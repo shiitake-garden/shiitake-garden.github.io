@@ -1,4 +1,4 @@
-const pesticideLinks = {
+window.pesticideLinks = {
   "スミチオン": "https://amzn.to/3OsRoDS",
   "ダコニール": "https://amzn.to/46EAJn5",
   "モスピラン": "https://amzn.to/4qtxB4L",
