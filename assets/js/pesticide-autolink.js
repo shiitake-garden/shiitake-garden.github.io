@@ -1,21 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 辞書があるかチェック
-  if (!window.pesticideLinks) {
-    console.error("辞書データ(pesticideLinks)が見つかりません");
-    return;
-  }
+  // あなたのアソシエイトタグをここに入れてください
+  const associateTag = "あなたのアソシエイトタグ"; 
 
   document.querySelectorAll(".pesticide").forEach(el => {
-    // 前後の空白や改行を完全に除去
-    const name = el.textContent.replace(/^\s+|\s+$/g, ''); 
-    
-    if (window.pesticideLinks[name]) {
-      //el.innerHTML = `<a href="${window.pesticideLinks[name]}" target="_blank" rel="noopener noreferrer">${name}</a>`;
-      // aタグに 「amazon-link」 というクラスを追加します
-      el.innerHTML = `<a href="${window.pesticideLinks[name]}" target="_blank" rel="noopener noreferrer" class="amazon-link">${name}</a>`;
+    const name = el.textContent.trim();
+    if (!name) return; // 空文字の場合はスキップ
+
+    let url = null;
+
+    // 1. 辞書(pesticideLinks)に存在するかチェック
+    if (window.pesticideLinks && window.pesticideLinks[name]) {
+      url = window.pesticideLinks[name];
     } else {
-      // リンクがつかない場合、コンソールに名前を出して確認できるようにする
-      console.log("辞書に未登録の商品名:", name);
+      // 2. 辞書にない場合はAmazonでの検索URLを生成
+      const encoded = encodeURIComponent(name);
+      url = `https://www.amazon.co.jp/s?k=${encoded}&tag=${associateTag}`;
     }
+
+    // リンクを生成（アイコン表示用のクラス amazon-link を付与）
+    el.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer" class="amazon-link">${name}</a>`;
   });
 });
