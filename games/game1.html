@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>畑ディフェンダー（Invaders for Crops）</title>
+  <style>
+    :root{ color-scheme: light dark; }
+    html,body { height: 100%; margin: 0; background:#0b1d0b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;}
+    #wrap { display:flex; flex-direction:column; height:100%; }
+    header { padding: 8px 12px; color:#e8ffe8; background:#103410; font-weight:600; font-size:14px; display:flex; justify-content:space-between; align-items:center; }
+    header .btn { appearance:none; border:1px solid #4faa4f; color:#e8ffe8; background:#165c16; padding:6px 10px; border-radius:6px; font-size:12px; }
+    #game { flex:1; display:flex; align-items:center; justify-content:center; }
+    canvas { width: 100vw; height: calc(100vh - 120px); max-height: calc(100vh - 120px); touch-action: none; background: linear-gradient(#0b1d0b, #0a240a 60%, #073007); }
+    /* 画面下のタッチコントローラ */
+    #controls { height: 100px; display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; padding: 8px 12px; background:#0d250d; }
+    .ctl { user-select:none; -webkit-user-select:none; touch-action: manipulation; display:flex; align-items:center; justify-content:center; border-radius:12px; font-size:22px; color:#e8ffe8; background:#134013; border:2px solid #2f7a2f; }
+    .ctl:active { transform: scale(0.98); filter: brightness(1.15); }
+    /* HUD */
+    #hud { position: fixed; top: 44px; left: 8px; right: 8px; display:flex; justify-content:space-between; color:#e8ffe8; font-size:12px; pointer-events:none; text-shadow: 0 1px 0 #000;}
+    /* デスクトップではコントローラを少し低く */
+    @media (min-width: 840px) {
+      canvas { height: calc(100vh - 110px); }
+      #controls { height: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <header>
+      <div>🥬 畑ディフェンダー - 害虫から作物を守ろう！</div>
+      <div>
+        <button id="btnPause" class="btn">⏸ 一時停止</button>
+        <button id="btnRestart" class="btn">↻ リスタート</button>
+      </div>
+    </header>
+
+    <div id="hud">
+      <div id="hudLeft">スコア: 0 / ウェーブ: 1</div>
+      <div id="hudRight">作物HP: 3</div>
+    </div>
+
+    <div id="game">
+      <canvas id="cv" width="900" height="600" aria-label="game canvas"></canvas>
+    </div>
+
+    <div id="controls">
+      <button class="ctl" id="leftBtn">◀</button>
+      <button class="ctl" id="fireBtn">●</button>
+      <button class="ctl" id="rightBtn">▶</button>
+    </div>
+  </div>
+
+  <script>
+  // ====== ユーティリティ ======
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const hudL = document.getElementById('hudLeft');
+  const hudR = document.getElementById('hudRight');
+  const btnPause = document.getElementById('btnPause');
+  const btnRestart = document.getElementById('btnRestart');
+
+  // デバイスピクセル比に合わせて高解像度化
+  function fitCanvas() {
+    const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+    // 可視領域に合わせてアスペクト調整（横長に寄せる）
+    const cssW = window.innerWidth;
+    const cssH = Math.max(220, window.innerHeight - 120);
+    cv.style.width = cssW + 'px';
+    cv.style.height = cssH + 'px';
+    cv.width = Math.floor(cssW * dpr);
+    cv.height = Math.floor(cssH * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener('resize', fitCanvas);
+  fitCanvas();
+
+  // ====== ゲーム状態 ======
+  const State = {
+    running: true,
+    score: 0,
+    wave: 1,
+    cropsHP: 3,
+    lastShot: 0,
+    shotCooldown: 200, // ms
+    lastTime: 0
+  };
+
+  // プレイヤー
+  const player = {
+    x: 200, y: 0, w: 44, h: 18, speed: 360, color: '#aef39a', vx: 0
+  };
+
+  // 弾・敵
+  const bullets = [];
+  const enemies = [];
+  let enemyDir = 1;      // 1:右 -1:左
+  let enemySpeed = 40;   // 水平スピード
+  let enemyStep = 18;    // 端到達時の下降量
+
+  // 初期配置
+  function resetGame() {
+    State.running = true;
+    State.score = 0;
+    State.wave = 1;
+    State.cropsHP = 3;
+    enemyDir = 1;
+    enemySpeed = 40;
+    createWave(State.wave);
+    centerPlayer();
+  }
+
+  function centerPlayer() {
+    player.x = (cv.clientWidth - player.w) / 2;
+    player.y = cv.clientHeight - 80;
+    player.vx = 0;
+  }
+
+  function createWave(wave) {
+    enemies.length = 0;
+    bullets.length = 0;
+    const cols = Math.min(8, 5 + Math.floor(wave * 0.8));
+    const rows = Math.min(5, 2 + Math.floor(wave * 0.6));
+    const marginX = 40, marginY = 50, gapX = 48, gapY = 36;
+    const startX = (cv.clientWidth - (cols-1)*gapX) / 2;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        enemies.push({
+          x: startX + c * gapX,
+          y: marginY + r * gapY,
+          w: 28, h: 18,
+          type: r % 3, // 0:アブラムシ,1:ヨトウ,2:バッタ風
+          alive: true
+        });
+      }
+    }
+    // 難易度調整
+    enemySpeed = 40 + (wave-1) * 10;
+  }
+
+  // ====== 入力（キーボード・タッチ） ======
+  const keys = { left:false, right:false, fire:false };
+
+  window.addEventListener('keydown', (e)=>{
+    if (e.repeat) return;
+    if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = true;
+    if (e.key === 'ArrowRight' || e.key === 'd') keys.right = true;
+    if (e.key === ' ' || e.key === 'Enter') keys.fire = true;
+  });
+  window.addEventListener('keyup', (e)=>{
+    if (e.key === 'ArrowLeft' || e.key === 'a') keys.left = false;
+    if (e.key === 'ArrowRight' || e.key === 'd') keys.right = false;
+    if (e.key === ' ' || e.key === 'Enter') keys.fire = false;
+  });
+
+  // モバイルボタン
+  function bindButton(btn, on, off) {
+    const start = (ev)=>{ ev.preventDefault(); on(); };
+    const end   = (ev)=>{ ev.preventDefault(); off(); };
+    btn.addEventListener('touchstart', start, {passive:false});
+    btn.addEventListener('touchend', end, {passive:false});
+    btn.addEventListener('touchcancel', end, {passive:false});
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('mouseup', end);
+    btn.addEventListener('mouseleave', end);
+  }
+  bindButton(document.getElementById('leftBtn'),
+    ()=>{ keys.left = true; },
+    ()=>{ keys.left = false; }
+  );
+  bindButton(document.getElementById('rightBtn'),
+    ()=>{ keys.right = true; },
+    ()=>{ keys.right = false; }
+  );
+  bindButton(document.getElementById('fireBtn'),
+    ()=>{ keys.fire = true; },
+    ()=>{ keys.fire = false; }
+  );
+
+  // ドラッグでプレイヤー移動、タップでショット
+  let dragging = false, dragOffsetX = 0;
+  cv.addEventListener('pointerdown', (e)=>{
+    const rect = cv.getBoundingClientRect();
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
+    if (py > player.y - 40 && py < player.y + 60) {
+      dragging = true;
+      dragOffsetX = px - player.x;
+    } else {
+      tryFire();
+    }
+  });
+  window.addEventListener('pointermove', (e)=>{
+    if (!dragging) return;
+    const rect = cv.getBoundingClientRect();
+    const px = e.clientX - rect.left;
+    player.x = Math.max(8, Math.min(cv.clientWidth - player.w - 8, px - dragOffsetX));
+  });
+  window.addEventListener('pointerup', ()=> dragging = false);
+
+  // ====== オーディオ（効果音は初回操作で解禁） ======
+  let audioCtx = null;
+  function initAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  function beep(freq=600, len=0.06, vol=0.05) {
+    if (!audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'square';
+    o.frequency.value = freq;
+    g.gain.value = vol;
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start();
+    o.stop(audioCtx.currentTime + len);
+  }
+  window.addEventListener('pointerdown', initAudio, {once:true});
+
+  // ====== 主要処理 ======
+  function tryFire() {
+    const now = performance.now();
+    if (now - State.lastShot < State.shotCooldown) return;
+    State.lastShot = now;
+    bullets.push({ x: player.x + player.w/2 - 2, y: player.y - 6, w:4, h:10, vy:-520, color:'#9cf' });
+    beep(760, 0.05, 0.03);
+  }
+
+  function update(dt) {
+    if (!State.running) return;
+
+    // 入力から速度
+    player.vx = 0;
+    if (keys.left)  player.vx -= player.speed;
+    if (keys.right) player.vx += player.speed;
+    if (keys.fire)  tryFire();
+
+    // プレイヤー移動
+    player.x += player.vx * dt;
+    player.x = Math.max(8, Math.min(cv.clientWidth - player.w - 8, player.x));
+
+    // 弾更新
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      const b = bullets[i];
+      b.y += b.vy * dt;
+      if (b.y + b.h < 0) bullets.splice(i,1);
+    }
+
+    // 敵の横移動と端チェック
+    let minX = Infinity, maxX = -Infinity, maxY = -Infinity;
+    const aliveList = enemies.filter(e => e.alive);
+    aliveList.forEach(e => {
+      e.x += enemyDir * enemySpeed * dt;
+      minX = Math.min(minX, e.x);
+      maxX = Math.max(maxX, e.x + e.w);
+      maxY = Math.max(maxY, e.y + e.h);
+    });
+    if (aliveList.length > 0) {
+      if (minX < 8 || maxX > cv.clientWidth - 8) {
+        enemyDir *= -1;
+        aliveList.forEach(e => e.y += enemyStep);
+      }
+      // 下到達で作物HP減少
+      if (maxY >= player.y - 10) {
+        State.cropsHP -= 1;
+        beep(220, 0.2, 0.05);
+        // リセット的に少し戻す
+        aliveList.forEach(e => e.y -= 40);
+        if (State.cropsHP <= 0) {
+          gameOver();
+        }
+      }
+    }
+
+    // 当たり判定（弾×敵）
+    for (let i = bullets.length - 1; i >= 0; i--) {
+      const b = bullets[i];
+      for (let j = 0; j < enemies.length; j++) {
+        const e = enemies[j];
+        if (!e.alive) continue;
+        if (b.x < e.x + e.w && b.x + b.w > e.x && b.y < e.y + e.h && b.y + b.h > e.y) {
+          e.alive = false;
+          bullets.splice(i,1);
+          State.score += 10;
+          beep(520, 0.07, 0.04);
+          break;
+        }
+      }
+    }
+
+    // 全滅 → 次ウェーブ
+    if (enemies.every(e => !e.alive)) {
+      State.wave += 1;
+      createWave(State.wave);
+      beep(880, 0.12, 0.05);
+    }
+
+    // HUD 更新
+    hudL.textContent = `スコア: ${State.score} / ウェーブ: ${State.wave}`;
+    hudR.textContent = `作物HP: ${State.cropsHP}`;
+  }
+
+  function draw() {
+    // 背景（畑の横筋）
+    const w = cv.clientWidth, h = cv.clientHeight;
+    ctx.clearRect(0,0,w,h);
+    for (let y=0; y<h; y+=20){
+      ctx.fillStyle = (y%40===0) ? '#0a2b0a' : '#0b300b';
+      ctx.fillRect(0,y,w,20);
+    }
+    // 作物（守るライン）
+    ctx.fillStyle = '#2fdc5c';
+    ctx.fillRect(0, player.y + player.h + 12, w, 6);
+
+    // プレイヤー（散布ドローン風）
+    drawPlayer(player);
+
+    // 弾
+    bullets.forEach(b=>{
+      ctx.fillStyle = b.color;
+      ctx.fillRect(b.x, b.y, b.w, b.h);
+    });
+
+    // 敵（害虫を簡易シェイプで描画）
+    enemies.forEach(e=>{
+      if (!e.alive) return;
+      drawBug(e);
+    });
+
+    // ポーズ表示
+    if (!State.running) {
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(0,0,w,h);
+      ctx.fillStyle = '#e8ffe8';
+      ctx.font = 'bold 28px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(State.cropsHP<=0 ? 'ゲームオーバー' : 'ポーズ中', w/2, h/2 - 10);
+      ctx.font = '16px system-ui, sans-serif';
+      ctx.fillText('↻ リスタートで再開できます', w/2, h/2 + 18);
+    }
+  }
+
+  function drawPlayer(p){
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    // 本体
+    ctx.fillStyle = '#aef39a';
+    ctx.fillRect(0, 0, p.w, p.h);
+    // ノズル
+    ctx.fillStyle = '#c2ffd2';
+    ctx.fillRect(p.w/2 - 2, -8, 4, 8);
+    // 車輪
+    ctx.fillStyle = '#214421';
+    ctx.fillRect(6, p.h, 8, 6);
+    ctx.fillRect(p.w-14, p.h, 8, 6);
+    ctx.restore();
+  }
+
+  function drawBug(e){
+    ctx.save();
+    ctx.translate(e.x, e.y);
+    // 種別ごとに色と形を少し変える
+    if (e.type === 0) { // アブラムシ風
+      ctx.fillStyle = '#b2ff66';
+      roundedRect(0,0,e.w,e.h,6);
+      ctx.fill();
+      eye(6,6); eye(e.w-12,6);
+    } else if (e.type === 1) { // ヨトウムシ風
+      ctx.fillStyle = '#88e05a';
+      roundedRect(0,0,e.w,e.h,8);
+      ctx.fill();
+      ctx.fillStyle='#2a4';
+      ctx.fillRect(4, e.h-4, e.w-8, 3);
+    } else { // バッタ風
+      ctx.fillStyle = '#66cc55';
+      ctx.beginPath();
+      ctx.moveTo(0, e.h); ctx.lineTo(e.w*0.3, 2); ctx.lineTo(e.w*0.7, 2); ctx.lineTo(e.w, e.h); ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function roundedRect(x,y,w,h,r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y,   x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x,   y+h, r);
+    ctx.arcTo(x,   y+h, x,   y,   r);
+    ctx.arcTo(x,   y,   x+w, y,   r);
+    ctx.closePath();
+  }
+  function eye(x,y){
+    ctx.fillStyle = '#0a250a';
+    ctx.fillRect(x,y,4,4);
+  }
+
+  function gameOver(){
+    State.running = false;
+  }
+
+  // ループ
+  function loop(t){
+    if (!State.lastTime) State.lastTime = t;
+    const dt = Math.min(0.033, (t - State.lastTime) / 1000);
+    State.lastTime = t;
+    if (State.running) update(dt);
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // ボタン
+  btnPause.addEventListener('click', ()=>{
+    State.running = !State.running;
+    btnPause.textContent = State.running ? '⏸ 一時停止' : '▶ 再開';
+  });
+  btnRestart.addEventListener('click', ()=>{
+    resetGame();
+    State.running = true;
+    btnPause.textContent = '⏸ 一時停止';
+  });
+
+  // 開始
+  resetGame();
+  </script>
+</body>
+</html>
