@@ -74,22 +74,46 @@ body {
   resize: none;
   font-size: 12px;
 }
-
 @media print {
+  /* コントロール類は非表示 */
   #controls {
     display: none;
   }
+
+  /* タイトル部分は少し大きく */
   #info {
-    font-size: 20px;
+    font-size: 18px;
     border-bottom: none;
+    padding: 4px 8px;
   }
+
+  /* バイオリズム部分を少し縮める */
   #biorhythm {
-    height: 30vh;
+    height: 28vh;   /* ← 30 → 28 に縮小 */
   }
+
+  /* カレンダー部分を広げる */
   #calendar {
-    height: 70vh;
+    height: 72vh;
+  }
+
+  /* カレンダーのセル高さを印刷時だけ縮める */
+  #calendar td {
+    height: 70px;   /* ← 95px → 70px に縮小 */
+  }
+
+  /* 予定欄も少し縮める */
+  #calendar textarea {
+    height: 40px;   /* ← 55px → 40px */
+  }
+
+  /* 印刷余白を最小化（ブラウザ依存だが効果大） */
+  @page {
+    margin: 5mm;
   }
 }
+
+
 </style>
 </head>
 <body>
@@ -99,10 +123,11 @@ body {
   年: <input type="number" id="year" value="2024" style="width:80px;">
   月: <input type="number" id="month" value="1" style="width:50px;">
 
+  <button onclick="updateAll()">更新</button>
   <!-- 印刷ボタン追加 -->
   <button onclick="printPage()">印刷</button>
 
-  <button onclick="updateAll()">更新</button>
+
 </div>
 
 <!-- タイトルと凡例 -->
