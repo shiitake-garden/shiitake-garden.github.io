@@ -21,7 +21,7 @@ body {
 
 /* タイトルと凡例のエリア */
 #info {
-  padding: 8px 12px;
+  padding: 6px 10px;
   font-size: 18px;
   border-bottom: 1px solid #333;
 }
@@ -43,7 +43,7 @@ body {
   border-collapse: collapse;
 }
 
-/* 曜日行（高さを低く） */
+/* 曜日行 */
 #calendar th {
   border: 1px solid #333;
   height: 28px;
@@ -51,7 +51,7 @@ body {
   background: #fafafa;
 }
 
-/* 日付セル（広く） */
+/* 日付セル */
 #calendar td {
   border: 1px solid #333;
   width: 14.2%;
@@ -60,7 +60,7 @@ body {
   padding: 3px;
 }
 
-/* 日付の数字（大きく） */
+/* 日付数字 */
 .date-number {
   font-size: 24px;
   font-weight: bold;
@@ -75,45 +75,45 @@ body {
   font-size: 12px;
 }
 
-/* 印刷最適化 */
+/* 印刷最適化（90％縮小版） */
 @media print {
 
   #controls {
     display: none;
   }
 
-  /* タイトルと凡例を極限まで薄く */
+  /* タイトルと凡例をさらに薄く */
   #info {
-    padding: 0 5px;
+    padding: 0 4px;
     margin: 0;
-    font-size: 14px;
-    line-height: 1.1;
+    font-size: 13px;
+    line-height: 1.05;
     border-bottom: none;
   }
 
   #legend {
-    font-size: 10px;
+    font-size: 9px;
     margin: 0;
   }
 
-  /* バイオリズム部分を縮める */
+  /* バイオリズム部分をさらに縮める */
   #biorhythm {
-    height: 26vh;
+    height: 24vh;   /* ← 26vh → 24vh */
   }
 
-  /* カレンダー部分を広げる */
+  /* カレンダー部分を縮める */
   #calendar {
-    height: 74vh;
+    height: 66vh;   /* ← 74vh → 66vh */
   }
 
   /* カレンダーのセル高さを縮める */
   #calendar td {
-    height: 65px;
+    height: 58px;   /* ← 65px → 58px */
   }
 
   /* 予定欄も縮める */
   #calendar textarea {
-    height: 38px;
+    height: 32px;   /* ← 38px → 32px */
   }
 
   /* 印刷余白を最小化 */
@@ -130,7 +130,7 @@ body {
   年: <input type="number" id="year" value="2024" style="width:80px;">
   月: <input type="number" id="month" value="1" style="width:50px;">
 
-  <!-- ボタン順を「更新 → 印刷」に変更 -->
+  <!-- ボタン順：更新 → 印刷 -->
   <button onclick="updateAll()">更新</button>
   <button onclick="printPage()">印刷</button>
 </div>
