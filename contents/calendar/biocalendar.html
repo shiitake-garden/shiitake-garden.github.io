@@ -17,7 +17,7 @@ body {
 
 #biorhythm {
   width: 100%;
-  height: 250px;
+  height: 260px;
   border-bottom: 2px solid #333;
 }
 
@@ -78,7 +78,7 @@ function biorhythm(birth, target, cycle) {
 }
 
 // -----------------------------
-// バイオリズム描画
+// バイオリズム描画（上部に日付目盛り付き）
 // -----------------------------
 function drawBiorhythm(birthDate, year, month) {
   const canvas = document.getElementById("biorhythm");
@@ -94,6 +94,17 @@ function drawBiorhythm(birthDate, year, month) {
 
   ctx.clearRect(0, 0, w, h);
 
+  // 日付目盛り（上部）
+  ctx.fillStyle = "#000";
+  ctx.font = "12px sans-serif";
+  for (let d = 1; d <= days; d++) {
+    const x = (d - 1) * (w / (days - 1));
+    if (d % 2 === 1) { // 1日おきに表示して見やすく
+      ctx.fillText(d, x - 3, 12);
+    }
+  }
+
+  // 波形の描画
   const cycles = [
     { cycle: 23, color: "red" },
     { cycle: 28, color: "blue" },
@@ -107,7 +118,7 @@ function drawBiorhythm(birthDate, year, month) {
       const x = (d - 1) * (w / (days - 1));
       const date = new Date(year, month - 1, d);
       const yValue = biorhythm(birthDate, date, c.cycle);
-      const y = h / 2 - yValue * (h / 2 - 10);
+      const y = h / 2 - yValue * (h / 2 - 20);
       if (d === 1) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
