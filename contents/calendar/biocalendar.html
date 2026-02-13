@@ -21,22 +21,39 @@ body {
   border-bottom: 2px solid #333;
 }
 
+/* カレンダー全体 */
 #calendar {
   width: 100%;
   border-collapse: collapse;
 }
 
-#calendar th, #calendar td {
+/* 曜日行（高さを低くする） */
+#calendar th {
+  border: 1px solid #333;
+  height: 30px; /* ← 高さを低くした */
+  font-size: 14px;
+  background: #fafafa;
+}
+
+/* 日付セル（高さを広くする） */
+#calendar td {
   border: 1px solid #333;
   width: 14.2%;
-  height: 80px;
+  height: 100px; /* ← 高さを大きくした */
   vertical-align: top;
   padding: 3px;
 }
 
+/* 日付の数字を大きく（2倍） */
+.date-number {
+  font-size: 24px; /* ← 2倍に拡大 */
+  font-weight: bold;
+}
+
+/* 予定欄 */
 #calendar textarea {
   width: 100%;
-  height: 55px;
+  height: 60px;
   border: none;
   resize: none;
   font-size: 12px;
@@ -78,7 +95,7 @@ function biorhythm(birth, target, cycle) {
 }
 
 // -----------------------------
-// バイオリズム描画（上部に日付目盛り付き）
+// バイオリズム描画（左右余白つき）
 // -----------------------------
 function drawBiorhythm(birthDate, year, month) {
   const canvas = document.getElementById("biorhythm");
@@ -94,17 +111,21 @@ function drawBiorhythm(birthDate, year, month) {
 
   ctx.clearRect(0, 0, w, h);
 
-  // 日付目盛り（上部）
+  // 左右余白（20px）
+  const margin = 20;
+  const graphWidth = w - margin * 2;
+
+  // 日付目盛り
   ctx.fillStyle = "#000";
   ctx.font = "12px sans-serif";
   for (let d = 1; d <= days; d++) {
-    const x = (d - 1) * (w / (days - 1));
-    if (d % 2 === 1) { // 1日おきに表示して見やすく
+    const x = margin + (d - 1) * (graphWidth / (days - 1));
+    if (d % 2 === 1) {
       ctx.fillText(d, x - 3, 12);
     }
   }
 
-  // 波形の描画
+  // 波形
   const cycles = [
     { cycle: 23, color: "red" },
     { cycle: 28, color: "blue" },
@@ -115,7 +136,7 @@ function drawBiorhythm(birthDate, year, month) {
     ctx.beginPath();
     ctx.strokeStyle = c.color;
     for (let d = 1; d <= days; d++) {
-      const x = (d - 1) * (w / (days - 1));
+      const x = margin + (d - 1) * (graphWidth / (days - 1));
       const date = new Date(year, month - 1, d);
       const yValue = biorhythm(birthDate, date, c.cycle);
       const y = h / 2 - yValue * (h / 2 - 20);
@@ -128,8 +149,8 @@ function drawBiorhythm(birthDate, year, month) {
   // 中央線
   ctx.strokeStyle = "#666";
   ctx.beginPath();
-  ctx.moveTo(0, h / 2);
-  ctx.lineTo(w, h / 2);
+  ctx.moveTo(margin, h / 2);
+  ctx.lineTo(w - margin, h / 2);
   ctx.stroke();
 }
 
@@ -153,7 +174,7 @@ function generateCalendar(year, month) {
   for (let i = 0; i < firstDay; i++) row += "<td></td>";
 
   for (let d = 1; d <= lastDate; d++) {
-    row += `<td>${d}<br><textarea></textarea></td>`;
+    row += `<td><div class="date-number">${d}</div><textarea></textarea></td>`;
     if ((firstDay + d) % 7 === 0) {
       row += "</tr>";
       table.innerHTML += row;
