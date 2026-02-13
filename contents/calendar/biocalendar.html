@@ -171,4 +171,37 @@ function generateCalendar(year, month) {
   for (let i = 0; i < firstDay; i++) row += "<td></td>";
 
   for (let d = 1; d <= lastDate; d++) {
-    row += `<td>
+    row += `<td><div class="date-number">${d}</div><textarea></textarea></td>`;
+    if ((firstDay + d) % 7 === 0) {
+      row += "</tr>";
+      table.innerHTML += row;
+      row = "<tr>";
+    }
+  }
+
+  if (row !== "<tr>") {
+    while (row.split("<td>").length - 1 < 7) row += "<td></td>";
+    row += "</tr>";
+    table.innerHTML += row;
+  }
+}
+
+// -----------------------------
+// 全体更新
+// -----------------------------
+function updateAll() {
+  const birth = document.getElementById("birth").value;
+  const year = Number(document.getElementById("year").value);
+  const month = Number(document.getElementById("month").value);
+
+  if (!birth) return alert("生年月日を入力してください");
+
+  const birthDate = new Date(birth);
+
+  drawBiorhythm(birthDate, year, month);
+  generateCalendar(year, month);
+}
+</script>
+
+</body>
+</html>
