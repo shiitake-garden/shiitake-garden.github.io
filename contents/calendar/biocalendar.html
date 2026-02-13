@@ -74,46 +74,53 @@ body {
   resize: none;
   font-size: 12px;
 }
+
+/* 印刷最適化 */
 @media print {
-  /* コントロール類は非表示 */
+
   #controls {
     display: none;
   }
 
-  /* タイトル部分は少し大きく */
+  /* タイトルと凡例を極限まで薄く */
   #info {
-    font-size: 18px;
+    padding: 0 5px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.1;
     border-bottom: none;
-    padding: 4px 8px;
   }
 
-  /* バイオリズム部分を少し縮める */
+  #legend {
+    font-size: 10px;
+    margin: 0;
+  }
+
+  /* バイオリズム部分を縮める */
   #biorhythm {
-    height: 28vh;   /* ← 30 → 28 に縮小 */
+    height: 26vh;
   }
 
   /* カレンダー部分を広げる */
   #calendar {
-    height: 72vh;
+    height: 74vh;
   }
 
-  /* カレンダーのセル高さを印刷時だけ縮める */
+  /* カレンダーのセル高さを縮める */
   #calendar td {
-    height: 70px;   /* ← 95px → 70px に縮小 */
+    height: 65px;
   }
 
-  /* 予定欄も少し縮める */
+  /* 予定欄も縮める */
   #calendar textarea {
-    height: 40px;   /* ← 55px → 40px */
+    height: 38px;
   }
 
-  /* 印刷余白を最小化（ブラウザ依存だが効果大） */
+  /* 印刷余白を最小化 */
   @page {
-    margin: 5mm;
+    margin: 4mm;
   }
 }
-
-
 </style>
 </head>
 <body>
@@ -123,11 +130,9 @@ body {
   年: <input type="number" id="year" value="2024" style="width:80px;">
   月: <input type="number" id="month" value="1" style="width:50px;">
 
+  <!-- ボタン順を「更新 → 印刷」に変更 -->
   <button onclick="updateAll()">更新</button>
-  <!-- 印刷ボタン追加 -->
   <button onclick="printPage()">印刷</button>
-
-
 </div>
 
 <!-- タイトルと凡例 -->
@@ -141,24 +146,18 @@ body {
 <table id="calendar"></table>
 
 <script>
-// -----------------------------
 // 印刷機能
-// -----------------------------
 function printPage() {
   window.print();
 }
 
-// -----------------------------
 // バイオリズム計算
-// -----------------------------
 function biorhythm(birth, target, cycle) {
   const diff = (target - birth) / (1000 * 60 * 60 * 24);
   return Math.sin((2 * Math.PI * diff) / cycle);
 }
 
-// -----------------------------
-// バイオリズム描画（記号で表示）
-// -----------------------------
+// バイオリズム描画（記号）
 function drawBiorhythm(birthDate, year, month) {
   const canvas = document.getElementById("biorhythm");
   const ctx = canvas.getContext("2d");
@@ -173,11 +172,9 @@ function drawBiorhythm(birthDate, year, month) {
 
   ctx.clearRect(0, 0, w, h);
 
-  // 左右余白
   const margin = 20;
   const graphWidth = w - margin * 2;
 
-  // 日付目盛り
   ctx.fillStyle = "#000";
   ctx.font = "12px sans-serif";
   for (let d = 1; d <= days; d++) {
@@ -185,7 +182,6 @@ function drawBiorhythm(birthDate, year, month) {
     if (d % 2 === 1) ctx.fillText(d, x - 3, 12);
   }
 
-  // 記号で波形を描く
   const cycles = [
     { cycle: 23, mark: "★" },
     { cycle: 28, mark: "●" },
@@ -205,7 +201,6 @@ function drawBiorhythm(birthDate, year, month) {
     }
   });
 
-  // 中央線
   ctx.strokeStyle = "#666";
   ctx.beginPath();
   ctx.moveTo(margin, h / 2);
@@ -213,9 +208,7 @@ function drawBiorhythm(birthDate, year, month) {
   ctx.stroke();
 }
 
-// -----------------------------
 // カレンダー生成
-// -----------------------------
 function generateCalendar(year, month) {
   const table = document.getElementById("calendar");
   table.innerHTML = "";
@@ -244,30 +237,4 @@ function generateCalendar(year, month) {
   if (row !== "<tr>") {
     while (row.split("<td>").length - 1 < 7) row += "<td></td>";
     row += "</tr>";
-    table.innerHTML += row;
-  }
-}
-
-// -----------------------------
-// 全体更新
-// -----------------------------
-function updateAll() {
-  const birth = document.getElementById("birth").value;
-  const year = Number(document.getElementById("year").value);
-  const month = Number(document.getElementById("month").value);
-
-  if (!birth) return alert("生年月日を入力してください");
-
-  const birthDate = new Date(birth);
-
-  // タイトル更新
-  document.getElementById("titleText").textContent =
-    `${year}年 ${month}月 バイオリズムカレンダー`;
-
-  drawBiorhythm(birthDate, year, month);
-  generateCalendar(year, month);
-}
-</script>
-
-</body>
-</html>
+    table
