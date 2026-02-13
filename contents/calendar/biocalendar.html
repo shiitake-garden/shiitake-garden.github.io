@@ -1,1 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>バイオリズム＋月間カレンダー</title>
+<style>
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
+#controls {
+  padding: 10px;
+  background: #f0f0f0;
+}
+
+#biorhythm {
+  width: 100%;
+  height: 250px;
+  border-bottom: 2px solid #333;
+}
+
+#calendar {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#calendar th, #calendar td {
+  border: 1px solid #333;
+  width: 14.2%;
+  height: 80px;
+  vertical-align: top;
+  padding: 3px;
+}
+
+#calendar textarea {
+  width: 100%;
+  height: 55px;
+  border: none;
+  resize: none;
+  font-size: 12px;
+}
+
+@media print {
+  #controls {
+    display: none;
+  }
+  #biorhythm {
+    height: 33vh;
+  }
+  #calendar {
+    height: 67vh;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="controls">
+  生年月日: <input type="date" id="birth">
+  年: <input type="number" id="year" value="2024" style="width:80px;">
+  月: <input type="number" id="month" value="1" style="width:50px;">
+  <button onclick="updateAll()">更新</button>
+</div>
+
+<canvas id="biorhythm"></canvas>
+
+<table id="calendar"></table>
+
+<script>
+// -----------------------------
+// バイオリズム計算
+// -----------------------------
+function biorhythm(birth, target, cycle) {
+  const diff = (target - birth) / (1000 * 60 * 60 * 24);
+  return Math.sin((2 * Math.PI * diff) / cycle);
+}
+
+// -----------------------------
+// バイオリズム描画
+// -----------------------------
+function drawBiorhythm(birthDate, year, month) {
+  const canvas = document.getElementById("biorhythm");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
+
+  const w = canvas.width;
+  const h = canvas.height;
+
+  const days = new Date(year, month, 0).getDate();
+
+  ctx.clearRect(0, 0, w, h);
+
+  const cycles = [
+    { cycle: 23, color: "red" },
+    { cycle: 28, color: "blue" },
+    { cycle: 33, color: "green" }
+  ];
+
+  cycles.forEach(c => {
+    ctx.beginPath();
+    ctx.strokeStyle = c.color;
+    for (let d = 1; d <= days; d++) {
+      const x = (d - 1) * (w / (days - 1));
+      const date = new Date(year, month - 1, d);
+      const yValue = biorhythm(birthDate, date, c.cycle);
+      const y = h / 2 - yValue * (h / 2 - 10);
+      if (d === 1) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  });
+
+  // 中央線
+  ctx.strokeStyle = "#666";
+  ctx.beginPath();
+  ctx.moveTo(0, h / 2);
+  ctx.lineTo(w, h / 2);
+  ctx.stroke();
+}
+
+// -----------------------------
+// カレンダー生成
+// -----------------------------
+function generateCalendar(year, month) {
+  const table = document.getElementById("calendar");
+  table.innerHTML = "";
+
+  const days = ["日", "月", "火", "水", "木", "金", "土"];
+  let header = "<tr>";
+  days.forEach(d => header += `<th>${d}</th>`);
+  header += "</tr>";
+  table.innerHTML += header;
+
+  const firstDay = new Date(year, month - 1, 1).getDay();
+  const lastDate = new Date(year, month, 0).getDate();
+
+  let row = "<tr>";
+  for (let i = 0; i < firstDay; i++) row += "<td></td>";
+
+  for (let d = 1; d <= lastDate; d++) {
+    row += `<td>${d}<br><textarea></textarea></td>`;
+    if ((firstDay + d) % 7 === 0) {
+      row += "</tr>";
+      table.innerHTML += row;
+      row = "<tr>";
+    }
+  }
+
+  if (row !== "<tr>") {
+    while (row.split("<td>").length - 1 < 7) row += "<td></td>";
+    row += "</tr>";
+    table.innerHTML += row;
+  }
+}
+
+// -----------------------------
+// 全体更新
+// -----------------------------
+function updateAll() {
+  const birth = document.getElementById("birth").value;
+  const year = Number(document.getElementById("year").value);
+  const month = Number(document.getElementById("month").value);
+
+  if (!birth) return alert("生年月日を入力してください");
+
+  const birthDate = new Date(birth);
+
+  drawBiorhythm(birthDate, year, month);
+  generateCalendar(year, month);
+}
+</script>
+
+</body>
+</html>
