@@ -1,4 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>バイオリズム＋月間カレンダー（記号版）</title>
+<style>
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#controls {
+  padding: 10px;
+  background: #f0f0f0;
+}
+
+#biorhythm {
+  width: 100%;
+  height: 260px;
+  border-bottom: 2px solid #333;
+}
+
+/* カレンダー全体 */
+#calendar {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* 曜日行（高さを低く） */
+#calendar th {
+  border: 1px solid #333;
+  height: 30px;
+  font-size: 14px;
+  background: #fafafa;
+}
+
+/* 日付セル（広く） */
+#calendar td {
+  border: 1px solid #333;
+  width: 14.2%;
+  height: 100px;
+  vertical-align: top;
+  padding: 3px;
+}
+
+/* 日付の数字（大きく） */
+.date-number {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* 予定欄 */
+#calendar textarea {
+  width: 100%;
+  height: 60px;
+  border: none;
+  resize: none;
+  font-size: 12px;
+}
+
+@media print {
+  #controls {
+    display: none;
+  }
+  #biorhythm {
+    height: 33vh;
+  }
+  #calendar {
+    height: 67vh;
+  }
+}
+</style>
+</head>
+<body>
+
+<div id="controls">
+  生年月日: <input type="date" id="birth">
+  年: <input type="number" id="year" value="2024" style="width:80px;">
+  月: <input type="number" id="month" value="1" style="width:50px;">
+  <button onclick="updateAll()">更新</button>
+</div>
+
+<canvas id="biorhythm"></canvas>
+
+<table id="calendar"></table>
+
 <script>
+// -----------------------------
+// バイオリズム計算
+// -----------------------------
+function biorhythm(birth, target, cycle) {
+  const diff = (target - birth) / (1000 * 60 * 60 * 24);
+  return Math.sin((2 * Math.PI * diff) / cycle);
+}
+
 // -----------------------------
 // バイオリズム描画（記号で表示）
 // -----------------------------
@@ -30,12 +125,12 @@ function drawBiorhythm(birthDate, year, month) {
 
   // 記号で波形を描く
   const cycles = [
-    { cycle: 23, mark: "★" },
-    { cycle: 28, mark: "●" },
-    { cycle: 33, mark: "＋" }
+    { cycle: 23, mark: "★" }, // 体力
+    { cycle: 28, mark: "●" }, // 感情
+    { cycle: 33, mark: "＋" }  // 知性
   ];
 
-  ctx.font = "16px sans-serif"; // 記号の大きさ
+  ctx.font = "16px sans-serif";
 
   cycles.forEach(c => {
     for (let d = 1; d <= days; d++) {
@@ -55,4 +150,25 @@ function drawBiorhythm(birthDate, year, month) {
   ctx.lineTo(w - margin, h / 2);
   ctx.stroke();
 }
-</script>
+
+// -----------------------------
+// カレンダー生成
+// -----------------------------
+function generateCalendar(year, month) {
+  const table = document.getElementById("calendar");
+  table.innerHTML = "";
+
+  const days = ["日", "月", "火", "水", "木", "金", "土"];
+  let header = "<tr>";
+  days.forEach(d => header += `<th>${d}</th>`);
+  header += "</tr>";
+  table.innerHTML += header;
+
+  const firstDay = new Date(year, month - 1, 1).getDay();
+  const lastDate = new Date(year, month, 0).getDate();
+
+  let row = "<tr>";
+  for (let i = 0; i < firstDay; i++) row += "<td></td>";
+
+  for (let d = 1; d <= lastDate; d++) {
+    row += `<td>
