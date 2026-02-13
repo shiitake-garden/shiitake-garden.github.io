@@ -15,6 +15,10 @@ body {
   background: #f0f0f0;
 }
 
+#controls button {
+  margin-left: 5px;
+}
+
 /* タイトルと凡例のエリア */
 #info {
   padding: 8px 12px;
@@ -94,6 +98,10 @@ body {
   生年月日: <input type="date" id="birth">
   年: <input type="number" id="year" value="2024" style="width:80px;">
   月: <input type="number" id="month" value="1" style="width:50px;">
+
+  <!-- 印刷ボタン追加 -->
+  <button onclick="printPage()">印刷</button>
+
   <button onclick="updateAll()">更新</button>
 </div>
 
@@ -108,6 +116,13 @@ body {
 <table id="calendar"></table>
 
 <script>
+// -----------------------------
+// 印刷機能
+// -----------------------------
+function printPage() {
+  window.print();
+}
+
 // -----------------------------
 // バイオリズム計算
 // -----------------------------
@@ -147,9 +162,9 @@ function drawBiorhythm(birthDate, year, month) {
 
   // 記号で波形を描く
   const cycles = [
-    { cycle: 23, mark: "★" }, // 体力
-    { cycle: 28, mark: "●" }, // 感情
-    { cycle: 33, mark: "＋" }  // 知性
+    { cycle: 23, mark: "★" },
+    { cycle: 28, mark: "●" },
+    { cycle: 33, mark: "＋" }
   ];
 
   ctx.font = "16px sans-serif";
