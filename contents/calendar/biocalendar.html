@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>バイオリズム＋月間カレンダー（記号版）</title>
+<title>カルティベーションラボ：バイオリズム＋月間カレンダー（記号版）</title>
 <style>
 body {
   font-family: sans-serif;
@@ -252,7 +252,7 @@ function updateAll() {
   const birthDate = new Date(birth);
 
   document.getElementById("titleText").textContent =
-    `${year}年 ${month}月 バイオリズムカレンダー`;
+    `${year}年 ${month}月 バイオリズムカレンダー＜カルティベーションラボ：Shiitake-Garden＞`;
 
   drawBiorhythm(birthDate, year, month);
   generateCalendar(year, month);
