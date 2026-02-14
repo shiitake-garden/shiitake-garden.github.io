@@ -121,10 +121,16 @@
     </label>
   </div>
 
-  <!-- 右：植物選択 -->
+  <!-- 右：植物選択（リストボックス＋登録） -->
   <div id="right-controls">
     <strong>植物選択（最大5種類）</strong><br>
-    <div id="plant-selector"></div>
+
+    <select id="plant-list" size="6" style="width:200px;"></select>
+    <br>
+    <button onclick="addPlant()">登録</button>
+
+    <h4>現在の選択</h4>
+    <ul id="selected-plants"></ul>
   </div>
 
 </div>
@@ -154,6 +160,7 @@
    CSV 読み込み
 ============================ */
 let plantData = [];
+let selectedPlants = [];
 
 async function loadPlantCSV() {
   const res = await fetch("/data/plant_tasks.csv");
@@ -181,26 +188,45 @@ function getPlantNames() {
   return [...new Set(plantData.map(d => d.plant))];
 }
 
-function renderPlantSelector(maxSelect = 5) {
+function renderPlantList() {
   const names = getPlantNames();
-  const area = document.getElementById("plant-selector");
-  area.innerHTML = "";
+  const list = document.getElementById("plant-list");
+  list.innerHTML = "";
 
   names.forEach(name => {
-    area.innerHTML += `
-      <label>
-        <input type="checkbox" name="plant" value="${name}">
-        ${name}
-      </label><br>
-    `;
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    list.appendChild(option);
   });
+}
 
-  area.addEventListener("change", () => {
-    const checked = area.querySelectorAll("input[type=checkbox]:checked");
-    if (checked.length > maxSelect) {
-      alert(`選択できるのは最大 ${maxSelect} 種類までです`);
-      checked[checked.length - 1].checked = false;
-    }
+function addPlant() {
+  const list = document.getElementById("plant-list");
+  const plant = list.value;
+
+  if (!plant) return;
+
+  if (selectedPlants.includes(plant)) {
+    alert("すでに登録されています");
+    return;
+  }
+
+  if (selectedPlants.length >= 5) {
+    alert("登録できるのは最大5種類です");
+    return;
+  }
+
+  selectedPlants.push(plant);
+  updateSelectedPlantList();
+}
+
+function updateSelectedPlantList() {
+  const ul = document.getElementById("selected-plants");
+  ul.innerHTML = "";
+
+  selectedPlants.forEach(p => {
+    ul.innerHTML += `<li>${p}</li>`;
   });
 }
 
@@ -216,11 +242,8 @@ function updateInfoArea(month) {
   const list = document.getElementById("info-plants");
   list.innerHTML = "";
 
-  const selected = [...document.querySelectorAll("input[name=plant]:checked")]
-    .map(el => el.value);
-
   const tasks = plantData.filter(d =>
-    d.month === month && selected.includes(d.plant)
+    d.month === month && selectedPlants.includes(d.plant)
   );
 
   tasks.forEach(t => {
@@ -271,14 +294,17 @@ async function updateAll() {
   const year = Number(document.getElementById("year").value);
   const month = Number(document.getElementById("month").value);
 
-  if (plantData.length === 0) {
-    await loadPlantCSV();
-    renderPlantSelector();
-  }
-
   updateInfoArea(month);
   generateCalendar(year, month);
 }
+
+/* ============================
+   ページ読み込み時の初期化
+============================ */
+window.onload = async () => {
+  await loadPlantCSV();
+  renderPlantList();
+};
 </script>
 
 </body>
