@@ -114,7 +114,7 @@
 <div id="controls">
 
   <!-- 左：年・月選択 -->
-  <div id="left-controls">
+  <div class="control-block" id="left-controls">
     <label>年：
       <input type="number" id="year" value="2026">
     </label>
@@ -137,19 +137,24 @@
     </label>
   </div>
 
-  <!-- 右：植物選択（リストボックス＋登録） -->
-  <div id="right-controls">
-    <strong>植物選択（最大5種類）</strong><br>
-
+  <!-- 中央：植物リストボックス -->
+  <div class="control-block" id="center-controls">
+    <strong>植物選択</strong><br>
     <select id="plant-list" size="6" style="width:200px;"></select>
     <br>
     <button onclick="addPlant()">登録</button>
+  </div>
 
-    <h4>現在の選択</h4>
+  <!-- 右：登録済み植物 -->
+  <div class="control-block" id="right-controls">
+    <strong>現在の選択（最大5種類）</strong>
     <ul id="selected-plants"></ul>
   </div>
 
 </div>
+
+
+
 
 <!-- 作成・印刷ボタン -->
 <div id="buttons">
