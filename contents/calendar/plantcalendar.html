@@ -120,20 +120,29 @@
 }
 
 /* 日曜日：背景薄赤、文字濃赤 */
-#calendar td.sunday {
-  background-color: #ffe5e5;
-}
-#calendar td.sunday div {
-  color: #d40000;
+/* 曜日行（日〜土）の背景色 */
+#calendar th:nth-child(1) {
+  background-color: #ffe5e5; /* 日曜：薄い赤 */
+  color: #d40000;            /* 日曜：濃い赤 */
 }
 
-/* 土曜日：背景薄青、文字青 */
-#calendar td.saturday {
-  background-color: #e5f0ff;
+#calendar th:nth-child(7) {
+  background-color: #e5f0ff; /* 土曜：薄い青 */
+  color: #0040c0;            /* 土曜：青 */
 }
+
+/* 日付セルは背景白のまま、文字色だけ変える */
+#calendar td.sunday div {
+  color: #d40000; /* 濃い赤 */
+}
+
 #calendar td.saturday div {
-  color: #0040c0;
+  color: #0040c0; /* 青 */
 }
+
+
+
+  
 
 /* textarea */
 #calendar textarea {
