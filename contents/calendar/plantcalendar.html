@@ -45,7 +45,6 @@
 #buttons {
   margin: 10px 0;
 }
-
 /* --- 情報領域（3分割） --- */
 #info-area {
   height: 240px;
@@ -56,22 +55,50 @@
   margin-bottom: 10px;
 }
 
+/* 左カラム：月＋年＋ロゴ */
 #info-month {
-  font-size: 80px;
-  font-weight: bold;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 下寄せ */
+  padding-left: 20px; /* 左に余白 */
 }
 
+#info-month .logo {
+  font-size: 40px; /* 月フォントの1/3 */
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+#info-month .month-year {
+  display: flex;
+  align-items: flex-end;
+}
+
+#info-month .month {
+  font-size: 120px; /* 1.5倍 */
+  font-weight: bold;
+  line-height: 1;
+}
+
+#info-month .year {
+  font-size: 40px; /* 月フォントの1/3 */
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+/* 中央：季節画像 */
 #info-image img {
   width: 100%;
   height: 220px;
   object-fit: cover;
 }
 
+/* 右：植物情報 */
 #info-plants {
   font-size: 14px;
   overflow-y: auto;
   padding: 5px;
+  line-height: 1.4;
 }
 
 /* --- カレンダー（日付領域） --- */
@@ -86,6 +113,29 @@
   vertical-align: top;
 }
 
+/* 日付数字 */
+#calendar td div {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+/* 日曜日：背景薄赤、文字濃赤 */
+#calendar td.sunday {
+  background-color: #ffe5e5;
+}
+#calendar td.sunday div {
+  color: #d40000;
+}
+
+/* 土曜日：背景薄青、文字青 */
+#calendar td.saturday {
+  background-color: #e5f0ff;
+}
+#calendar td.saturday div {
+  color: #0040c0;
+}
+
+/* textarea */
 #calendar textarea {
   width: 100%;
   height: 80px;
@@ -94,6 +144,7 @@
   font-size: 12px;
 }
 
+  
 /* --- 印刷時の最適化 --- */
 @media print {
   #controls, #buttons {
@@ -165,12 +216,13 @@
 <!-- ========================= -->
 <!--  情報領域（3分割）        -->
 <!-- ========================= -->
-<div id="info-area">
-  <div id="info-month"></div>
-  <div id="info-image"></div>
-  <div id="info-plants"></div>
+<div id="info-month">
+  <div class="logo">Cultivation Lab</div>
+  <div class="month-year">
+    <div class="month" id="month-number"></div>
+    <div class="year" id="year-number"></div>
+  </div>
 </div>
-
 <!-- ========================= -->
 <!--  日付領域（カレンダー）   -->
 <!-- ========================= -->
@@ -255,7 +307,10 @@ function updateSelectedPlantList() {
    情報領域の更新
 ============================ */
 function updateInfoArea(month) {
-  document.getElementById("info-month").textContent = month;
+  const year = Number(document.getElementById("year").value);
+
+  document.getElementById("month-number").textContent = month;
+  document.getElementById("year-number").textContent = year;
 
   document.getElementById("info-image").innerHTML =
     `<img src="/images/month/${month}.jpg">`;
@@ -267,11 +322,10 @@ function updateInfoArea(month) {
     d.month === month && selectedPlants.includes(d.plant)
   );
 
-tasks.forEach(t => {
-  const noteText = t.note ? `、【${t.note}】` : "";
-  list.innerHTML += `<div><strong>${t.plant}</strong>：${t.task}${noteText}</div>`;
-});
-
+  tasks.forEach(t => {
+    const noteText = t.note ? `、【${t.note}】` : "";
+    list.innerHTML += `<div><strong>${t.plant}</strong>：${t.task}${noteText}</div>`;
+  });
 }
 
 /* ============================
@@ -294,18 +348,29 @@ function generateCalendar(year, month) {
   for (let i = 0; i < firstDay; i++) row += "<td></td>";
 
   for (let d = 1; d <= lastDate; d++) {
-    row += `
-      <td>
-        <div>${d}</div>
-        <textarea></textarea>
-      </td>
-    `;
-    if ((firstDay + d) % 7 === 0) {
-      row += "</tr>";
-      table.innerHTML += row;
-      row = "<tr>";
-    }
+
+  // 曜日を計算
+  const dayOfWeek = (firstDay + d - 1) % 7;
+
+  // クラスを付与（日曜＝sunday、土曜＝saturday）
+  const cls =
+    dayOfWeek === 0 ? "sunday" :
+    dayOfWeek === 6 ? "saturday" : "";
+
+  row += `
+    <td class="${cls}">
+      <div>${d}</div>
+      <textarea></textarea>
+    </td>
+  `;
+
+  if ((firstDay + d) % 7 === 0) {
+    row += "</tr>";
+    table.innerHTML += row;
+    row = "<tr>";
   }
+}
+
   row += "</tr>";
   table.innerHTML += row;
 }
