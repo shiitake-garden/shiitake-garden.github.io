@@ -267,9 +267,11 @@ function updateInfoArea(month) {
     d.month === month && selectedPlants.includes(d.plant)
   );
 
-  tasks.forEach(t => {
-    list.innerHTML += `<div><strong>${t.plant}</strong>：${t.task}</div>`;
-  });
+tasks.forEach(t => {
+  const noteText = t.note ? `、【${t.note}】` : "";
+  list.innerHTML += `<div><strong>${t.plant}</strong>：${t.task}${noteText}</div>`;
+});
+
 }
 
 /* ============================
