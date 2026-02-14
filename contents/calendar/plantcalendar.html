@@ -8,12 +8,28 @@
 /* --- 上部コントロールエリア --- */
 #controls {
   display: flex;
+  flex-wrap: wrap;   /* ← これがポイント */
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 10px;
   padding: 10px;
   border-bottom: 2px solid #ccc;
 }
+/* 各ブロックの基本幅（PC では横並び） */
+#left-controls,
+#right-controls {
+  flex: 1 1 300px;   /* 最小300px、余裕があれば横に広がる */
+  margin-bottom: 10px;
+}
+
+/* スマホなど画面が狭い場合は縦並びに */
+@media (max-width: 800px) {
+  #left-controls,
+  #right-controls {
+    width: 100%;
+  }
+}
+
 
 #left-controls {
   width: 40%;
