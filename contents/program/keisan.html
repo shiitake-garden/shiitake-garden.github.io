@@ -75,7 +75,7 @@
     height: 44px;
   }
 
-  input[type="number"] {
+  input {
     width: 100%;
     height: 32px;
     font-size: 14px;
@@ -159,10 +159,43 @@
 
     tr.innerHTML = `
       <td>${i + 1}</td>
-      <td><input type="number" inputmode="numeric" class="col2"></td>
-      <td><input type="number" class="col3" readonly></td>
-      <td><input type="number" inputmode="numeric" class="col4"></td>
-      <td><input type="number" inputmode="numeric" class="col5"></td>
+
+      <td>
+        <input 
+          type="text"
+          inputmode="decimal"
+          pattern="[0-9]*[.,]?[0-9]+"
+          class="col2"
+        >
+      </td>
+
+      <td>
+        <input 
+          type="text"
+          inputmode="decimal"
+          pattern="[0-9]*[.,]?[0-9]+"
+          class="col3"
+          readonly
+        >
+      </td>
+
+      <td>
+        <input 
+          type="text"
+          inputmode="decimal"
+          pattern="[0-9]*[.,]?[0-9]+"
+          class="col4"
+        >
+      </td>
+
+      <td>
+        <input 
+          type="text"
+          inputmode="decimal"
+          pattern="[0-9]*[.,]?[0-9]+"
+          class="col5"
+        >
+      </td>
     `;
 
     tbody.appendChild(tr);
