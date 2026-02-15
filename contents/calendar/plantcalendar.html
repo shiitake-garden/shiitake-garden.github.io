@@ -139,15 +139,16 @@
 #calendar td.sunday div { color: #d40000; }
 #calendar td.saturday div { color: #0040c0; }
 
-/* ★ 印刷時にも効くセル高さ */
+/* ★ 植物管理版として最適化した高さ */
 #calendar td {
-  min-height: 150px;
+  height: 120px;        /* 画面表示用 */
+  min-height: 120px;
 }
 
 /* textarea */
 #calendar textarea {
   width: 100%;
-  height: 120px;
+  height: 70px;         /* 画面表示用 */
   border: none;
   resize: none;
   font-size: 12px;
@@ -166,14 +167,24 @@
     display: none;
   }
 
-  /* ★ 印刷時だけ高さ倍率を適用（横幅は変わらない） */
+  /* ★ 印刷時の最適高さ（A4に収まる） */
+  #calendar td {
+    height: 75px;
+    min-height: 75px;
+  }
+
+  #calendar textarea {
+    height: 40px;
+  }
+
+  /* ★ 印刷倍率（ユーザー調整） */
   body {
     transform: scaleY(var(--print-scale, 1));
     transform-origin: top left;
   }
 
-  #calendar textarea {
-    height: auto;
+  @page {
+    margin: 4mm;
   }
 }
 </style>
