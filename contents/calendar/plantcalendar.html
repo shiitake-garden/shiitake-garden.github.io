@@ -427,6 +427,7 @@ function generateCalendar(year, month) {
 function updateCellHeight() {
   const h = document.getElementById("cell-height").value;
   document.documentElement.style.setProperty("--cell-height", h + "px");
+  document.documentElement.style.setProperty("--cell-min-height", h + "px");
 }
 
 function updatePrintScale() {
