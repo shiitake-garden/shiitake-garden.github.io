@@ -8,43 +8,39 @@
 /* --- 上部コントロールエリア --- */
 #controls {
   display: flex;
-  flex-wrap: wrap;   /* ← これがポイント */
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 10px;
   padding: 10px;
   border-bottom: 2px solid #ccc;
 }
-/* 各ブロックの基本幅（PC では横並び） */
+
 #left-controls,
+#center-controls,
 #right-controls {
-  flex: 1 1 300px;   /* 最小300px、余裕があれば横に広がる */
+  flex: 1 1 250px;
   margin-bottom: 10px;
 }
 
-/* スマホなど画面が狭い場合は縦並びに */
+/* スマホ対応 */
 @media (max-width: 800px) {
   #left-controls,
+  #center-controls,
   #right-controls {
     width: 100%;
   }
 }
 
-
-#left-controls {
-  width: 40%;
-  font-size: 16px;
-}
-
-#right-controls {
-  width: 55%;
-  font-size: 14px;
-}
+#left-controls { font-size: 16px; }
+#center-controls { font-size: 14px; }
+#right-controls { font-size: 14px; }
 
 /* --- ボタンエリア --- */
 #buttons {
   margin: 10px 0;
 }
+
 /* --- 情報領域（3分割） --- */
 #info-area {
   height: 240px;
@@ -59,12 +55,12 @@
 #info-month {
   display: flex;
   flex-direction: column;
-  justify-content: flex-end; /* 下寄せ */
-  padding-left: 20px; /* 左に余白 */
+  justify-content: flex-end;
+  padding-left: 20px;
 }
 
 #info-month .logo {
-  font-size: 40px; /* 月フォントの1/3 */
+  font-size: 40px;
   font-weight: bold;
   margin-bottom: 5px;
 }
@@ -75,18 +71,22 @@
 }
 
 #info-month .month {
-  font-size: 120px; /* 1.5倍 */
+  font-size: 120px;
   font-weight: bold;
   line-height: 1;
 }
 
 #info-month .year {
-  font-size: 40px; /* 月フォントの1/3 */
+  font-size: 40px;
   margin-left: 10px;
   margin-bottom: 10px;
 }
 
 /* 中央：季節画像 */
+#info-image {
+  height: 220px;
+  overflow: hidden;
+}
 #info-image img {
   width: 100%;
   height: 220px;
@@ -113,36 +113,22 @@
   vertical-align: top;
 }
 
-/* 日付数字 */
 #calendar td div {
   font-weight: bold;
   margin-bottom: 3px;
 }
 
-/* 日曜日：背景薄赤、文字濃赤 */
-/* 曜日行（日〜土）の背景色 */
+/* 曜日色 */
 #calendar th:nth-child(1) {
-  background-color: #ffe5e5; /* 日曜：薄い赤 */
-  color: #d40000;            /* 日曜：濃い赤 */
+  background-color: #ffe5e5;
+  color: #d40000;
 }
-
 #calendar th:nth-child(7) {
-  background-color: #e5f0ff; /* 土曜：薄い青 */
-  color: #0040c0;            /* 土曜：青 */
+  background-color: #e5f0ff;
+  color: #0040c0;
 }
-
-/* 日付セルは背景白のまま、文字色だけ変える */
-#calendar td.sunday div {
-  color: #d40000; /* 濃い赤 */
-}
-
-#calendar td.saturday div {
-  color: #0040c0; /* 青 */
-}
-
-
-
-  
+#calendar td.sunday div { color: #d40000; }
+#calendar td.saturday div { color: #0040c0; }
 
 /* textarea */
 #calendar textarea {
@@ -153,14 +139,13 @@
   font-size: 12px;
 }
 
-  
-/* --- 印刷時の最適化 --- */
+/* 印刷最適化 */
 @media print {
   #controls, #buttons {
     display: none;
   }
-  #info-area {
-    page-break-after: avoid;
+  #calendar textarea {
+    height: auto;
   }
 }
 </style>
@@ -197,7 +182,7 @@
     </label>
   </div>
 
-  <!-- 中央：植物リストボックス -->
+  <!-- 中央：植物リスト -->
   <div class="control-block" id="center-controls">
     <strong>植物選択</strong><br>
     <select id="plant-list" size="6" style="width:200px;"></select>
@@ -213,9 +198,6 @@
 
 </div>
 
-
-
-
 <!-- 作成・印刷ボタン -->
 <div id="buttons">
   <button onclick="updateAll()">作成</button>
@@ -227,7 +209,6 @@
 <!-- ========================= -->
 <div id="info-area">
 
-  <!-- 左：月＋年＋ロゴ -->
   <div id="info-month">
     <div class="logo">Cultivation Lab</div>
     <div class="month-year">
@@ -236,16 +217,14 @@
     </div>
   </div>
 
-  <!-- 中央：季節画像 -->
   <div id="info-image"></div>
 
-  <!-- 右：植物情報 -->
   <div id="info-plants"></div>
 
 </div>
-  
+
 <!-- ========================= -->
-<!--  日付領域（カレンダー）   -->
+<!--  カレンダー本体           -->
 <!-- ========================= -->
 <table id="calendar"></table>
 
@@ -257,7 +236,7 @@ let plantData = [];
 let selectedPlants = [];
 
 async function loadPlantCSV() {
-  const res = await fetch("/data/plant_tasks.csv");
+  const res = await fetch("data/plant_tasks.csv");
   const text = await res.text();
   plantData = parseCSV(text);
 }
@@ -300,12 +279,10 @@ function addPlant() {
   const plant = list.value;
 
   if (!plant) return;
-
   if (selectedPlants.includes(plant)) {
     alert("すでに登録されています");
     return;
   }
-
   if (selectedPlants.length >= 5) {
     alert("登録できるのは最大5種類です");
     return;
@@ -315,12 +292,17 @@ function addPlant() {
   updateSelectedPlantList();
 }
 
+function removePlant(name) {
+  selectedPlants = selectedPlants.filter(p => p !== name);
+  updateSelectedPlantList();
+}
+
 function updateSelectedPlantList() {
   const ul = document.getElementById("selected-plants");
   ul.innerHTML = "";
 
   selectedPlants.forEach(p => {
-    ul.innerHTML += `<li>${p}</li>`;
+    ul.innerHTML += `<li>${p} <button onclick="removePlant('${p}')">×</button></li>`;
   });
 }
 
@@ -334,14 +316,14 @@ function updateInfoArea(month) {
   document.getElementById("year-number").textContent = year;
 
   document.getElementById("info-image").innerHTML =
-    `<img src="/images/month/${month}.jpg">`;
+    `<img src="images/month/${month}.jpg">`;
 
   const list = document.getElementById("info-plants");
   list.innerHTML = "";
 
-  const tasks = plantData.filter(d =>
-    d.month === month && selectedPlants.includes(d.plant)
-  );
+  const tasks = plantData
+    .filter(d => d.month === month && selectedPlants.includes(d.plant))
+    .sort((a, b) => a.plant.localeCompare(b.plant));
 
   tasks.forEach(t => {
     const noteText = t.note ? `、【${t.note}】` : "";
@@ -369,28 +351,24 @@ function generateCalendar(year, month) {
   for (let i = 0; i < firstDay; i++) row += "<td></td>";
 
   for (let d = 1; d <= lastDate; d++) {
+    const dayOfWeek = (firstDay + d - 1) % 7;
+    const cls =
+      dayOfWeek === 0 ? "sunday" :
+      dayOfWeek === 6 ? "saturday" : "";
 
-  // 曜日を計算
-  const dayOfWeek = (firstDay + d - 1) % 7;
+    row += `
+      <td class="${cls}">
+        <div>${d}</div>
+        <textarea></textarea>
+      </td>
+    `;
 
-  // クラスを付与（日曜＝sunday、土曜＝saturday）
-  const cls =
-    dayOfWeek === 0 ? "sunday" :
-    dayOfWeek === 6 ? "saturday" : "";
-
-  row += `
-    <td class="${cls}">
-      <div>${d}</div>
-      <textarea></textarea>
-    </td>
-  `;
-
-  if ((firstDay + d) % 7 === 0) {
-    row += "</tr>";
-    table.innerHTML += row;
-    row = "<tr>";
+    if ((firstDay + d) % 7 === 0) {
+      row += "</tr>";
+      table.innerHTML += row;
+      row = "<tr>";
+    }
   }
-}
 
   row += "</tr>";
   table.innerHTML += row;
@@ -400,6 +378,10 @@ function generateCalendar(year, month) {
    updateAll（全更新）
 ============================ */
 async function updateAll() {
+  if (plantData.length === 0) {
+    await loadPlantCSV();
+  }
+
   const year = Number(document.getElementById("year").value);
   const month = Number(document.getElementById("month").value);
 
@@ -408,7 +390,7 @@ async function updateAll() {
 }
 
 /* ============================
-   ページ読み込み時の初期化
+   初期化
 ============================ */
 window.onload = async () => {
   await loadPlantCSV();
