@@ -236,7 +236,7 @@ let plantData = [];
 let selectedPlants = [];
 
 async function loadPlantCSV() {
-  const res = await fetch("data/plant_tasks.csv");
+  const res = await fetch("/data/plant_tasks.csv");
   const text = await res.text();
   plantData = parseCSV(text);
 }
@@ -316,7 +316,7 @@ function updateInfoArea(month) {
   document.getElementById("year-number").textContent = year;
 
   document.getElementById("info-image").innerHTML =
-    `<img src="images/month/${month}.jpg">`;
+    `<img src="/images/month/${month}.jpg">`;
 
   const list = document.getElementById("info-plants");
   list.innerHTML = "";
