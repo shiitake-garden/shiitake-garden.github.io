@@ -114,6 +114,11 @@
   vertical-align: top;
 }
 
+/* ★ 曜日のフォントを1.5倍に */
+#calendar th {
+  font-size: 21px;
+}
+
 /* 日付数字（2倍）＋ 左余白 */
 #calendar td div {
   font-weight: bold;
@@ -134,10 +139,15 @@
 #calendar td.sunday div { color: #d40000; }
 #calendar td.saturday div { color: #0040c0; }
 
-/* ★ ユーザー設定可能な日付セル高さ */
+/* ★ 印刷時にも効くセル高さ */
+#calendar td {
+  min-height: 150px;
+}
+
+/* textarea */
 #calendar textarea {
   width: 100%;
-  height: var(--cell-height, 96px);
+  height: 120px;
   border: none;
   resize: none;
   font-size: 12px;
@@ -145,6 +155,13 @@
 
 /* 印刷最適化 */
 @media print {
+
+  /* ★ 背景色を印刷させる */
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
   #controls, #buttons {
     display: none;
   }
@@ -159,11 +176,6 @@
     height: auto;
   }
 }
-  #calendar td {
-  min-height: var(--cell-min-height, 550px);
-}
-
-
 </style>
 
 </head>
@@ -174,7 +186,7 @@
 <!-- ========================= -->
 <div id="controls">
 
-  <div class="control-block" id="left-controls">
+  <div id="left-controls">
     <label>年：
       <input type="number" id="year" value="2026">
     </label>
@@ -197,14 +209,14 @@
     </label>
   </div>
 
-  <div class="control-block" id="center-controls">
+  <div id="center-controls">
     <strong>植物選択</strong><br>
     <select id="plant-list" size="6" style="width:200px;"></select>
     <br>
     <button onclick="addPlant()">登録</button>
   </div>
 
-  <div class="control-block" id="right-controls">
+  <div id="right-controls">
     <strong>現在の選択（最大5種類）</strong>
     <ul id="selected-plants"></ul>
   </div>
@@ -220,20 +232,6 @@
 
   <br><br>
 
-  <!-- ★ 日付セル高さ調整 -->
-  <label>
-    日付セルの高さ：
-    <select id="cell-height" onchange="updateCellHeight()">
-      <option value="80">80px</option>
-      <option value="100">100px</option>
-      <option value="120" selected>120px</option>
-      <option value="140">140px</option>
-      <option value="160">160px</option>
-    </select>
-  </label>
-
-  <br>
-
   <!-- ★ 印刷時の高さ倍率 -->
   <label>
     印刷時の高さ倍率：
@@ -247,7 +245,7 @@
   </label>
 
   <div style="font-size:12px; color:#555; margin-top:4px;">
-    ※ 印刷プレビューを見ながら最適な高さと倍率を選んでください
+    ※ 印刷プレビューを見ながら最適な倍率を選んでください
   </div>
 </div>
 
@@ -424,12 +422,6 @@ function generateCalendar(year, month) {
 /* ============================
    印刷調整 UI
 ============================ */
-function updateCellHeight() {
-  const h = document.getElementById("cell-height").value;
-  document.documentElement.style.setProperty("--cell-height", h + "px");
-  document.documentElement.style.setProperty("--cell-min-height", h + "px");
-}
-
 function updatePrintScale() {
   const scale = document.getElementById("print-scale").value;
   document.documentElement.style.setProperty("--print-scale", scale);
@@ -456,7 +448,6 @@ async function updateAll() {
 window.onload = async () => {
   await loadPlantCSV();
   renderPlantList();
-  updateCellHeight();
   updatePrintScale();
 };
 </script>
