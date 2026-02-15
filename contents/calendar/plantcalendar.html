@@ -210,10 +210,6 @@
 </div>
 
 <!-- 作成・印刷ボタン -->
-<div id="buttons">
-  <button onclick="updateAll()">作成</button>
-  <button onclick="window.print()">印刷</button>
-</div>
 
 <!-- 印刷高さ倍率 -->
 <div id="buttons">
@@ -424,6 +420,11 @@ async function updateAll() {
   generateCalendar(year, month);
 }
 
+function updatePrintScale() {
+  const scale = document.getElementById("print-scale").value;
+  document.documentElement.style.setProperty("--print-scale", scale);
+}
+  
 /* ============================
    初期化
 ============================ */
@@ -431,7 +432,8 @@ window.onload = async () => {
   await loadPlantCSV();
   renderPlantList();
 };
+  
 </script>
-
+  
 </body>
 </html>
