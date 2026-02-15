@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>カルティベージョンラボ：植物管理カレンダー</title>
+<title>植物管理カレンダー</title>
 
 <style>
 /* --- 上部コントロールエリア --- */
@@ -38,6 +38,7 @@
 /* --- ボタンエリア --- */
 #buttons {
   margin: 10px 0;
+  font-size: 14px;
 }
 
 /* --- 情報領域（3分割） --- */
@@ -58,7 +59,7 @@
   padding-left: 20px;
 }
 
-/* ★ ロゴを 2/3 の大きさに縮小 */
+/* ロゴを 2/3 に縮小 */
 #info-month .logo {
   font-size: 26px;
   font-weight: bold;
@@ -95,7 +96,7 @@
 
 /* 右：植物情報 */
 #info-plants {
-  font-size: 12px;
+  font-size: 14px;
   overflow-y: auto;
   padding: 5px;
   line-height: 1.4;
@@ -113,7 +114,7 @@
   vertical-align: top;
 }
 
-/* ★ 日付数字を 2 倍に拡大 & 左余白追加 */
+/* 日付数字（2倍）＋ 左余白 */
 #calendar td div {
   font-weight: bold;
   margin-bottom: 3px;
@@ -133,10 +134,10 @@
 #calendar td.sunday div { color: #d40000; }
 #calendar td.saturday div { color: #0040c0; }
 
-/* textarea */
+/* ★ ユーザー設定可能な日付セル高さ */
 #calendar textarea {
   width: 100%;
-  height: 110px;
+  height: var(--cell-height, 96px);
   border: none;
   resize: none;
   font-size: 12px;
@@ -147,21 +148,17 @@
   #controls, #buttons {
     display: none;
   }
-  #calendar textarea {
-    height: auto;
-  }
-}
-  
 
-@media print {
+  /* ★ 印刷時だけ高さ倍率を適用（横幅は変わらない） */
   body {
     transform: scaleY(var(--print-scale, 1));
     transform-origin: top left;
   }
+
+  #calendar textarea {
+    height: auto;
+  }
 }
-
-
-  
 </style>
 
 </head>
@@ -209,15 +206,30 @@
 
 </div>
 
-<!-- 作成・印刷ボタン -->
-
-<!-- 印刷高さ倍率 -->
+<!-- ========================= -->
+<!--  作成・印刷ボタン + 調整UI -->
+<!-- ========================= -->
 <div id="buttons">
   <button onclick="updateAll()">作成</button>
   <button onclick="window.print()">印刷</button>
 
   <br><br>
 
+  <!-- ★ 日付セル高さ調整 -->
+  <label>
+    日付セルの高さ：
+    <select id="cell-height" onchange="updateCellHeight()">
+      <option value="80">80px</option>
+      <option value="100">100px</option>
+      <option value="120" selected>120px</option>
+      <option value="140">140px</option>
+      <option value="160">160px</option>
+    </select>
+  </label>
+
+  <br>
+
+  <!-- ★ 印刷時の高さ倍率 -->
   <label>
     印刷時の高さ倍率：
     <select id="print-scale" onchange="updatePrintScale()">
@@ -225,16 +237,15 @@
       <option value="1.10">1.10</option>
       <option value="1.20">1.20</option>
       <option value="1.30">1.30</option>
-      <option value="1.40">1.40</option>
+      <option value="1.40" selected>1.40</option>
     </select>
   </label>
+
   <div style="font-size:12px; color:#555; margin-top:4px;">
-    ※ 印刷プレビューで最適な倍率を選んでください
+    ※ 印刷プレビューを見ながら最適な高さと倍率を選んでください
   </div>
 </div>
 
-
-  
 <!-- ========================= -->
 <!--  情報領域（3分割）        -->
 <!-- ========================= -->
@@ -406,6 +417,19 @@ function generateCalendar(year, month) {
 }
 
 /* ============================
+   印刷調整 UI
+============================ */
+function updateCellHeight() {
+  const h = document.getElementById("cell-height").value;
+  document.documentElement.style.setProperty("--cell-height", h + "px");
+}
+
+function updatePrintScale() {
+  const scale = document.getElementById("print-scale").value;
+  document.documentElement.style.setProperty("--print-scale", scale);
+}
+
+/* ============================
    updateAll（全更新）
 ============================ */
 async function updateAll() {
@@ -420,20 +444,16 @@ async function updateAll() {
   generateCalendar(year, month);
 }
 
-function updatePrintScale() {
-  const scale = document.getElementById("print-scale").value;
-  document.documentElement.style.setProperty("--print-scale", scale);
-}
-  
 /* ============================
    初期化
 ============================ */
 window.onload = async () => {
   await loadPlantCSV();
   renderPlantList();
+  updateCellHeight();
+  updatePrintScale();
 };
-  
 </script>
-  
+
 </body>
 </html>
