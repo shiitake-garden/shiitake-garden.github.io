@@ -139,16 +139,16 @@
 #calendar td.sunday div { color: #d40000; }
 #calendar td.saturday div { color: #0040c0; }
 
-/* ★ 植物管理版として最適化した高さ */
+/* ★ 植物管理版として最適化した高さ（画面用） */
 #calendar td {
-  height: 120px;        /* 画面表示用 */
+  height: 120px;
   min-height: 120px;
 }
 
-/* textarea */
+/* textarea（画面用） */
 #calendar textarea {
   width: 100%;
-  height: 70px;         /* 画面表示用 */
+  height: 70px;
   border: none;
   resize: none;
   font-size: 12px;
@@ -167,19 +167,19 @@
     display: none;
   }
 
-  /* ★ 印刷時の最適高さ（A4に収まる） */
+  /* ★ 印刷時の最適高さ（A4にさらに近づける） */
   #calendar td {
-    height: 75px;
-    min-height: 75px;
+    height: 82px;      /* ← 75px → 82px に調整 */
+    min-height: 82px;
   }
 
   #calendar textarea {
-    height: 40px;
+    height: 45px;      /* ← 40px → 45px に調整 */
   }
 
-  /* ★ 印刷倍率（ユーザー調整） */
+  /* ★ 印刷倍率（デフォルト1.00） */
   body {
-    transform: scaleY(var(--print-scale, 1));
+    transform: scaleY(var(--print-scale, 1.00));
     transform-origin: top left;
   }
 
@@ -243,15 +243,15 @@
 
   <br><br>
 
-  <!-- ★ 印刷時の高さ倍率 -->
+  <!-- ★ 印刷時の高さ倍率（デフォルト1.00） -->
   <label>
     印刷時の高さ倍率：
     <select id="print-scale" onchange="updatePrintScale()">
-      <option value="1.00">1.00</option>
+      <option value="1.00" selected>1.00</option>
       <option value="1.10">1.10</option>
       <option value="1.20">1.20</option>
       <option value="1.30">1.30</option>
-      <option value="1.40" selected>1.40</option>
+      <option value="1.40">1.40</option>
     </select>
   </label>
 
