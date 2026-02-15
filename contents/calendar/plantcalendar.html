@@ -72,7 +72,7 @@
 }
 
 #info-month .month {
-  font-size: 96px;
+  font-size: 120px;
   font-weight: bold;
   line-height: 1;
 }
@@ -154,6 +154,15 @@
   font-size: 12px;
 }
 
+/* ★ ロゴフッター（2行） */
+#footer-logo {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.3;
+  color: #555;
+}
+
 /* 印刷最適化 */
 @media print {
 
@@ -169,12 +178,12 @@
 
   /* ★ 印刷時の最適高さ（A4にさらに近づける） */
   #calendar td {
-    height: 82px;      /* ← 75px → 82px に調整 */
+    height: 82px;
     min-height: 82px;
   }
 
   #calendar textarea {
-    height: 45px;      /* ← 40px → 45px に調整 */
+    height: 45px;
   }
 
   /* ★ 印刷倍率（デフォルト1.00） */
@@ -256,9 +265,7 @@
   </label>
 
   <div style="font-size:12px; color:#555; margin-top:4px;">
-    ※ 印刷プレビューを見ながら最適な倍率を選んでください<BR>
-    ただし、縦長になってしまいます。<BR>
-    ※ 日付部分の領域に、文字を入力してから印刷するこもできます。
+    ※ 印刷プレビューを見ながら最適な倍率を選んでください
   </div>
 </div>
 
@@ -285,6 +292,14 @@
 <!--  カレンダー本体           -->
 <!-- ========================= -->
 <table id="calendar"></table>
+
+<!-- ========================= -->
+<!--  ★ ロゴフッター（2行）   -->
+<!-- ========================= -->
+<div id="footer-logo">
+  <div>Cultivation Lab</div>
+  <div>Shiitake-Garden</div>
+</div>
 
 <script>
 /* ============================
