@@ -23,7 +23,6 @@
   margin-bottom: 10px;
 }
 
-/* スマホ対応 */
 @media (max-width: 800px) {
   #left-controls,
   #center-controls,
@@ -59,8 +58,9 @@
   padding-left: 20px;
 }
 
+/* ★ ロゴを 2/3 の大きさに縮小 */
 #info-month .logo {
-  font-size: 40px;
+  font-size: 26px;
   font-weight: bold;
   margin-bottom: 5px;
 }
@@ -113,9 +113,12 @@
   vertical-align: top;
 }
 
+/* ★ 日付数字を 2 倍に拡大 & 左余白追加 */
 #calendar td div {
   font-weight: bold;
   margin-bottom: 3px;
+  font-size: 30px;
+  padding-left: 6px;
 }
 
 /* 曜日色 */
@@ -158,7 +161,6 @@
 <!-- ========================= -->
 <div id="controls">
 
-  <!-- 左：年・月選択 -->
   <div class="control-block" id="left-controls">
     <label>年：
       <input type="number" id="year" value="2026">
@@ -182,7 +184,6 @@
     </label>
   </div>
 
-  <!-- 中央：植物リスト -->
   <div class="control-block" id="center-controls">
     <strong>植物選択</strong><br>
     <select id="plant-list" size="6" style="width:200px;"></select>
@@ -190,7 +191,6 @@
     <button onclick="addPlant()">登録</button>
   </div>
 
-  <!-- 右：登録済み植物 -->
   <div class="control-block" id="right-controls">
     <strong>現在の選択（最大5種類）</strong>
     <ul id="selected-plants"></ul>
