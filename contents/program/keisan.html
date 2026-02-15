@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>スマホ用セル計算テスト</title>
+<title>セル計算テスト（保存機能付き）</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
   * { box-sizing: border-box; }
@@ -27,13 +27,13 @@
 
   header {
     top: 0;
-    height: 10vh; /* 画面の10% */
+    height: 10vh;
     justify-content: space-between;
   }
 
   footer {
     bottom: 0;
-    height: 20vh; /* 画面の20% */
+    height: 20vh;
     border-top: 1px solid #ccc;
     border-bottom: none;
     flex-direction: column;
@@ -72,7 +72,7 @@
   }
 
   tr {
-    height: 44px; /* タップしやすい高さ */
+    height: 44px;
   }
 
   input[type="number"] {
@@ -88,9 +88,6 @@
     color: #555;
   }
 
-  .col1 { width: 12%; }
-  .col2, .col3, .col4, .col5 { width: 22%; }
-
   .btn {
     padding: 6px 12px;
     font-size: 14px;
@@ -102,6 +99,7 @@
   .info {
     font-size: 12px;
     color: #555;
+    text-align: center;
   }
 
   .base-indicator {
@@ -121,21 +119,27 @@
   <table id="sheet">
     <thead>
       <tr>
-        <th class="col1">行</th>
-        <th class="col2">2列目</th>
-        <th class="col3">3列目<br>(2+5)</th>
-        <th class="col4">4列目</th>
-        <th class="col5">5列目</th>
+        <th>行</th>
+        <th>2列目</th>
+        <th>3列目<br>(2+5)</th>
+        <th>4列目</th>
+        <th>5列目</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- JSで50行生成 -->
-    </tbody>
+    <tbody></tbody>
   </table>
 </div>
 
 <footer>
   <div class="base-indicator" id="baseInfo">基準行：未設定</div>
+
+  <div>
+    <button class="btn" onclick="saveData()">保存</button>
+    <button class="btn" onclick="loadData()">復元</button>
+    <button class="btn" onclick="clearSaved()">保存データ削除</button>
+    <button class="btn" onclick="clearInputs()">新規入力</button>
+  </div>
+
   <div class="info">
     ・2列目と5列目の合計が3列目に入り、その行が基準行になります。<br>
     ・基準行より下の4列目に値を入れると「基準行3列目 − 4列目」が5列目に入ります。
@@ -145,56 +149,26 @@
 <script>
   const tbody = document.querySelector("#sheet tbody");
   const baseInfo = document.getElementById("baseInfo");
-  let baseRowIndex = null; // 0-based index in tbody rows
+  let baseRowIndex = null;
+
+  const ROW_COUNT = 50;
 
   // 50行生成
-  const ROW_COUNT = 50;
   for (let i = 0; i < ROW_COUNT; i++) {
     const tr = document.createElement("tr");
 
-    const td1 = document.createElement("td");
-    td1.textContent = i + 1;
-
-    const td2 = document.createElement("td");
-    const td3 = document.createElement("td");
-    const td4 = document.createElement("td");
-    const td5 = document.createElement("td");
-
-    const col2 = document.createElement("input");
-    col2.type = "number";
-    col2.inputMode = "numeric";
-    col2.className = "col2";
-
-    const col3 = document.createElement("input");
-    col3.type = "number";
-    col3.readOnly = true;
-    col3.className = "col3";
-
-    const col4 = document.createElement("input");
-    col4.type = "number";
-    col4.inputMode = "numeric";
-    col4.className = "col4";
-
-    const col5 = document.createElement("input");
-    col5.type = "number";
-    col5.inputMode = "numeric";
-    col5.className = "col5";
-
-    td2.appendChild(col2);
-    td3.appendChild(col3);
-    td4.appendChild(col4);
-    td5.appendChild(col5);
-
-    tr.appendChild(td1);
-    tr.appendChild(td2);
-    tr.appendChild(td3);
-    tr.appendChild(td4);
-    tr.appendChild(td5);
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td><input type="number" inputmode="numeric" class="col2"></td>
+      <td><input type="number" class="col3" readonly></td>
+      <td><input type="number" inputmode="numeric" class="col4"></td>
+      <td><input type="number" inputmode="numeric" class="col5"></td>
+    `;
 
     tbody.appendChild(tr);
   }
 
-  function getRowElements(rowIndex) {
+  function getRow(rowIndex) {
     const tr = tbody.rows[rowIndex];
     return {
       tr,
@@ -207,64 +181,102 @@
 
   function updateBaseRow(rowIndex) {
     baseRowIndex = rowIndex;
-    // 5列目のreadonly制御
     [...tbody.rows].forEach((tr, i) => {
       const col5 = tr.querySelector(".col5");
-      if (!col5) return;
       col5.readOnly = (i !== baseRowIndex);
     });
     baseInfo.textContent = "基準行：" + (rowIndex + 1) + " 行目";
   }
 
   function recalcBaseRow(rowIndex) {
-    const { col2, col3, col5 } = getRowElements(rowIndex);
+    const { col2, col3, col5 } = getRow(rowIndex);
     const v2 = Number(col2.value) || 0;
     const v5 = Number(col5.value) || 0;
-    if (col2.value !== "" || col5.value !== "") {
-      col3.value = v2 + v5;
-    } else {
-      col3.value = "";
-    }
+    col3.value = (col2.value || col5.value) ? v2 + v5 : "";
   }
 
-  // イベント設定
+  // 入力イベント設定
   [...tbody.rows].forEach((tr, rowIndex) => {
     const col2 = tr.querySelector(".col2");
     const col3 = tr.querySelector(".col3");
     const col4 = tr.querySelector(".col4");
     const col5 = tr.querySelector(".col5");
 
-    // 2列目入力 → その行が新たな基準行
     col2.addEventListener("input", () => {
       recalcBaseRow(rowIndex);
       updateBaseRow(rowIndex);
-      // 入力欄を中央付近にスクロール
       tr.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    // 5列目入力 → 基準行なら3列目を更新
     col5.addEventListener("input", () => {
-      if (rowIndex === baseRowIndex) {
-        recalcBaseRow(rowIndex);
-      }
+      if (rowIndex === baseRowIndex) recalcBaseRow(rowIndex);
     });
 
-    // 4列目入力 → 基準行より下なら差額を5列目へ
     col4.addEventListener("input", () => {
-      if (baseRowIndex === null) return;
-      if (rowIndex <= baseRowIndex) return;
+      if (baseRowIndex === null || rowIndex <= baseRowIndex) return;
 
-      const baseRow = getRowElements(baseRowIndex);
-      const base3 = Number(baseRow.col3.value);
-      if (isNaN(base3)) return;
-
+      const base = getRow(baseRowIndex);
+      const base3 = Number(base.col3.value);
       const v4 = Number(col4.value) || 0;
+
       col5.value = base3 - v4;
-      // 5列目はこの行では常にreadonly（基準行以外）
       col5.readOnly = true;
+
       tr.scrollIntoView({ behavior: "smooth", block: "center" });
     });
   });
+
+  // 保存
+  function saveData() {
+    const data = [...tbody.rows].map(tr => ({
+      col2: tr.querySelector(".col2").value,
+      col3: tr.querySelector(".col3").value,
+      col4: tr.querySelector(".col4").value,
+      col5: tr.querySelector(".col5").value,
+    }));
+
+    localStorage.setItem("cellData", JSON.stringify(data));
+    localStorage.setItem("baseRowIndex", baseRowIndex);
+    alert("保存しました");
+  }
+
+  // 復元
+  function loadData() {
+    const json = localStorage.getItem("cellData");
+    if (!json) return;
+
+    const data = JSON.parse(json);
+    data.forEach((row, i) => {
+      if (!tbody.rows[i]) return;
+      const tr = tbody.rows[i];
+      tr.querySelector(".col2").value = row.col2;
+      tr.querySelector(".col3").value = row.col3;
+      tr.querySelector(".col4").value = row.col4;
+      tr.querySelector(".col5").value = row.col5;
+    });
+
+    const savedBase = localStorage.getItem("baseRowIndex");
+    if (savedBase !== null) updateBaseRow(Number(savedBase));
+  }
+
+  // 保存データ削除
+  function clearSaved() {
+    localStorage.removeItem("cellData");
+    localStorage.removeItem("baseRowIndex");
+    alert("保存データを削除しました");
+  }
+
+  // 新規入力（全クリア）
+  function clearInputs() {
+    [...tbody.rows].forEach(tr => {
+      tr.querySelector(".col2").value = "";
+      tr.querySelector(".col3").value = "";
+      tr.querySelector(".col4").value = "";
+      tr.querySelector(".col5").value = "";
+    });
+    baseRowIndex = null;
+    baseInfo.textContent = "基準行：未設定";
+  }
 </script>
 
 </body>
