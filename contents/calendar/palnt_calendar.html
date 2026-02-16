@@ -167,6 +167,9 @@ body {
   .print-container {
     transform: scale(var(--print-scale, 1.00));
     transform-origin: top left;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    display: block; /* gridやflexだと改ページ制御が効かない場合があるため */
   }
 
   /* テキストエリアのボーダーを消す */
