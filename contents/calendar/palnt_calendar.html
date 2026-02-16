@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>植物管理カレンダー</title>
+<title>シイタケガーデン 植物管理カレンダー</title>
   
 <style>
 /* --- 基本設定 --- */
@@ -12,14 +12,14 @@ body {
   font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
 }
 
-/* --- 上部コントロールエリア（印刷時は非表示） --- */
+/* --- コントロールエリア（印刷非表示） --- */
 #controls, #buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 15px;
   border-bottom: 2px solid #ccc;
   background-color: #f9f9f9;
 }
@@ -29,13 +29,13 @@ body {
   margin-bottom: 10px;
 }
 
-/* --- 情報領域（A4横に最適化） --- */
+/* --- 情報領域 --- */
 #info-area {
   display: grid;
-  grid-template-columns: 1fr 1.2fr 1.5fr; /* 比率を調整 */
+  grid-template-columns: 1fr 1.2fr 1.5fr;
   border-bottom: 3px solid #333;
   padding: 5mm;
-  height: 60mm; /* 高さを固定 */
+  height: 60mm; 
   box-sizing: border-box;
 }
 
@@ -51,11 +51,6 @@ body {
   color: #2e7d32;
 }
 
-#info-month .month-year {
-  display: flex;
-  align-items: baseline;
-}
-
 #info-month .month {
   font-size: 80pt;
   font-weight: bold;
@@ -69,7 +64,6 @@ body {
 
 #info-image {
   height: 50mm;
-  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,14 +79,13 @@ body {
   font-size: 11pt;
   padding-left: 5mm;
   line-height: 1.5;
-  overflow: hidden;
 }
 
 /* --- カレンダー本体 --- */
 #calendar {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* 列幅を固定 */
+  table-layout: fixed;
 }
 
 #calendar th, #calendar td {
@@ -107,14 +100,13 @@ body {
   background-color: #f0f0f0;
 }
 
-/* 日付セルの高さ（A4横1枚に収めるための重要設定） */
 #calendar td {
   height: 24mm; 
 }
 
 #calendar td div {
   font-weight: bold;
-  font-size: 20pt;
+  font-size: 18pt;
   padding-left: 2mm;
   line-height: 1.2;
 }
@@ -132,49 +124,46 @@ body {
 /* 曜日色 */
 #calendar th:nth-child(1), #calendar td.sunday div { color: #d40000; }
 #calendar th:nth-child(7), #calendar td.saturday div { color: #0040c0; }
-#calendar th:nth-child(1) { background-color: #ffe5e5; }
-#calendar th:nth-child(7) { background-color: #e5f0ff; }
 
 /* フッター */
 #footer-logo {
   text-align: center;
-  margin-top: 2mm;
+  padding: 5mm 0;
   font-size: 10pt;
   color: #666;
-  page-break-before: avoid;   /* 直前での改ページを禁止 */
-  break-before: avoid;
 }
 
 /* =========================================
-   印刷専用設定（ここが解決の鍵です）
+    印刷設定
    ========================================= */
 @media print {
   @page {
-    size: A4 landscape; /* A4横を強制 */
-    margin: 5mm;        /* 余白を最小化 */
+    size: A4 landscape;
+    margin: 5mm;
   }
 
   body {
-    width: 287mm;      /* A4横297mm - 余白10mm */
+    width: 287mm;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  /* 入力補助UIは隠す */
   #controls, #buttons {
     display: none !important;
   }
 
-  /* 印刷時は倍率を適用（必要に応じてJSで可変） */
+  /* 倍率調整のコア設定 
+     scaleYにより、横幅を変えずに「高さ」だけを微調整します 
+  */
   .print-container {
-    transform: scale(var(--print-scale, 1.00));
-    transform-origin: top left;
+    transform: scaleY(var(--print-scale, 1.00));
+    transform-origin: top center;
     page-break-inside: avoid;
     break-inside: avoid;
-    display: block; /* gridやflexだと改ページ制御が効かない場合があるため */
+    display: block;
+    width: 100%;
   }
 
-  /* テキストエリアのボーダーを消す */
   textarea {
     border: none !important;
     outline: none !important;
@@ -187,10 +176,10 @@ body {
 
 <div id="controls">
   <div id="left-controls">
-    <label>年：<input type="number" id="year" value="2026" style="width:60px;"></label>
+    <label>年：<input type="number" id="year" value="2026" style="width:70px;"></label>
     <label>月：
       <select id="month">
-        <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+        <option value="1">1月</option><option value="2" selected>2月</option><option value="3">3月</option>
         <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
         <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
         <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
@@ -200,29 +189,30 @@ body {
 
   <div id="center-controls">
     <strong>植物選択</strong><br>
-    <select id="plant-list" size="5" style="width:200px;"></select>
-    <button onclick="addPlant()">登録</button>
+    <select id="plant-list" size="5" style="width:200px; margin-top:5px;"></select>
+    <button onclick="addPlant()">選択リストに追加</button>
   </div>
 
   <div id="right-controls">
     <strong>選択中（最大5）</strong>
-    <ul id="selected-plants" style="font-size:12px;"></ul>
-    <a href="https://shiitake-garden.github.io/">トップページ</a>
+    <ul id="selected-plants" style="font-size:12px; margin-top:5px;"></ul>
   </div>
 </div>
 
 <div id="buttons">
-  <button onclick="updateAll()" style="padding:10px 20px;">1. カレンダー作成</button>
-  <button onclick="window.print()" style="padding:10px 20px; background:#2e7d32; color:white; border:none; cursor:pointer;">2. 印刷する</button>
+  <div>
+    <button onclick="updateAll()" style="padding:10px 20px; font-weight:bold; cursor:pointer;">1. カレンダー更新</button>
+    <button onclick="window.print()" style="padding:10px 20px; background:#2e7d32; color:white; border:none; font-weight:bold; cursor:pointer; margin-left:10px;">2. 印刷プレビュー</button>
+  </div>
 
-  <label style="margin-left:20px;">
-    高さ微調整：
-    <select id="print-scale" onchange="updatePrintScale()">
-      <option value="0.8">80%</option>
-      <option value="0.9">90%</option>
-      <option value="0.95">95%</option>
-      <option value="1.00" selected>100%</option>
-      <option value="1.05">105%</option>
+  <label>
+    <strong>【重要】1枚に収めるための高さ微調整：</strong>
+    <select id="print-scale" onchange="updatePrintScale()" style="padding:5px; border:2px solid #2e7d32;">
+      <option value="0.85">85% (かなり縮める)</option>
+      <option value="0.90">90% (少し縮める)</option>
+      <option value="0.95">95% (微調整)</option>
+      <option value="1.00" selected>100% (標準)</option>
+      <option value="1.05">105% (少し伸ばす)</option>
     </select>
   </label>
 </div>
@@ -231,7 +221,7 @@ body {
     <div id="info-area">
       <div id="info-month">
         <div class="logo">Cultivation Lab</div>
-        <div class="month-year">
+        <div style="display: flex; align-items: baseline;">
           <div class="month" id="month-number">--</div>
           <div class="year" id="year-number">----</div>
         </div>
@@ -243,24 +233,30 @@ body {
     <table id="calendar"></table>
 
     <div id="footer-logo">
-      <div>Cultivation Lab</div>   
-      <div>Shiitake-Garden</div> 
+      <div>Cultivation Lab: Shiitake-Garden</div>   
     </div>
 </div>
 
 <script>
-// --- CSV読み込み・植物選択ロジック（元のロジックを継承） ---
 let plantData = [];
 let selectedPlants = [];
 
+// CSVの読み込み (GitHub Pages等のパスに合わせる)
 async function loadPlantCSV() {
   try {
     const res = await fetch("/data/plant_tasks.csv");
+    if(!res.ok) throw new Error("CSV not found");
     const text = await res.text();
     plantData = parseCSV(text);
     renderPlantList();
   } catch (e) {
-    console.error("CSV読み込み失敗:", e);
+    console.error("CSV読み込み失敗、またはファイルが存在しません:", e);
+    // デモ用データ
+    plantData = [
+      {plant: "シイタケ", month: 2, task: "散水・温度管理", note: "乾燥注意"},
+      {plant: "マイタケ", month: 2, task: "換気", note: "湿度維持"}
+    ];
+    renderPlantList();
   }
 }
 
@@ -270,7 +266,7 @@ function parseCSV(csvText) {
     const cols = line.split(",");
     return {
       plant: cols[0],
-      month: parseInt(cols[1].replace("月", ""), 10),
+      month: parseInt(cols[1], 10),
       task: cols[2],
       note: cols[3] || ""
     };
@@ -303,18 +299,18 @@ function removePlant(name) {
 
 function updateSelectedPlantList() {
   const ul = document.getElementById("selected-plants");
-  ul.innerHTML = selectedPlants.map(p => `<li>${p} <button onclick="removePlant('${p}')">×</button></li>`).join('');
+  ul.innerHTML = selectedPlants.map(p => `<li>${p} <button onclick="removePlant('${p}')">消去</button></li>`).join('');
 }
 
 function updateInfoArea(month) {
   const year = document.getElementById("year").value;
   document.getElementById("month-number").textContent = month;
   document.getElementById("year-number").textContent = year;
-  document.getElementById("info-image").innerHTML = `<img src="/images/month/${month}.jpg" onerror="this.style.display='none'">`;
+  document.getElementById("info-image").innerHTML = `<img src="/images/month/${month}.jpg" onerror="this.src='https://via.placeholder.com/300x200?text=Month+Image'">`;
 
   const list = document.getElementById("info-plants");
   const tasks = plantData.filter(d => d.month === month && selectedPlants.includes(d.plant));
-  list.innerHTML = tasks.map(t => `<div><strong>${t.plant}</strong>：${t.task}${t.note ? '【'+t.note+'】':''}</div>`).join('');
+  list.innerHTML = tasks.map(t => `<div><strong>${t.plant}</strong>：${t.task} <span style="font-size:9pt; color:#666;">${t.note}</span></div>`).join('');
 }
 
 function generateCalendar(year, month) {
@@ -322,7 +318,7 @@ function generateCalendar(year, month) {
   const firstDay = new Date(year, month - 1, 1).getDay();
   const lastDate = new Date(year, month, 0).getDate();
   
-  let html = '<tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr><tr>';
+  let html = '<thead><tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr></thead><tbody><tr>';
   
   for (let i = 0; i < firstDay; i++) html += '<td></td>';
 
@@ -333,7 +329,13 @@ function generateCalendar(year, month) {
     if ((firstDay + d) % 7 === 0 && d !== lastDate) html += '</tr><tr>';
   }
   
-  html += '</tr>';
+  // 最終行の空セル埋め
+  const remaining = (firstDay + lastDate) % 7;
+  if (remaining !== 0) {
+    for (let i = remaining; i < 7; i++) html += '<td></td>';
+  }
+
+  html += '</tr></tbody>';
   table.innerHTML = html;
 }
 
@@ -343,7 +345,6 @@ function updatePrintScale() {
 }
 
 async function updateAll() {
-  if (plantData.length === 0) await loadPlantCSV();
   const year = Number(document.getElementById("year").value);
   const month = Number(document.getElementById("month").value);
   updateInfoArea(month);
