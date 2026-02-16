@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>セル計算アプリ - 完全版</title>
+<title>セル計算アプリ - ロジック刷新版</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
   * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -18,14 +18,13 @@
 
   header {
     height: 50px;
-    background: #4a4a4a;
+    background: #333;
     color: white;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 15px;
     flex-shrink: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
 
   .main {
@@ -45,7 +44,6 @@
     top: 0;
     background: #eee;
     z-index: 5;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
   }
 
   th, td {
@@ -55,8 +53,6 @@
     font-size: 12px;
     height: 48px;
   }
-
-  th { background: #f8f8f8; font-weight: bold; }
 
   input {
     width: 100%;
@@ -70,18 +66,18 @@
     display: block;
   }
 
-  /* 入力中セルの強調 */
   input:focus {
     background: #fff9c4;
     box-shadow: inset 0 0 0 2px #ffeb3b;
   }
 
-  /* 基準行（3列目合計など）の背景色 */
-  .base-row { background-color: #e3f2fd !important; }
-  
+  /* 基準行の見た目 */
+  tr.is-base { background-color: #e3f2fd; }
+  tr.is-base td:nth-child(3) input { font-weight: bold; color: #007aff; }
+
   input[readonly] {
     background: #f5f5f5;
-    color: #777;
+    color: #888;
   }
 
   footer {
@@ -100,8 +96,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 15px;
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 13px;
     border-bottom: 1px solid #bbb;
   }
 
@@ -126,14 +121,8 @@
     cursor: pointer;
   }
 
-  .key:active {
-    background: #bbb;
-    transform: translateY(2px);
-    box-shadow: none;
-  }
-
+  .key:active { background: #bbb; transform: translateY(2px); box-shadow: none; }
   .key.special { background: #adb4be; }
-  .key.action { background: #ff9800; color: white; box-shadow: 0 2px 0 #c67100; }
   .key.next { background: #007aff; color: white; box-shadow: 0 2px 0 #004ead; }
 
   .btn-sm { padding: 4px 10px; border-radius: 4px; border: 1px solid #999; background: #fff; }
@@ -142,7 +131,7 @@
 <body>
 
 <header>
-  <span>Cell Calc Test</span>
+  <span>Calculation App</span>
   <div>
     <button class="btn-sm" onclick="saveData()">保存</button>
     <button class="btn-sm" onclick="loadData()">復元</button>
@@ -153,9 +142,9 @@
   <table id="sheet">
     <thead>
       <tr>
-        <th style="width:45px;">行</th>
+        <th style="width:40px;">行</th>
         <th>2列目</th>
-        <th>3列目<br>(合計)</th>
+        <th>3列目<br>(基準)</th>
         <th>4列目</th>
         <th>5列目</th>
       </tr>
@@ -166,8 +155,8 @@
 
 <footer>
   <div class="status-bar">
-    <span id="baseInfo" style="color: #007aff;">基準行：未設定</span>
-    <button class="btn-sm" onclick="clearInputs()">全てクリア</button>
+    <span id="baseLabel" style="font-weight:bold; color:#007aff;">最新基準値: ---</span>
+    <button class="btn-sm" onclick="clearAll()">リセット</button>
   </div>
 
   <div class="keypad">
@@ -193,10 +182,10 @@
 
 <script>
   const tbody = document.querySelector("#sheet tbody");
-  const baseInfo = document.getElementById("baseInfo");
-  let baseRowIndex = null;
+  const baseLabel = document.getElementById("baseLabel");
+  
+  let latestBaseValue = null; // アプリ全体の最新基準値
   let activeInput = null;
-
   const ROW_COUNT = 50;
 
   // 初期テーブル生成
@@ -207,7 +196,7 @@
       <td><input type="text" inputmode="none" class="col2"></td>
       <td><input type="text" inputmode="none" class="col3" readonly></td>
       <td><input type="text" inputmode="none" class="col4"></td>
-      <td><input type="text" inputmode="none" class="col5" readonly></td>
+      <td><input type="text" inputmode="none" class="col5"></td>
     `;
     tbody.appendChild(tr);
 
@@ -219,6 +208,7 @@
     });
   }
 
+  // ソフトキー入力
   function pressKey(key) {
     if (!activeInput) return;
     if (activeInput.readOnly && key !== 'NEXT' && key !== 'C') return;
@@ -228,7 +218,7 @@
     } else if (key === 'C') {
       activeInput.value = "";
     } else if (key === 'NEXT') {
-      moveToNextLogic();
+      moveToNext();
       return;
     } else if (key === '.') {
       if (!activeInput.value.includes('.')) activeInput.value += '.';
@@ -236,131 +226,113 @@
       activeInput.value += key;
     }
 
-    handleInputChange(activeInput);
+    calculateLogic(activeInput);
   }
 
-  function handleInputChange(input) {
+  // コアロジック
+  function calculateLogic(input) {
     const tr = input.closest("tr");
-    const rowIndex = tr.sectionRowIndex;
-    
-    if (input.classList.contains("col2")) {
-      updateBaseRow(rowIndex);
-      recalcBaseRow(rowIndex);
-    } 
-    else if (input.classList.contains("col5") && rowIndex === baseRowIndex) {
-      recalcBaseRow(rowIndex);
-    } 
-    else if (input.classList.contains("col4")) {
-      recalcDependentRow(rowIndex);
+    const v2 = tr.querySelector(".col2");
+    const v3 = tr.querySelector(".col3");
+    const v4 = tr.querySelector(".col4");
+    const v5 = tr.querySelector(".col5");
+
+    // 1. 基準値の判定 (2列目と5列目が入力されているか)
+    // 基準行の時、5列目は自ら入力するものなので readonly を解除する判断が必要
+    // ただし、4列目がある行は5列目が自動計算になるため、
+    // 「2列目に入力がある行」を基準候補として扱う
+    if (v2.value !== "") {
+        v5.readOnly = false; // 基準行候補は5列目を打てるようにする
+        
+        const val2 = parseFloat(v2.value) || 0;
+        const val5 = parseFloat(v5.value) || 0;
+        
+        if (v5.value !== "") {
+            const sum = val2 + val5;
+            v3.value = formatNum(sum);
+            latestBaseValue = sum; // 最新基準値を更新
+            baseLabel.textContent = "最新基準値: " + v3.value;
+            
+            // 基準行としてマーク
+            resetBaseStyles();
+            tr.classList.add("is-base");
+        }
+    } else {
+        // 2列目が空なら、基準行ではないので5列目は計算結果専用
+        v5.readOnly = true;
+    }
+
+    // 2. 減算ロジック (4列目に入力がある場合)
+    if (v4.value !== "" && latestBaseValue !== null) {
+        const val4 = parseFloat(v4.value) || 0;
+        v5.value = formatNum(latestBaseValue - val4);
+        v5.readOnly = true; // 基準値からの計算結果なのでロック
+    } else if (v4.value === "" && !tr.classList.contains("is-base")) {
+        v5.value = "";
     }
   }
 
-  // 4列目入力後は次の行の4列目へ、それ以外は通常移動
-  function moveToNextLogic() {
+  function resetBaseStyles() {
+    [...tbody.rows].forEach(r => r.classList.remove("is-base"));
+  }
+
+  function formatNum(num) {
+    return num.toFixed(2).replace(/\.?0+$/, "");
+  }
+
+  // 移動ロジック
+  function moveToNext() {
     if (!activeInput) return;
     const tr = activeInput.closest("tr");
-    const rowIndex = tr.sectionRowIndex;
+    const idx = tr.sectionRowIndex;
 
+    // 4列目を打っていたら次の行の4列目へ
     if (activeInput.classList.contains("col4")) {
-      const nextTr = tbody.rows[rowIndex + 1];
-      if (nextTr) {
-        nextTr.querySelector(".col4").focus();
-      }
+      const nextTr = tbody.rows[idx + 1];
+      if (nextTr) nextTr.querySelector(".col4").focus();
     } else {
+      // それ以外は一般的な順序で移動
       const inputs = Array.from(document.querySelectorAll("input:not([readonly])"));
-      const currentIndex = inputs.indexOf(activeInput);
-      if (currentIndex !== -1 && inputs[currentIndex + 1]) {
-        inputs[currentIndex + 1].focus();
-      }
+      const cIdx = inputs.indexOf(activeInput);
+      if (inputs[cIdx + 1]) inputs[cIdx + 1].focus();
     }
   }
 
-  function updateBaseRow(rowIndex) {
-    baseRowIndex = rowIndex;
-    [...tbody.rows].forEach((tr, i) => {
-      const col5 = tr.querySelector(".col5");
-      const isBase = (i === baseRowIndex);
-      
-      // 基準行のスタイル適用
-      if (isBase) tr.classList.add("base-row");
-      else tr.classList.remove("base-row");
-
-      // 基準行のみ5列目を入力可能にする
-      col5.readOnly = !isBase;
-    });
-    baseInfo.textContent = "基準行：" + (rowIndex + 1) + " 行目";
-  }
-
-  function recalcBaseRow(rowIndex) {
-    const tr = tbody.rows[rowIndex];
-    const v2 = parseFloat(tr.querySelector(".col2").value) || 0;
-    const v5 = parseFloat(tr.querySelector(".col5").value) || 0;
-    
-    if (tr.querySelector(".col2").value === "" && tr.querySelector(".col5").value === "") {
-        tr.querySelector(".col3").value = "";
-    } else {
-        tr.querySelector(".col3").value = (v2 + v5).toFixed(2).replace(/\.?0+$/, "");
-    }
-    
-    // 基準の合計が変わったので、下の行（依存行）をすべて更新
-    for (let i = baseRowIndex + 1; i < ROW_COUNT; i++) {
-      recalcDependentRow(i);
-    }
-  }
-
-  function recalcDependentRow(rowIndex) {
-    if (baseRowIndex === null || rowIndex <= baseRowIndex) return;
-    
-    const baseCol3 = parseFloat(tbody.rows[baseRowIndex].querySelector(".col3").value) || 0;
-    const thisRow = tbody.rows[rowIndex];
-    const v4 = parseFloat(thisRow.querySelector(".col4").value) || 0;
-    
-    if (thisRow.querySelector(".col4").value !== "") {
-      thisRow.querySelector(".col5").value = (baseCol3 - v4).toFixed(2).replace(/\.?0+$/, "");
-    } else {
-      thisRow.querySelector(".col5").value = "";
-    }
-  }
-
+  // 保存・復元
   function saveData() {
     const data = [...tbody.rows].map(tr => ({
-      col2: tr.querySelector(".col2").value,
-      col3: tr.querySelector(".col3").value,
-      col4: tr.querySelector(".col4").value,
-      col5: tr.querySelector(".col5").value,
+      c2: tr.querySelector(".col2").value,
+      c3: tr.querySelector(".col3").value,
+      c4: tr.querySelector(".col4").value,
+      c5: tr.querySelector(".col5").value,
+      isB: tr.classList.contains("is-base")
     }));
-    localStorage.setItem("cellData", JSON.stringify(data));
-    localStorage.setItem("baseRowIndex", baseRowIndex);
-    alert("データを保存しました");
+    localStorage.setItem("appData", JSON.stringify(data));
+    alert("保存完了");
   }
 
   function loadData() {
-    const json = localStorage.getItem("cellData");
+    const json = localStorage.getItem("appData");
     if (!json) return;
     const data = JSON.parse(json);
-    data.forEach((row, i) => {
-      if (!tbody.rows[i]) return;
+    data.forEach((d, i) => {
       const tr = tbody.rows[i];
-      tr.querySelector(".col2").value = row.col2;
-      tr.querySelector(".col3").value = row.col3;
-      tr.querySelector(".col4").value = row.col4;
-      tr.querySelector(".col5").value = row.col5;
+      tr.querySelector(".col2").value = d.c2;
+      tr.querySelector(".col3").value = d.c3;
+      tr.querySelector(".col4").value = d.c4;
+      tr.querySelector(".col5").value = d.c5;
+      if (d.isB) {
+          tr.classList.add("is-base");
+          latestBaseValue = parseFloat(d.c3);
+          baseLabel.textContent = "最新基準値: " + d.c3;
+      }
     });
-    const savedBase = localStorage.getItem("baseRowIndex");
-    if (savedBase !== "null" && savedBase !== null) updateBaseRow(Number(savedBase));
   }
 
-  function clearInputs() {
-    if(!confirm("全ての入力を削除しますか？")) return;
-    [...tbody.rows].forEach(tr => {
-      tr.classList.remove("base-row");
-      tr.querySelectorAll("input").forEach(i => {
-          i.value = "";
-          if(i.classList.contains("col5")) i.readOnly = true;
-      });
-    });
-    baseRowIndex = null;
-    baseInfo.textContent = "基準行：未設定";
+  function clearAll() {
+    if (!confirm("全てクリアしますか？")) return;
+    localStorage.clear();
+    location.reload();
   }
 </script>
 
