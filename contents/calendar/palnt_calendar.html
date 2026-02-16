@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>シイタケガーデン 植物管理カレンダー</title>
+<title>シイタケガーデン 植物管理カレンダー（6段固定版）</title>
   
 <style>
 /* --- 基本設定 --- */
@@ -29,13 +29,13 @@ body {
   margin-bottom: 10px;
 }
 
-/* --- 情報領域 --- */
+/* --- 情報領域（高さを少し抑えて6段に対応） --- */
 #info-area {
   display: grid;
   grid-template-columns: 1fr 1.2fr 1.5fr;
   border-bottom: 3px solid #333;
-  padding: 5mm;
-  height: 60mm; 
+  padding: 3mm 5mm;
+  height: 50mm; /* 60mmから50mmに短縮 */
   box-sizing: border-box;
 }
 
@@ -46,24 +46,24 @@ body {
 }
 
 #info-month .logo {
-  font-size: 20pt;
+  font-size: 18pt;
   font-weight: bold;
   color: #2e7d32;
 }
 
 #info-month .month {
-  font-size: 80pt;
+  font-size: 65pt;
   font-weight: bold;
   line-height: 1;
 }
 
 #info-month .year {
-  font-size: 30pt;
-  margin-left: 5mm;
+  font-size: 24pt;
+  margin-left: 3mm;
 }
 
 #info-image {
-  height: 50mm;
+  height: 42mm;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -72,13 +72,13 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 3mm;
+  border-radius: 2mm;
 }
 
 #info-plants {
-  font-size: 11pt;
+  font-size: 10pt;
   padding-left: 5mm;
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 /* --- カレンダー本体 --- */
@@ -95,28 +95,29 @@ body {
 }
 
 #calendar th {
-  font-size: 14pt;
-  height: 10mm;
+  font-size: 12pt;
+  height: 8mm; /* 少し短縮 */
   background-color: #f0f0f0;
 }
 
+/* 日付セルの高さ：6段(20mm×6=120mm)を確保 */
 #calendar td {
-  height: 24mm; 
+  height: 20mm; 
 }
 
 #calendar td div {
   font-weight: bold;
-  font-size: 18pt;
+  font-size: 16pt;
   padding-left: 2mm;
-  line-height: 1.2;
+  line-height: 1.1;
 }
 
 #calendar textarea {
   width: 100%;
-  height: 12mm;
+  height: 10mm;
   border: none;
   resize: none;
-  font-size: 9pt;
+  font-size: 8.5pt;
   background: transparent;
   overflow: hidden;
 }
@@ -128,7 +129,7 @@ body {
 /* フッター */
 #footer-logo {
   text-align: center;
-  padding: 5mm 0;
+  padding: 2mm 0;
   font-size: 10pt;
   color: #666;
 }
@@ -152,9 +153,6 @@ body {
     display: none !important;
   }
 
-  /* 倍率調整のコア設定 
-     scaleYにより、横幅を変えずに「高さ」だけを微調整します 
-  */
   .print-container {
     transform: scaleY(var(--print-scale, 1.00));
     transform-origin: top center;
@@ -162,11 +160,6 @@ body {
     break-inside: avoid;
     display: block;
     width: 100%;
-  }
-
-  textarea {
-    border: none !important;
-    outline: none !important;
   }
 }
 </style>
@@ -179,40 +172,35 @@ body {
     <label>年：<input type="number" id="year" value="2026" style="width:70px;"></label>
     <label>月：
       <select id="month">
-        <option value="1">1月</option><option value="2" selected>2月</option><option value="3">3月</option>
-        <option value="4">4月</option><option value="5">5月</option><option value="6">6月</option>
+        <option value="1">1月</option><option value="2">2月</option><option value="3">3月</option>
+        <option value="4">4月</option><option value="5" selected>5月</option><option value="6">6月</option>
         <option value="7">7月</option><option value="8">8月</option><option value="9">9月</option>
         <option value="10">10月</option><option value="11">11月</option><option value="12">12月</option>
       </select>
     </label>
   </div>
-
   <div id="center-controls">
     <strong>植物選択</strong><br>
     <select id="plant-list" size="5" style="width:200px; margin-top:5px;"></select>
-    <button onclick="addPlant()">選択リストに追加</button>
+    <button onclick="addPlant()">追加</button>
   </div>
-
   <div id="right-controls">
-    <strong>選択中（最大5）</strong>
-    <ul id="selected-plants" style="font-size:12px; margin-top:5px;"></ul>
+    <strong>選択中</strong>
+    <ul id="selected-plants" style="font-size:12px;"></ul>
   </div>
 </div>
 
 <div id="buttons">
   <div>
-    <button onclick="updateAll()" style="padding:10px 20px; font-weight:bold; cursor:pointer;">1. カレンダー更新</button>
-    <button onclick="window.print()" style="padding:10px 20px; background:#2e7d32; color:white; border:none; font-weight:bold; cursor:pointer; margin-left:10px;">2. 印刷プレビュー</button>
+    <button onclick="updateAll()" style="padding:10px 20px; font-weight:bold;">1. カレンダー更新</button>
+    <button onclick="window.print()" style="padding:10px 20px; background:#2e7d32; color:white; border:none; font-weight:bold; margin-left:10px;">2. 印刷</button>
   </div>
-
   <label>
-    <strong>【重要】1枚に収めるための高さ微調整：</strong>
-    <select id="print-scale" onchange="updatePrintScale()" style="padding:5px; border:2px solid #2e7d32;">
-      <option value="0.85">85% (かなり縮める)</option>
-      <option value="0.90">90% (少し縮める)</option>
-      <option value="0.95">95% (微調整)</option>
-      <option value="1.00" selected>100% (標準)</option>
-      <option value="1.05">105% (少し伸ばす)</option>
+    <strong>高さ微調整：</strong>
+    <select id="print-scale" onchange="updatePrintScale()">
+      <option value="0.90">90%</option>
+      <option value="0.95">95%</option>
+      <option value="1.00" selected>100% (推奨)</option>
     </select>
   </label>
 </div>
@@ -233,8 +221,7 @@ body {
     <table id="calendar"></table>
 
     <div id="footer-logo">
-      <div>Cultivation Lab</div>  
-      <div>Shiitake-Garden</div> 
+      <div>Cultivation Lab: Shiitake-Garden</div>   
     </div>
 </div>
 
@@ -242,35 +229,22 @@ body {
 let plantData = [];
 let selectedPlants = [];
 
-// CSVの読み込み (GitHub Pages等のパスに合わせる)
 async function loadPlantCSV() {
   try {
     const res = await fetch("/data/plant_tasks.csv");
-    if(!res.ok) throw new Error("CSV not found");
     const text = await res.text();
     plantData = parseCSV(text);
-    renderPlantList();
   } catch (e) {
-    console.error("CSV読み込み失敗、またはファイルが存在しません:", e);
-    // デモ用データ
-    plantData = [
-      {plant: "シイタケ", month: 2, task: "散水・温度管理", note: "乾燥注意"},
-      {plant: "マイタケ", month: 2, task: "換気", note: "湿度維持"}
-    ];
-    renderPlantList();
+    plantData = [{plant: "サンプル", month: 5, task: "サンプルの作業"}];
   }
+  renderPlantList();
 }
 
 function parseCSV(csvText) {
   const lines = csvText.trim().split("\n");
   return lines.slice(1).map(line => {
     const cols = line.split(",");
-    return {
-      plant: cols[0],
-      month: parseInt(cols[1], 10),
-      task: cols[2],
-      note: cols[3] || ""
-    };
+    return { plant: cols[0], month: parseInt(cols[1], 10), task: cols[2], note: cols[3] || "" };
   });
 }
 
@@ -300,7 +274,7 @@ function removePlant(name) {
 
 function updateSelectedPlantList() {
   const ul = document.getElementById("selected-plants");
-  ul.innerHTML = selectedPlants.map(p => `<li>${p} <button onclick="removePlant('${p}')">消去</button></li>`).join('');
+  ul.innerHTML = selectedPlants.map(p => `<li>${p} <button onclick="removePlant('${p}')">×</button></li>`).join('');
 }
 
 function updateInfoArea(month) {
@@ -308,12 +282,14 @@ function updateInfoArea(month) {
   document.getElementById("month-number").textContent = month;
   document.getElementById("year-number").textContent = year;
   document.getElementById("info-image").innerHTML = `<img src="/images/month/${month}.jpg" onerror="this.src='https://via.placeholder.com/300x200?text=Month+Image'">`;
-
   const list = document.getElementById("info-plants");
   const tasks = plantData.filter(d => d.month === month && selectedPlants.includes(d.plant));
-  list.innerHTML = tasks.map(t => `<div><strong>${t.plant}</strong>：${t.task} <span style="font-size:9pt; color:#666;">${t.note}</span></div>`).join('');
+  list.innerHTML = tasks.map(t => `<div><strong>${t.plant}</strong>：${t.task}</div>`).join('');
 }
 
+/**
+ * 常に6段のカレンダーを生成するロジック
+ */
 function generateCalendar(year, month) {
   const table = document.getElementById("calendar");
   const firstDay = new Date(year, month - 1, 1).getDay();
@@ -321,19 +297,28 @@ function generateCalendar(year, month) {
   
   let html = '<thead><tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr></thead><tbody><tr>';
   
-  for (let i = 0; i < firstDay; i++) html += '<td></td>';
+  let dayCount = 0;
+  // 前月の空セル
+  for (let i = 0; i < firstDay; i++) {
+    html += '<td></td>';
+    dayCount++;
+  }
 
+  // 日付セル
   for (let d = 1; d <= lastDate; d++) {
     const dayOfWeek = (firstDay + d - 1) % 7;
     const cls = dayOfWeek === 0 ? "sunday" : dayOfWeek === 6 ? "saturday" : "";
     html += `<td class="${cls}"><div>${d}</div><textarea></textarea></td>`;
-    if ((firstDay + d) % 7 === 0 && d !== lastDate) html += '</tr><tr>';
+    dayCount++;
+    if (dayCount % 7 === 0 && d !== lastDate) html += '</tr><tr>';
   }
   
-  // 最終行の空セル埋め
-  const remaining = (firstDay + lastDate) % 7;
-  if (remaining !== 0) {
-    for (let i = remaining; i < 7; i++) html += '<td></td>';
+  // 常に6行(42セル)にするための空セル埋め
+  const totalCellsNeeded = 42; 
+  while (dayCount < totalCellsNeeded) {
+    if (dayCount % 7 === 0) html += '</tr><tr>';
+    html += '<td></td>';
+    dayCount++;
   }
 
   html += '</tr></tbody>';
