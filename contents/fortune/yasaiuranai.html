@@ -127,36 +127,59 @@ title: カルティベーションラボ
         showQuestion();
     }
 
-    function showResult() {
-        document.getElementById('quiz-part').style.display = 'none';
-        document.getElementById('result').style.display = 'block';
+  function showResult() {
+    document.getElementById('quiz-part').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
 
-        let nearestVeg = null;
-        let minDistance = Infinity;
+    let nearestVeg = null;
+    let minDistance = Infinity;
 
-        vegetables.forEach(v => {
-            const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
-            // ユークリッド距離の計算
-            const distance = Math.sqrt(
-                Math.pow(userScore.A - vScore.A, 2) +
-                Math.pow(userScore.H - vScore.H, 2) +
-                Math.pow(userScore.S - vScore.S, 2)
-            );
+    vegetables.forEach(v => {
+        // v[5]=A, v[6]=H, v[7]=S
+        const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
+        const distance = Math.sqrt(
+            Math.pow(userScore.A - vScore.A, 2) +
+            Math.pow(userScore.H - vScore.H, 2) +
+            Math.pow(userScore.S - vScore.S, 2)
+        );
 
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestVeg = v;
-            }
-        });
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestVeg = v;
+        }
+    });
 
-        document.getElementById('res-name').innerText = nearestVeg[0];
-        document.getElementById('res-desc').innerText = nearestVeg[1];
-        
-        const jobsDiv = document.getElementById('res-jobs');
-        [nearestVeg[2], nearestVeg[3], nearestVeg[4]].forEach(job => {
-            if(job) jobsDiv.innerHTML += `<span class="job-tag">${job}</span>`;
-        });
+    // 結果の表示
+    document.getElementById('res-name').innerText = nearestVeg[0];
+    document.getElementById('res-desc').innerText = nearestVeg[1];
+    
+    // 職業タグの表示
+    const jobsDiv = document.getElementById('res-jobs');
+    jobsDiv.innerHTML = ""; // 一旦クリア
+    [nearestVeg[2], nearestVeg[3], nearestVeg[4]].forEach(job => {
+        if(job) jobsDiv.innerHTML += `<span class="job-tag">${job}</span>`;
+    });
+
+    // ★ここが追加ポイント：詳細ページへのボタンを作成
+    const vegId = nearestVeg[8]; // CSVの9列目（詳細ID）
+    if (vegId) {
+        const detailLinkSection = document.createElement('div');
+        detailLinkSection.style.marginTop = "30px";
+        detailLinkSection.innerHTML = `
+            <div style="padding: 20px; background: #e8f5e9; border-radius: 10px; border: 1px solid #c8e6c9;">
+                <p style="margin: 0 0 15px 0; font-weight: bold; color: #2e7d32;">
+                    もっと詳しく知りたいですか？
+                </p>
+                <a href="detail.html?id=${vegId}" 
+                   style="display: block; text-align: center; background: #4caf50; color: white; 
+                          padding: 12px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    ${nearestVeg[0]}の性格深掘りと育て方
+                </a>
+            </div>
+        `;
+        document.getElementById('result').appendChild(detailLinkSection);
     }
+}
 
     init();
 </script>
