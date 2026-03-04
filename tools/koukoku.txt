@@ -2,6 +2,10 @@
 <!-- admax -->
 <script src="https://adm.shinobi.jp/s/26af68e0f0c2794c6b8b1a65977c1a4a"></script>
 <!-- admax -->
+同じくスマホ用中型
+<!-- admax -->
+<script src="https://adm.shinobi.jp/s/a5d6718c650816d3759cd99c1c286350"></script>
+<!-- admax -->
 同じくPC用300×250
 <!-- admax -->
 <script src="https://adm.shinobi.jp/s/9636538b62d70065fd2f5d158affb5ce"></script>
