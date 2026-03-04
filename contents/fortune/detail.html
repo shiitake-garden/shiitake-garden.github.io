@@ -65,10 +65,11 @@ title: カルティベーションラボ
             document.getElementById('veg-name').innerText = data[0];
             document.getElementById('veg-desc').innerText = data[1];
             document.getElementById('veg-grow').innerText = data[9];
-            
-            const shopKw = encodeURIComponent(data[10]);
-            document.getElementById('ad-link').innerHTML = 
-                `<a href="https://www.amazon.co.jp/s?k=${shopKw}" target="_blank" style="color: #d32f2f; font-weight: bold;">
+           
+          const yourTrackingId = "loadmap-22";
+          const shopKw = encodeURIComponent(data[10]);
+          document.getElementById('ad-link').innerHTML = 
+                `<a href="https://www.amazon.co.jp/s?k=${shopKw}&tag=${yourTrackingId}" target="_blank" style="color: #d32f2f; font-weight: bold;">
                 Amazonで「${data[0]}」の栽培セットを見る</a>`;
         } else {
             document.getElementById('veg-name').innerText = "野菜が見つかりませんでした";
