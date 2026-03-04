@@ -6,3 +6,11 @@
 <!-- admax -->
 <script src="https://adm.shinobi.jp/s/9636538b62d70065fd2f5d158affb5ce"></script>
 <!-- admax -->
+同じくｐｃ用縦長
+<!-- admax -->
+<script src="https://adm.shinobi.jp/s/1c5297a1f21c0a05e42610c2f423b8ef"></script>
+<!-- admax -->
+同じくｐｃ用横長
+<!-- admax -->
+<script src="https://adm.shinobi.jp/s/9ee9ae61898b55c5c49b1913e342ff68"></script>
+<!-- admax -->
