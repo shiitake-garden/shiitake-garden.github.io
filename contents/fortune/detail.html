@@ -11,155 +11,71 @@ title: カルティベーションラボ
 <!--ここから記事-->
 <section class="article-layout">
   <article class="article-main">
-  <!--占い本体-->
-  <head>
+ <head>
     <meta charset="UTF-8">
-    <title>本格！野菜占い</title>
+    <title id="page-title">野菜詳細ページ</title>
     <style>
-        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; line-height: 1.6; background-color: #f9fbf9; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .btn-container { display: flex; gap: 10px; margin-top: 20px; }
-        button { flex: 1; padding: 15px; font-size: 1.1em; cursor: pointer; border-radius: 8px; border: none; transition: 0.2s; }
-        .btn-yes { background-color: #ff6b6b; color: white; }
-        .btn-no { background-color: #4ecdc4; color: white; }
-        button:hover { opacity: 0.8; transform: translateY(-2px); }
-        #result { display: none; }
-        .job-tag { display: inline-block; background: #e0f2f1; padding: 5px 10px; border-radius: 5px; margin-right: 5px; font-size: 0.9em; }
+        body { font-family: sans-serif; background: #f4f7f4; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        h1 { color: #2e7d32; border-bottom: 3px solid #81c784; padding-bottom: 10px; }
+        .section { margin-bottom: 30px; }
+        .label { font-weight: bold; background: #e8f5e9; padding: 5px 10px; border-radius: 5px; display: inline-block; margin-bottom: 10px; }
+        .ad-box { background: #fffde7; border: 2px dashed #fdd835; padding: 20px; text-align: center; border-radius: 10px; }
+        .back-btn { display: inline-block; margin-top: 20px; color: #2e7d32; text-decoration: none; font-size: 0.9em; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div id="quiz-part">
-        <h2 id="q-number">質問 1 / 15</h2>
-        <p id="q-text">読み込み中...</p>
-        <div class="btn-container">
-            <button class="btn-yes" onclick="answer(true)">YES</button>
-            <button class="btn-no" onclick="answer(false)">NO</button>
-        </div>
+<div class="container">
+    <h1 id="veg-name">読み込み中...</h1>
+    
+    <div class="section">
+        <span class="label">あなたの性格</span>
+        <p id="veg-desc"></p>
     </div>
 
-    <div id="result">
-        <h2>あなたの野菜タイプは...</h2>
-        <h1 id="res-name" style="color: #2e7d32;">野菜名</h1>
-        <p id="res-desc">性格文がここに入ります。</p>
-        <h3>向いている職業</h3>
-        <div id="res-jobs"></div>
-        <hr>
-        <button onclick="location.reload()">もう一度占う</button>
+    <div class="section">
+        <span class="label">プロが教える育て方のコツ</span>
+        <p id="veg-grow"></p>
     </div>
+
+    <div class="ad-box">
+        <p><strong>🛒 この野菜を育ててみませんか？</strong></p>
+        <p id="ad-link">商品リンクを準備中...</p>
+    </div>
+
+    <a href="index.html" class="back-btn">← 診断に戻る</a>
 </div>
-  
-  
-  
-  
-  <!--占いここまで-->
-  </article>
-  <!--ここからサイドバー-->
-  <aside class="article-sidebar">
 
-    <div class="sidebar-block">
-      <h3>おすすめ記事</h3>
-      <ul>
-        <!--
-        <li><a href="#">家庭菜園の病害虫対策</a></li>
-        <li><a href="#">果樹の年間作業カレンダー</a></li>
-        <li><a href="#">初心者向け農薬の選び方</a></li>
-        -->
-      </ul>
-    </div>
-
-    <div class="sidebar-block">
-      <h3>おすすめ商品</h3>
-      <!-- Amazonアフィリエイトリンクをここに -->
-    </div>
-
-    <div class="sidebar-block">
-      <h3>広告</h3>
-      <!-- AdSense広告枠 -->
-
-    </div>
-
-  </aside>
-
-</section>
-<!--ここから占いスクリプト-->
 <script>
-    let questions = [];
-    let vegetables = [];
-    let currentIdx = 0;
-    let userScore = { A: 0, H: 0, S: 0 };
+    async function loadDetail() {
+        // URLからIDを取得 (例: ?id=tomato)
+        const params = new URLSearchParams(window.location.search);
+        const targetId = params.get('id');
 
-    // CSVをパースする関数
-    function parseCSV(text) {
+        const response = await fetch('vegetables.csv');
+        const text = await response.text();
         const lines = text.trim().split('\n');
-        return lines.slice(1).map(line => line.split(',').map(s => s.trim()));
-    }
-
-    // データの読み込み
-    async function init() {
-        const [qRes, vRes] = await Promise.all([
-            fetch('questions.csv').then(r => r.text()),
-            fetch('vegetables.csv').then(r => r.text())
-        ]);
         
-        questions = parseCSV(qRes);
-        vegetables = parseCSV(vRes);
-        showQuestion();
-    }
+        // CSVから該当するIDの行を探す
+        const data = lines.slice(1).map(line => line.split(',')).find(row => row[8] === targetId);
 
-    function showQuestion() {
-        if (currentIdx < questions.length) {
-            document.getElementById('q-number').innerText = `質問 ${currentIdx + 1} / ${questions.length}`;
-            document.getElementById('q-text').innerText = questions[currentIdx][1];
+        if (data) {
+            document.getElementById('page-title').innerText = data[0] + "の育て方と性格診断";
+            document.getElementById('veg-name').innerText = data[0];
+            document.getElementById('veg-desc').innerText = data[1];
+            document.getElementById('veg-grow').innerText = data[9];
+            
+            const shopKw = encodeURIComponent(data[10]);
+            document.getElementById('ad-link').innerHTML = 
+                `<a href="https://www.amazon.co.jp/s?k=${shopKw}" target="_blank" style="color: #d32f2f; font-weight: bold;">
+                Amazonで「${data[0]}」の栽培セットを見る</a>`;
         } else {
-            showResult();
+            document.getElementById('veg-name').innerText = "野菜が見つかりませんでした";
         }
     }
-
-    function answer(isYes) {
-        const q = questions[currentIdx];
-        const attr = q[2].charAt(0); // "A (外向)" から "A" を取得
-        const points = isYes ? parseInt(q[3]) : parseInt(q[4]);
-        userScore[attr] += points;
-
-        currentIdx++;
-        showQuestion();
-    }
-
-    function showResult() {
-        document.getElementById('quiz-part').style.display = 'none';
-        document.getElementById('result').style.display = 'block';
-
-        let nearestVeg = null;
-        let minDistance = Infinity;
-
-        vegetables.forEach(v => {
-            const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
-            // ユークリッド距離の計算
-            const distance = Math.sqrt(
-                Math.pow(userScore.A - vScore.A, 2) +
-                Math.pow(userScore.H - vScore.H, 2) +
-                Math.pow(userScore.S - vScore.S, 2)
-            );
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestVeg = v;
-            }
-        });
-
-        document.getElementById('res-name').innerText = nearestVeg[0];
-        document.getElementById('res-desc').innerText = nearestVeg[1];
-        
-        const jobsDiv = document.getElementById('res-jobs');
-        [nearestVeg[2], nearestVeg[3], nearestVeg[4]].forEach(job => {
-            if(job) jobsDiv.innerHTML += `<span class="job-tag">${job}</span>`;
-        });
-    }
-
-    init();
+    loadDetail();
 </script>
-  <!--ここまで占いスクリプト-->
+
 </body>
 </html>
