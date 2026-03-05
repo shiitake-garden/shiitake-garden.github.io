@@ -17,13 +17,17 @@ title: カルティベーションラボ
       <h1>コラム一覧</h1>
 </header>
 
+
 <ul>
-  {% for post in site.posts %}
+  {%- assign column_pages = site.pages 
+      | where_exp: "p", "p.url startswith '/column/' and p.url != '/column/'" 
+      | sort: "name" -%}
+  {%- for p in column_pages -%}
     <li>
-      {{ post.url | relative_url }}{{ post.title }}</a>
-      <small>（{{ post.date | date: "%Y-%m-%d" }}）</small>
+      <a href="{{ p.url |_url }}{{ p.title | default: p.name }}</a>
+      {%- if p.date -%}<small>（{{ p.date | date: "%Y-%m-%d" }}）</small>{%- endif -%}
     </li>
-  {% endfor %}
+  {%- endfor -%}
 </ul>
 
     
