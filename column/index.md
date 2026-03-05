@@ -13,16 +13,18 @@ title: カルティベーションラボ
   <article class="article-main">
 
 
-# コラム一覧
+# 診断
+
+- site.pages 件数: {{ site.pages | size }}
 
 {% assign column_pages = site.pages | where: "dir", "/column/" %}
-{% assign sorted = column_pages | sort: "name" %}
+- /column/ 抽出件数: {{ column_pages | size }}
 
-{% for p in sorted %}
-{% unless p.name == "index.html" or p.name == "column_index.html" %}
-- {{ p.title | default: p.name }}
-{% endunless %}
+## /column/ 配下ページ一覧（Jekyll視点）
+{% for p in column_pages %}
+- path: `{{ p.path }}` / dir: `{{ p.dir }}` / name: `{{ p.name }}` / url: `{{ p.url }}` / title: `{{ p.title | default: '(titleなし)' }}`
 {% endfor %}
+
 
 
 
