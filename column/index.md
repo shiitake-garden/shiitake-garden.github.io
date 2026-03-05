@@ -1,5 +1,5 @@
 ---
-layout: default_care
+layout: none
 title: カルティベーションラボ
 ---
 # 診断
