@@ -14,25 +14,18 @@ title: カルティベーションラボ
 
 <h1>コラム一覧</h1>
 
-
 <ul>
-  {% comment %}
-    GitHub Pages 互換版：/column/ 直下の通常ページを列挙
-    - where_exp は使わず、where と if の組み合わせで対応
-    - 並びはファイル名（p.name）の昇順
-  {% endcomment %}
-
   {% assign column_pages = site.pages | where: "dir", "/column/" %}
   {% assign sorted = column_pages | sort: "name" %}
-
   {% for p in sorted %}
-    {% if p.name != "index.html" %}
+    {% unless p.name == "index.html" or p.name == "column_index.html" %}
       <li>
         {{ p.url | relative_url }}{{ p.title | default: p.name }}</a>
       </li>
-    {% endif %}
+    {% endunless %}
   {% endfor %}
 </ul>
+
 
 
 
