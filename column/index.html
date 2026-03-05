@@ -13,32 +13,6 @@ title: カルティベーションラボ
   <article class="article-main">
 
 
-<header>
-      <h1>コラム一覧</h1>
-</header>
-
-
-<p>site.pages 全体件数: {{ site.pages | size }}</p>
-
-{%- assign column_pages = site.pages
-    | where_exp: "p", "p.dir == '/column/' and p.name != 'index.html'" -%}
-<p>/column/ 抽出件数: {{ column_pages | size }}</p>
-
-<ul>
-  {%- for p in column_pages -%}
-    <li>
-      path: {{ p.path }} /
-      dir: {{ p.dir }} /
-      name: {{ p.name }} /
-      url: {{ p.url }} /
-      title: {{ p.title | default: '(titleなし)' }}
-    </li>
-  {%- endfor -%}
-</ul>
-
-
-
-
     
   </article>
   <!--ここからサイドバー-->
