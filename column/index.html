@@ -17,27 +17,25 @@ title: カルティベーションラボ
       <h1>コラム一覧</h1>
 </header>
 
+
+<p>site.pages 全体件数: {{ site.pages | size }}</p>
+
+{%- assign column_pages = site.pages
+    | where_exp: "p", "p.dir == '/column/' and p.name != 'index.html'" -%}
+<p>/column/ 抽出件数: {{ column_pages | size }}</p>
+
 <ul>
-  {%- comment -%}
-    /column/ フォルダ直下のページだけを抽出します。
-    p.dir はファイルのディレクトリ（例: "/column/"）
-    p.name はファイル名（例: "abc.html"）
-  {%- endcomment -%}
-  {%- assign column_pages = site.pages
-      | where_exp: "p", "p.dir == '/column/' and p.name != 'index.html'" -%}
-
-  {%- comment -%}
-    ファイル名（p.name）でソート（a→z）。日付なしでも安定します。
-    ※ 後でタイトルを直したら title でソートに変えてもOK。
-  {%- endcomment -%}
-  {%- assign sorted = column_pages | sort: "name" -%}
-
-  {%- for p in sorted -%}
+  {%- for p in column_pages -%}
     <li>
-      {{ p.url | relative_url }}{{ p.title | default: p.name }}</a>
+      path: {{ p.path }} /
+      dir: {{ p.dir }} /
+      name: {{ p.name }} /
+      url: {{ p.url }} /
+      title: {{ p.title | default: '(titleなし)' }}
     </li>
   {%- endfor -%}
 </ul>
+
 
 
 
