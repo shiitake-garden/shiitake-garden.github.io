@@ -3,7 +3,25 @@ layout: default_care
 title: 記事一覧
 ---
 
+
+
+---
+layout: default_care
+title: カルティベーションラボ
+---
+
+
+<!doctype html>
+<html lang="ja">
+
+<body>
+<!--ここから記事-->
+<section class="article-layout">
+
+  <article class="article-main">
+<header>
 <h2>コラム一覧</h2>
+</header>
 <ul>
   {% assign column_pages = site.pages | where_exp: "item", "item.path contains 'column/'" %}
   {% for post in column_pages %}
@@ -16,3 +34,25 @@ title: 記事一覧
     {% endunless %}
   {% endfor %}
 </ul>
+
+
+    
+  </article>
+
+  <!--ここからサイドバー-->
+  <aside class="article-sidebar">
+
+    <div class="sidebar-block">
+      <h3>広告</h3>
+      <!-- AdSense広告枠 -->
+<!-- admax -->
+<script src="https://adm.shinobi.jp/s/1c5297a1f21c0a05e42610c2f423b8ef"></script>
+<!-- admax -->
+    </div>
+
+  </aside>
+
+</section>
+
+</body>
+</html>
