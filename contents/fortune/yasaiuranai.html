@@ -106,27 +106,38 @@ title: カルティベーションラボ：野菜性格診断
         showQuestion();
     }
 
-  function showResult() {
-    document.getElementById('quiz-part').style.display = 'none';
-    document.getElementById('result').style.display = 'block';
+function showResult() {
+    document.getElementById('quiz-part').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
 
-    let nearestVeg = null;
-    let minDistance = Infinity;
+    // ★重要：ユーザーの点数(0-5)を、野菜のスケール(0-10)に変換して補正する
+    // ※設問の配点を合計10点に修正したCSVを使う場合は、この「* 2」は不要ですが、
+    // 配点を[1,2,2,2,3]に設定した場合は、この補正を入れると完璧に一致します。
+    const normA = userScore.A; // 修正版CSVを使うならそのまま
+    const normH = userScore.H; // 修正版CSVを使うならそのまま
+    const normS = userScore.S; // 修正版CSVを使うならそのまま
 
-    vegetables.forEach(v => {
-        // v[5]=A, v[6]=H, v[7]=S
-        const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
-        const distance = Math.sqrt(
-            Math.pow(userScore.A - vScore.A, 2) +
-            Math.pow(userScore.H - vScore.H, 2) +
-            Math.pow(userScore.S - vScore.S, 2)
-        );
+    let nearestVeg = null;
+    let minDistance = Infinity;
 
-        if (distance < minDistance) {
-            minDistance = distance;
-            nearestVeg = v;
-        }
-    });
+    vegetables.forEach(v => {
+        // v[5]=A, v[6]=H, v[7]=S
+        const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
+        
+        // 距離計算の式を少しだけ変更
+        const distance = Math.sqrt(
+            Math.pow(normA - vScore.A, 2) +
+            Math.pow(normH - vScore.H, 2) +
+            Math.pow(normS - vScore.S, 2)
+        );
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestVeg = v;
+        }
+    });
+
+  
 
     // 結果の表示
     document.getElementById('res-name').innerText = nearestVeg[0];
