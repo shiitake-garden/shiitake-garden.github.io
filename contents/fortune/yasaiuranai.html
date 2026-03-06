@@ -110,62 +110,49 @@ title: カルティベーションラボ：野菜性格診断
     }
 
 function showResult() {
-    document.getElementById('quiz-part').style.display = 'none';
-    document.getElementById('result').style.display = 'block';
+    document.getElementById('quiz-part').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
 
-    // ★重要：ユーザーの点数(0-5)を、野菜のスケール(0-10)に変換して補正する
-    // ※設問の配点を合計10点に修正したCSVを使う場合は、この「* 2」は不要ですが、
-    // 配点を[1,2,2,2,3]に設定した場合は、この補正を入れると完璧に一致します。
-    const normA = userScore.A; // 修正版CSVを使うならそのまま
-    const normH = userScore.H; // 修正版CSVを使うならそのまま
-    const normS = userScore.S; // 修正版CSVを使うならそのまま
+    const normA = userScore.A;
+    const normH = userScore.H;
+    const normS = userScore.S;
 
-    let nearestVeg = null;
-    let minDistance = Infinity;
+    let nearestVeg = null;
+    let minDistance = Infinity;
 
-    vegetables.forEach(v => {
-        // v[5]=A, v[6]=H, v[7]=S
-        const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
-        
-        // 距離計算の式を少しだけ変更
-        const distance = Math.sqrt(
-            Math.pow(normA - vScore.A, 2) +
-            Math.pow(normH - vScore.H, 2) +
-            Math.pow(normS - vScore.S, 2)
-        );
+    vegetables.forEach(v => {
+        const vScore = { A: parseInt(v[5]), H: parseInt(v[6]), S: parseInt(v[7]) };
+        const distance = Math.sqrt(
+            Math.pow(normA - vScore.A, 2) +
+            Math.pow(normH - vScore.H, 2) +
+            Math.pow(normS - vScore.S, 2)
+        );
+        if (distance < minDistance) {
+            minDistance = distance;
+            nearestVeg = v;
+        }
+    });
 
-        if (distance < minDistance) {
-            minDistance = distance;
-            nearestVeg = v;
-        }
-    });
+    // --- ここで vegId を宣言 ---
+    const vegId = nearestVeg[8]; 
+    const vegName = nearestVeg[0];
 
-//顔画像の処理
-const vegId = nearestVeg[8]; // 詳細ID (例: tomato)
-    const vegName = nearestVeg[0]; // 野菜名 (例: トマト)
-
-    // 画像を表示する処理を追加
     const resImg = document.getElementById('res-image');
     if (resImg) {
-        // images/tomato.jpg のようなパスを指定
         resImg.src = `images/${vegId}.jpg`;
         resImg.alt = `${vegName}タイプのあなた`;
     }
-  
 
-    // 結果の表示
     document.getElementById('res-name').innerText = nearestVeg[0];
     document.getElementById('res-desc').innerText = nearestVeg[1];
     
-    // 職業タグの表示
     const jobsDiv = document.getElementById('res-jobs');
-    jobsDiv.innerHTML = ""; // 一旦クリア
+    jobsDiv.innerHTML = "";
     [nearestVeg[2], nearestVeg[3], nearestVeg[4]].forEach(job => {
         if(job) jobsDiv.innerHTML += `<span class="job-tag">${job}</span>`;
     });
 
-    // ★ここが追加ポイント：詳細ページへのボタンを作成
-    const vegId = nearestVeg[8]; // CSVの9列目（詳細ID）
+    // --- 修正箇所：ここでは 'const' を付けずに、すでに宣言済みの vegId を使う ---
     if (vegId) {
         const detailLinkSection = document.createElement('div');
         detailLinkSection.style.marginTop = "30px";
