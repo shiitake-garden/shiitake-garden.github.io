@@ -140,6 +140,17 @@ function showResult() {
         }
     });
 
+//顔画像の処理
+const vegId = nearestVeg[8]; // 詳細ID (例: tomato)
+    const vegName = nearestVeg[0]; // 野菜名 (例: トマト)
+
+    // 画像を表示する処理を追加
+    const resImg = document.getElementById('res-image');
+    if (resImg) {
+        // images/tomato.jpg のようなパスを指定
+        resImg.src = `images/${vegId}.jpg`;
+        resImg.alt = `${vegName}タイプのあなた`;
+    }
   
 
     // 結果の表示
