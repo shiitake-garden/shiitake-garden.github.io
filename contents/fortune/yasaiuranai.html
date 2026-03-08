@@ -152,6 +152,34 @@ function showResult() {
         if(job) jobsDiv.innerHTML += `<span class="job-tag">${job}</span>`;
     });
 
+//--シェア--
+// --- X（旧Twitter）シェアボタンの追加 ---
+const shareSection = document.createElement('div');
+shareSection.style.marginTop = "20px";
+
+// ツイートに含めるテキストを作成
+const tweetText = encodeURIComponent(
+    `【野菜性格診断】私の性格は「${nearestVeg[0]}」タイプでした！\n` +
+    `向いている職業は「${nearestVeg[2]}」など。顔がヤバい…。\n\n` +
+    `#野菜性格診断 #個人開発`
+);
+const shareUrl = encodeURIComponent(window.location.href); // 現在のサイトURL
+
+shareSection.innerHTML = `
+    <a href="https://twitter.com/intent/tweet?text=${tweetText}&url=${shareUrl}" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       style="display: block; text-align: center; background: #000; color: white; 
+              padding: 12px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+       <span style="margin-right:8px;">𝕏</span>結果をフォロワーに晒す
+    </a>
+`;
+document.getElementById('result').appendChild(shareSection);
+//--ここまでシェア--
+
+
+
+  
     // --- 修正箇所：ここでは 'const' を付けずに、すでに宣言済みの vegId を使う ---
     if (vegId) {
         const detailLinkSection = document.createElement('div');
