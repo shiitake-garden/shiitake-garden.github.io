@@ -13,6 +13,294 @@ title: カルティベーションラボ
 
   <article class="article-main">
 
+ <h1>農薬希釈計算ツール</h1>
+    <p>家庭菜園・園芸向けに、<strong>希釈倍率モード</strong>と<strong>規定量モード</strong>（「水10Lに◯g（mL）」の指示を換算）の2通りで計算できます。数値を入れると即時計算されます。</p>
+
+    <details>
+      <summary>使い方（クリックで開閉）</summary>
+      <ul>
+        <li><strong>倍率モード</strong>：ラベルに「1000倍」などの記載がある場合に使います。<br>式：<code>原液量(mL) = 作りたい合計量(mL) ÷ 倍率</code> ／ <code>水量 = 合計量 − 原液量</code></li>
+        <li><strong>規定量モード</strong>：粉剤・水和剤などで「水10Lに◯g（mL）」のような指定を任意の水量へ比例換算します。<br>式：<code>必要量 = 目標の水量 ÷ 基準の水量 × 基準の製剤量</code></li>
+        <li>表示単位はmL（体積）またはg（質量）を選べます。必要に応じてスプーンやシリンジ（注射器）等で正確に量ってください。</li>
+      </ul>
+    </details>
+
+    <style>
+      .tool-wrap{border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin:16px 0;background:#fafafa}
+      .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+      .tool-grid .full{grid-column:1/-1}
+      .field{display:flex;flex-direction:column;gap:6px}
+      .field label{font-weight:600}
+      .row{display:flex;gap:8px;align-items:center}
+      .btns{display:flex;flex-wrap:wrap;gap:8px}
+      button.preset{padding:6px 10px;border:1px solid #94a3b8;background:#fff;border-radius:6px;cursor:pointer}
+      button.preset:hover{background:#f1f5f9}
+      .result{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px}
+      .result h3{margin:.2em 0 .4em}
+      .muted{color:#64748b;font-size:.92em}
+      table.tbl{width:100%;border-collapse:collapse;margin-top:8px}
+      .tbl th,.tbl td{border:1px solid #e5e7eb;padding:8px;text-align:left}
+      .warn{background:#fff7ed;border-left:4px solid #fb923c;padding:10px;margin-top:16px}
+      @media (max-width:800px){.tool-grid{grid-template-columns:1fr}}
+    </style>
+
+    <div class="tool-wrap" id="pesticideTool">
+      <div class="field">
+        <label>モード</label>
+        <div class="row">
+          <label><input type="radio" name="mode" value="倍率" checked> 倍率モード</label>
+          <label><input type="radio" name="mode" value="規定量"> 規定量モード（「水10Lに◯g（mL）」）</label>
+        </div>
+      </div>
+
+      <!-- 倍率モード -->
+      <div id="modeA" class="tool-grid">
+        <div class="field">
+          <label for="ratio">希釈倍率</label>
+          <div class="row">
+            <input id="ratio" type="number" inputmode="numeric" min="1" step="1" value="1000" style="width:120px">
+            <div class="btns">
+              <button class="preset" data-r="100">100倍</button>
+              <button class="preset" data-r="200">200倍</button>
+              <button class="preset" data-r="500">500倍</button>
+              <button class="preset" data-r="1000">1000倍</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="totalVal">作りたい合計量</label>
+          <div class="row">
+            <input id="totalVal" type="number" inputmode="decimal" value="1000" step="1" min="1" style="width:140px">
+            <select id="totalUnit">
+              <option value="mL" selected>mL（ミリリットル）</option>
+              <option value="L">L（リットル）</option>
+            </select>
+          </div>
+          <div class="muted">※合計量＝出来上がりの希釈液の総量（原液＋水）</div>
+        </div>
+      </div>
+
+      <!-- 規定量モード -->
+      <div id="modeB" class="tool-grid" style="display:none">
+        <div class="field">
+          <label>基準（ラベルの記載）</label>
+          <div class="row">
+            <span>水</span>
+            <input id="refWater" type="number" inputmode="decimal" value="10" step="0.1" min="0.1" style="width:100px">
+            <select id="refWaterUnit">
+              <option value="L" selected>L</option>
+              <option value="mL">mL</option>
+            </select>
+            <span>に対して 製剤</span>
+            <input id="refDose" type="number" inputmode="decimal" value="20" step="0.1" min="0" style="width:100px">
+            <select id="refDoseUnit">
+              <option value="g" selected>g</option>
+              <option value="mL">mL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>作りたい水量（目標）</label>
+          <div class="row">
+            <input id="targetWater" type="number" inputmode="decimal" value="5" step="0.1" min="0.1" style="width:120px">
+            <select id="targetWaterUnit">
+              <option value="L" selected>L</option>
+              <option value="mL">mL</option>
+            </select>
+          </div>
+          <div class="muted">※このモードでは「水の量」を基準に比例換算します。</div>
+        </div>
+      </div>
+
+      <div class="tool-grid">
+        <div class="field">
+          <label for="rounding">端数処理</label>
+          <select id="rounding" style="max-width:200px">
+            <option value="round" selected>四捨五入</option>
+            <option value="ceil">切り上げ</option>
+            <option value="floor">切り捨て</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="digits">小数点以下の桁数</label>
+          <input id="digits" type="number" min="0" max="3" value="1" step="1" style="max-width:120px">
+        </div>
+      </div>
+
+      <div class="result" id="resultBox">
+        <h3>計算結果</h3>
+        <div id="resMain">入力値を変更するとここに表示されます。</div>
+        <div id="resTableWrap"></div>
+        <div class="muted" id="resNote"></div>
+      </div>
+
+      <div class="warn">
+        <strong>注意・免責：</strong>
+        <ul>
+          <li>必ず製品ラベル・適用作物・使用時期・使用量等の指示に従ってください（法令・地域ルールも遵守）。</li>
+          <li>本ツールは家庭向けの目安です。必要に応じてメスシリンダー／シリンジ等で<strong>正確に計量</strong>してください。</li>
+          <li>「合計量＝原液＋水」で計算しています（体積加成の近似）。高精度が要求される場合はラベルの手順を優先。</li>
+          <li>混用・散布条件（気温・日射・pHなど）により薬害の恐れがあります。必ず小面積で試験散布して確認してください。</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const $ = (id) => document.getElementById(id);
+        const modeRadios = document.querySelectorAll('input[name="mode"]');
+        const modeA = $("modeA");
+        const modeB = $("modeB");
+        const ratio = $("ratio");
+        const totalVal = $("totalVal");
+        const totalUnit = $("totalUnit");
+
+        const refWater = $("refWater");
+        const refWaterUnit = $("refWaterUnit");
+        const refDose = $("refDose");
+        const refDoseUnit = $("refDoseUnit");
+        const targetWater = $("targetWater");
+        const targetWaterUnit = $("targetWaterUnit");
+
+        const rounding = $("rounding");
+        const digits = $("digits");
+        const resMain = $("resMain");
+        const resTableWrap = $("resTableWrap");
+        const resNote = $("resNote");
+
+        // プリセット倍率
+        document.querySelectorAll('button.preset').forEach(btn => {
+          btn.addEventListener('click', () => {
+            ratio.value = btn.dataset.r;
+            calc();
+          });
+        });
+
+        // モード切替
+        modeRadios.forEach(r => {
+          r.addEventListener('change', () => {
+            const isA = r.value === "倍率" && r.checked;
+            modeA.style.display = isA ? "" : "none";
+            modeB.style.display = isA ? "none" : "";
+            calc();
+          });
+        });
+
+        // 共通：入力変更イベント
+        [ratio, totalVal, totalUnit,
+         refWater, refWaterUnit, refDose, refDoseUnit,
+         targetWater, targetWaterUnit,
+         rounding, digits].forEach(el => {
+          el.addEventListener('input', calc);
+        });
+
+        function toMilliLiters(val, unit){
+          const n = Number(val);
+          if(!isFinite(n) || n <= 0) return NaN;
+          return unit === 'L' ? n * 1000 : n;
+        }
+
+        function format(val){
+          const d = Math.min(Math.max(parseInt(digits.value||0,10),0),3);
+          const fn = rounding.value;
+          const m = Math.pow(10, d);
+          let num = Number(val);
+          if(!isFinite(num)) return "-";
+          if(fn === "ceil") num = Math.ceil(num * m) / m;
+          else if(fn === "floor") num = Math.floor(num * m) / m;
+          else num = Math.round(num * m) / m;
+          return num.toFixed(d);
+        }
+
+        function calc(){
+          const mode = [...modeRadios].find(r=>r.checked)?.value || "倍率";
+          resTableWrap.innerHTML = "";
+          resNote.textContent = "";
+
+          if(mode === "倍率"){
+            const R = Number(ratio.value);
+            const T = toMilliLiters(totalVal.value, totalUnit.value);
+            if(!isFinite(R) || R <= 0 || !isFinite(T) || T <= 0){
+              resMain.textContent = "入力値を確認してください。";
+              return;
+            }
+            const product_mL = T / R;
+            const water_mL = T - product_mL;
+
+            resMain.innerHTML = `
+              <p><strong>原液（製剤）量：</strong> ${format(product_mL)} mL</p>
+              <p><strong>水の量：</strong> ${format(water_mL)} mL</p>
+              <p class="muted">合計 ${format(T)} mL（= ${format(T/1000)} L）</p>
+            `;
+
+            // 目安表（固定サイズ：500mL / 1L / 5L）
+            const sizes = [500, 1000, 5000];
+            const rows = sizes.map(s => {
+              const p = s / R;
+              const w = s - p;
+              return `<tr><td>${s} mL</td><td>${format(p)} mL</td><td>${format(w)} mL</td></tr>`;
+            }).join("");
+            resTableWrap.innerHTML = `
+              <table class="tbl">
+                <thead><tr><th>作る量</th><th>原液量</th><th>水量</th></tr></thead>
+                <tbody>${rows}</tbody>
+              </table>`;
+            resNote.textContent = "※ 体積加成の近似で計算しています。高精度が必要な場合は製品ラベルの手順を優先してください。";
+          }else{
+            // 規定量モード：比例換算
+            const RW = toMilliLiters(refWater.value, refWaterUnit.value);
+            const RD = Number(refDose.value);
+            const TW = toMilliLiters(targetWater.value, targetWaterUnit.value);
+            if(!isFinite(RW) || RW <= 0 || !isFinite(RD) || RD < 0 || !isFinite(TW) || TW <= 0){
+              resMain.textContent = "入力値を確認してください。";
+              return;
+            }
+            const need = TW / RW * RD; // g または mL
+            const doseUnit = refDoseUnit.value; // g or mL
+            resMain.innerHTML = `
+              <p><strong>必要な製剤量：</strong> ${format(need)} ${doseUnit}</p>
+              <p><strong>水の量：</strong> ${format(TW)} mL（= ${format(TW/1000)} L）</p>
+              <p class="muted">基準：水 ${format(RW)} mL に対して 製剤 ${format(RD)} ${doseUnit}</p>
+            `;
+
+            // 目安表：500mL / 1L / 5L の水量での必要量
+            const sizes = [500, 1000, 5000];
+            const rows = sizes.map(s => {
+              const n = s / RW * RD;
+              return `<tr><td>水 ${s} mL</td><td>${format(n)} ${doseUnit}</td></tr>`;
+            }).join("");
+            resTableWrap.innerHTML = `
+              <table class="tbl">
+                <thead><tr><th>目標の水量</th><th>必要な製剤量</th></tr></thead>
+                <tbody>${rows}</tbody>
+              </table>`;
+            resNote.textContent = "※ 粉剤・水和剤など「水◯Lに対して◯g（mL）」表記の換算に適します。";
+          }
+        }
+
+        calc();
+      })();
+    </script>
+
+  </article>
+
+  <aside class="article-sidebar">
+    <!-- おすすめ記事 -->
+    <section>
+      <h3>おすすめ記事</h3>
+      <ul>
+        <li>/fertilizer-basics/肥料の三要素と主要肥料一覧（まとめ）</a></li>
+        <li>/soil-ph-guide/土の酸度（pH）と石灰の基礎</a></li>
+      </ul>
+
+
+
+
+
+    
   </article>
 
   <!--ここからサイドバー-->
