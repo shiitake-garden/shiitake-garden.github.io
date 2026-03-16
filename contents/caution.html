@@ -10,281 +10,253 @@ title: カルティベーションラボ
 <body>
 <!--ここから記事-->
 <section class="article-layout">
-
   <article class="article-main">
 
- <h1>農薬希釈計算ツール</h1>
-    <p>家庭菜園・園芸向けに、<strong>希釈倍率モード</strong>と<strong>規定量モード</strong>（「水10Lに◯g（mL）」の指示を換算）の2通りで計算できます。数値を入れると即時計算されます。</p>
+    <header>
+      <h1>身近な庭の植物に潜む「毒」と「薬」—安全に楽しむための基礎知識</h1>
+      <p class="lead">
+        庭や花壇には、目を楽しませてくれる一方で<strong>毒性をもつ植物</strong>が少なくありません。また、古くから民間で「薬草」として親しまれてきた植物もあります。
+        本ページでは、危険をいたずらに煽らず、<strong>正しく知って安全に付き合う</strong>ための基礎情報を整理しました。
+        とくに<strong>子ども・ペットのいるご家庭</strong>では、誤食・誤飲の回避と処分方法の理解が安心につながります。
+      </p>
 
-    <details>
-      <summary>使い方（クリックで開閉）</summary>
+      <aside class="notice -safety">
+        <p><strong>重要な方針：</strong>本記事は<strong>教育・啓発目的</strong>です。記載は歴史的・民俗的な「利用例」や安全配慮の基礎知識にとどめ、<strong>摂取・外用・治療効果の断定や推奨は行いません</strong>。体調・既往症・妊娠中・通院中の方は、植物成分が医薬品に干渉する場合があります。体への適用は<strong>医療専門家に相談</strong>してください。</p>
+      </aside>
+    </header>
+
+
+ <!-- 1. 有毒植物一覧 -->
+    <section id="toxic-plants">
+      <h2>1. 毒がある植物（家庭園芸で身近な例）</h2>
+      <p>家庭で出会いやすい有毒植物を、<strong>毒のある部位</strong>・<strong>接触の可否</strong>・<strong>誤食注意／処分のポイント</strong>とあわせて一覧にしました。<br>
+      触れて問題ないものもありますが、<strong>「触れても安全」＝「食べてよい」ではありません</strong>。剪定や掘り上げの際は手袋を推奨します。</p>
+
+      <div class="table-wrapper">
+        <table>
+          <caption>有毒植物一覧（教育・啓発目的）</caption>
+          <thead>
+            <tr>
+              <th>植物名</th>
+              <th>毒のある部位</th>
+              <th>接触の可否</th>
+              <th>誤食注意・処分方法</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>スイセン</td>
+              <td>全草（特に球根）</td>
+              <td>触れても概ね安全</td>
+              <td>ニラやノビルと間違えやすい。処分時は他の野菜と混ざらないよう袋を分け、一般ゴミへ。</td>
+            </tr>
+            <tr>
+              <td>スズラン</td>
+              <td>全草（特に花・根）</td>
+              <td>触れるのはOK</td>
+              <td>生けていた水も毒になります。ペットや子供が飲まないよう注意。</td>
+            </tr>
+            <tr>
+              <td>クリスマスローズ</td>
+              <td>全草（特に根・茎）</td>
+              <td>皮膚炎の恐れあり</td>
+              <td>植え替えや剪定時は手袋必須。汁液が肌に付くと被れることがあります。</td>
+            </tr>
+            <tr>
+              <td>キョウチクトウ</td>
+              <td>全草（枝・葉・花）</td>
+              <td>危険</td>
+              <td>非常に強い毒。燃やした煙を吸うのも危険なため、家庭で焼却せず自治体のゴミ回収へ。</td>
+            </tr>
+            <tr>
+              <td>アサガオ</td>
+              <td>種子</td>
+              <td>触れても安全</td>
+              <td>下剤成分が含まれます。お子様が種を口に入れないよう、種取り時は注意してください。</td>
+            </tr>
+            <tr>
+              <td>アジサイ</td>
+              <td>つぼみ・葉・根</td>
+              <td>触れても安全</td>
+              <td>料理の飾りに出され、誤食する事故が毎年起きています。絶対に食べないこと。</td>
+            </tr>
+            <tr>
+              <td>ヒガンバナ</td>
+              <td>全草（特に球根）</td>
+              <td>触れても概ね安全</td>
+              <td>誤食防止のため球根の掘り上げ時は手袋着用し持ち帰らない。</td>
+            </tr>
+            <tr>
+              <td>ジンチョウゲ</td>
+              <td>樹皮・葉・実</td>
+              <td>触れても概ね安全</td>
+              <td>剪定後は手洗いを徹底。切り枝は子供やペットの届かないよう処分。</td>
+            </tr>
+            <tr>
+              <td>アイビー（ヘデラ）</td>
+              <td>葉・実</td>
+              <td>触れても安全</td>
+              <td>実に毒性あり。室内栽培では結実させない管理を。</td>
+            </tr>
+            <tr>
+              <td>ポインセチア</td>
+              <td>樹液</td>
+              <td>皮膚炎の恐れあり</td>
+              <td>切り口の白い汁に注意。剪定時は手袋着用。</td>
+            </tr>
+            <tr>
+              <td>ヒヤシンス</td>
+              <td>球根</td>
+              <td>皮膚炎の恐れあり</td>
+              <td>球根処理時は手袋着用。誤食防止のため子供の手の届かない場所で管理。</td>
+            </tr>
+            <tr>
+              <td>ラッパスイセン</td>
+              <td>全草（特に球根）</td>
+              <td>触れても概ね安全</td>
+              <td>食用ネギ類との混植や混同を避ける。</td>
+            </tr>
+            <tr>
+              <td>カロライナジャスミン</td>
+              <td>全草</td>
+              <td>危険</td>
+              <td>非常に強い毒性。ジャスミン茶などと混同しない。</td>
+            </tr>
+            <tr>
+              <td>トリカブト</td>
+              <td>全草</td>
+              <td>非常に危険</td>
+              <td>園芸でも極めて強い毒。家庭栽培は避ける。見かけても触れず専門機関に相談。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note">※「触れても安全」は<strong>経口摂取の安全を意味しません</strong>。食用と観賞用の区別を徹底し、台所や食品と<strong>物理的に混在させない</strong>ことが重要です。</p>
+    </section>
+
+    <!-- 2. 民間で親しまれてきた植物（薬の文脈：歴史・伝承の紹介に限定） -->
+    <section id="folk-medicine">
+      <h2>2. 【薬】伝統的に親しまれてきた植物（歴史・伝承の紹介）</h2>
+      <p>
+        ここでは「民間療法として<strong>歴史的に</strong>親しまれてきた」という事実関係に限って紹介します。<br>
+        効果の感じ方には個人差があり、現代医療における位置づけも様々です。<strong>摂取・外用などの具体的実践は勧めません</strong>。
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <caption>民間で語られてきた代表例（伝承の紹介）</caption>
+          <thead>
+            <tr>
+              <th>植物名</th>
+              <th>伝承されてきた扱い・用途</th>
+              <th>備考（安全配慮）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ドクダミ（十薬）</td>
+              <td>乾燥させて茶として用いられてきた、解毒・利尿の助けになると<strong>伝えられている</strong></td>
+              <td>香りが強い植物。体への適用は医療専門家へ相談。</td>
+            </tr>
+            <tr>
+              <td>アロエベラ／キダチアロエ</td>
+              <td>葉肉のゼリーについて、やけど・皮膚の外用、健胃などに<strong>用いられた記録がある</strong></td>
+              <td>品種や体質で反応が異なる可能性。安易な外用・摂取は控える。</td>
+            </tr>
+            <tr>
+              <td>ビワ</td>
+              <td>葉を乾燥させた茶が<strong>民間で親しまれてきた</strong></td>
+              <td>現代では健康効果の断定はできません。相互作用に注意。</td>
+            </tr>
+            <tr>
+              <td>シソ（紫蘇）</td>
+              <td>食文化とともに、防腐や香味、気分を整えるなどの<strong>伝承</strong>がある</td>
+              <td>アレルギー体質など個人差に留意。</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="notice -disclaimer">
+        <p><strong>免責：</strong>上記は歴史・民俗上の伝承をまとめたもので、<strong>医療上の効能を保証しません</strong>。試す場合は自己判断で行わず、専門家の指示に従ってください。</p>
+      </aside>
+    </section>
+
+    <!-- 3. 薬草をお茶に…掲載方針 -->
+    <section id="herbal-tea-policy">
+      <h2>3. 「薬草をお茶にする」——本サイトの掲載方針</h2>
+      <p>
+        ご提供いただいた資料には、洗浄・乾燥・焙煎・抽出などの工程が記されています。<br>
+        しかし本サイトでは<strong>安全最優先</strong>のため、<strong>具体的な手順・分量・飲用方法は掲載しません</strong>。歴史的に「そのような工程が言及されてきた」という<strong>概説</strong>にとどめ、実践は医療・食の専門家に相談してください。
+      </p>
       <ul>
-        <li><strong>倍率モード</strong>：ラベルに「1000倍」などの記載がある場合に使います。<br>式：<code>原液量(mL) = 作りたい合計量(mL) ÷ 倍率</code> ／ <code>水量 = 合計量 − 原液量</code></li>
-        <li><strong>規定量モード</strong>：粉剤・水和剤などで「水10Lに◯g（mL）」のような指定を任意の水量へ比例換算します。<br>式：<code>必要量 = 目標の水量 ÷ 基準の水量 × 基準の製剤量</code></li>
-        <li>表示単位はmL（体積）またはg（質量）を選べます。必要に応じてスプーンやシリンジ（注射器）等で正確に量ってください。</li>
+        <li>一般に語られてきた工程の名称例：<em>収穫 / 洗浄 / 乾燥 / 焙煎 / 抽出</em></li>
+        <li>妊娠中・持病・通院中は<strong>必ず</strong>医師へ相談</li>
+        <li>子ども・ペットが届かない保管と、<strong>食品との物理的分離</strong>を徹底</li>
       </ul>
-    </details>
+    </section>
 
-    <style>
-      .tool-wrap{border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin:16px 0;background:#fafafa}
-      .tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-      .tool-grid .full{grid-column:1/-1}
-      .field{display:flex;flex-direction:column;gap:6px}
-      .field label{font-weight:600}
-      .row{display:flex;gap:8px;align-items:center}
-      .btns{display:flex;flex-wrap:wrap;gap:8px}
-      button.preset{padding:6px 10px;border:1px solid #94a3b8;background:#fff;border-radius:6px;cursor:pointer}
-      button.preset:hover{background:#f1f5f9}
-      .result{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px}
-      .result h3{margin:.2em 0 .4em}
-      .muted{color:#64748b;font-size:.92em}
-      table.tbl{width:100%;border-collapse:collapse;margin-top:8px}
-      .tbl th,.tbl td{border:1px solid #e5e7eb;padding:8px;text-align:left}
-      .warn{background:#fff7ed;border-left:4px solid #fb923c;padding:10px;margin-top:16px}
-      @media (max-width:800px){.tool-grid{grid-template-columns:1fr}}
-    </style>
+    <!-- 4. 混同注意！間違えやすい組み合わせ -->
+    <section id="look-alikes">
+      <h2>4. 混同注意！間違えやすい「そっくりさん」</h2>
+      <p>誤食事故の多くは、外見が似た植物の取り違えから起こります。<strong>匂い・生育環境・断面の違い</strong>など、複数の指標で見分けましょう。</p>
 
-    <div class="tool-wrap" id="pesticideTool">
-      <div class="field">
-        <label>モード</label>
-        <div class="row">
-          <label><input type="radio" name="mode" value="倍率" checked> 倍率モード</label>
-          <label><input type="radio" name="mode" value="規定量"> 規定量モード（「水10Lに◯g（mL）」）</label>
-        </div>
+      <div class="table-wrapper">
+        <table>
+          <caption>取り違えやすい組み合わせ（予防のポイント）</caption>
+          <thead>
+            <tr>
+              <th>安全側／食用として知られる例</th>
+              <th>取り違えやすい有毒種</th>
+              <th>見分けのヒント</th>
+              <th>注意事項</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>ニラ</td>
+              <td>スイセン</td>
+              <td>ニラは<strong>強いニラ臭</strong>。スイセンは<strong>揉んでもニラ臭がしない</strong>。</td>
+              <td>畑・台所へ混入させない。葉だけで判断せず球根・匂いで確認。</td>
+            </tr>
+            <tr>
+              <td>ミツバ</td>
+              <td>キツネノボタン</td>
+              <td>湿った場所に生える点が似る。キツネノボタンは果実が<strong>トゲ状</strong>に見える段階がある。</td>
+              <td>野外採取は避ける。観賞用と食材を<strong>明確に分離</strong>。</td>
+            </tr>
+            <tr>
+              <td>ゴボウ</td>
+              <td>チョウセンアサガオ</td>
+              <td>根の見た目が似ることがある。葉・花・種子の形が大きく異なる。</td>
+              <td>根だけで判断しない。未知の根菜は<strong>口にしない</strong>。</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+    </section>
 
-      <!-- 倍率モード -->
-      <div id="modeA" class="tool-grid">
-        <div class="field">
-          <label for="ratio">希釈倍率</label>
-          <div class="row">
-            <input id="ratio" type="number" inputmode="numeric" min="1" step="1" value="1000" style="width:120px">
-            <div class="btns">
-              <button class="preset" data-r="100">100倍</button>
-              <button class="preset" data-r="200">200倍</button>
-              <button class="preset" data-r="500">500倍</button>
-              <button class="preset" data-r="1000">1000倍</button>
-            </div>
-          </div>
-        </div>
+    <!-- 5. 結び -->
+    <section id="closing">
+      <h2>おわりに—「怖がりすぎず、油断しない」ために</h2>
+      <p>
+        有毒植物は自然界では珍しくありません。庭にあること自体が直ちに危険というわけではなく、<strong>性質を知って適切に扱う</strong>ことが肝心です。
+        ラベル管理、手袋・ハサミの洗浄、食品との<strong>保管分離</strong>、子ども・ペットの<strong>アクセス制限</strong>を習慣化しましょう。
+      </p>
+      <ul>
+        <li>名前が分からない植物は<strong>口にしない・触れない・人に渡さない</strong></li>
+        <li>剪定・掘り上げは<strong>手袋＋目・口を触らない</strong>を徹底</li>
+        <li>処分は<strong>自治体のルール</strong>に従い、焼却は避ける</li>
+        <li>異常を感じたら<strong>速やかに医療機関に相談</strong></li>
+      </ul>
+      <p>本ページが、家庭の園芸をより安全で楽しいものにする一助になれば幸いです。</p>
+    </section>
 
-        <div class="field">
-          <label for="totalVal">作りたい合計量</label>
-          <div class="row">
-            <input id="totalVal" type="number" inputmode="decimal" value="1000" step="1" min="1" style="width:140px">
-            <select id="totalUnit">
-              <option value="mL" selected>mL（ミリリットル）</option>
-              <option value="L">L（リットル）</option>
-            </select>
-          </div>
-          <div class="muted">※合計量＝出来上がりの希釈液の総量（原液＋水）</div>
-        </div>
-      </div>
 
-      <!-- 規定量モード -->
-      <div id="modeB" class="tool-grid" style="display:none">
-        <div class="field">
-          <label>基準（ラベルの記載）</label>
-          <div class="row">
-            <span>水</span>
-            <input id="refWater" type="number" inputmode="decimal" value="10" step="0.1" min="0.1" style="width:100px">
-            <select id="refWaterUnit">
-              <option value="L" selected>L</option>
-              <option value="mL">mL</option>
-            </select>
-            <span>に対して 製剤</span>
-            <input id="refDose" type="number" inputmode="decimal" value="20" step="0.1" min="0" style="width:100px">
-            <select id="refDoseUnit">
-              <option value="g" selected>g</option>
-              <option value="mL">mL</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>作りたい水量（目標）</label>
-          <div class="row">
-            <input id="targetWater" type="number" inputmode="decimal" value="5" step="0.1" min="0.1" style="width:120px">
-            <select id="targetWaterUnit">
-              <option value="L" selected>L</option>
-              <option value="mL">mL</option>
-            </select>
-          </div>
-          <div class="muted">※このモードでは「水の量」を基準に比例換算します。</div>
-        </div>
-      </div>
-
-      <div class="tool-grid">
-        <div class="field">
-          <label for="rounding">端数処理</label>
-          <select id="rounding" style="max-width:200px">
-            <option value="round" selected>四捨五入</option>
-            <option value="ceil">切り上げ</option>
-            <option value="floor">切り捨て</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label for="digits">小数点以下の桁数</label>
-          <input id="digits" type="number" min="0" max="3" value="1" step="1" style="max-width:120px">
-        </div>
-      </div>
-
-      <div class="result" id="resultBox">
-        <h3>計算結果</h3>
-        <div id="resMain">入力値を変更するとここに表示されます。</div>
-        <div id="resTableWrap"></div>
-        <div class="muted" id="resNote"></div>
-      </div>
-
-      <div class="warn">
-        <strong>注意・免責：</strong>
-        <ul>
-          <li>必ず製品ラベル・適用作物・使用時期・使用量等の指示に従ってください（法令・地域ルールも遵守）。</li>
-          <li>本ツールは家庭向けの目安です。必要に応じてメスシリンダー／シリンジ等で<strong>正確に計量</strong>してください。</li>
-          <li>「合計量＝原液＋水」で計算しています（体積加成の近似）。高精度が要求される場合はラベルの手順を優先。</li>
-          <li>混用・散布条件（気温・日射・pHなど）により薬害の恐れがあります。必ず小面積で試験散布して確認してください。</li>
-        </ul>
-      </div>
-    </div>
-
-    <script>
-      (() => {
-        const $ = (id) => document.getElementById(id);
-        const modeRadios = document.querySelectorAll('input[name="mode"]');
-        const modeA = $("modeA");
-        const modeB = $("modeB");
-        const ratio = $("ratio");
-        const totalVal = $("totalVal");
-        const totalUnit = $("totalUnit");
-
-        const refWater = $("refWater");
-        const refWaterUnit = $("refWaterUnit");
-        const refDose = $("refDose");
-        const refDoseUnit = $("refDoseUnit");
-        const targetWater = $("targetWater");
-        const targetWaterUnit = $("targetWaterUnit");
-
-        const rounding = $("rounding");
-        const digits = $("digits");
-        const resMain = $("resMain");
-        const resTableWrap = $("resTableWrap");
-        const resNote = $("resNote");
-
-        // プリセット倍率
-        document.querySelectorAll('button.preset').forEach(btn => {
-          btn.addEventListener('click', () => {
-            ratio.value = btn.dataset.r;
-            calc();
-          });
-        });
-
-        // モード切替
-        modeRadios.forEach(r => {
-          r.addEventListener('change', () => {
-            const isA = r.value === "倍率" && r.checked;
-            modeA.style.display = isA ? "" : "none";
-            modeB.style.display = isA ? "none" : "";
-            calc();
-          });
-        });
-
-        // 共通：入力変更イベント
-        [ratio, totalVal, totalUnit,
-         refWater, refWaterUnit, refDose, refDoseUnit,
-         targetWater, targetWaterUnit,
-         rounding, digits].forEach(el => {
-          el.addEventListener('input', calc);
-        });
-
-        function toMilliLiters(val, unit){
-          const n = Number(val);
-          if(!isFinite(n) || n <= 0) return NaN;
-          return unit === 'L' ? n * 1000 : n;
-        }
-
-        function format(val){
-          const d = Math.min(Math.max(parseInt(digits.value||0,10),0),3);
-          const fn = rounding.value;
-          const m = Math.pow(10, d);
-          let num = Number(val);
-          if(!isFinite(num)) return "-";
-          if(fn === "ceil") num = Math.ceil(num * m) / m;
-          else if(fn === "floor") num = Math.floor(num * m) / m;
-          else num = Math.round(num * m) / m;
-          return num.toFixed(d);
-        }
-
-        function calc(){
-          const mode = [...modeRadios].find(r=>r.checked)?.value || "倍率";
-          resTableWrap.innerHTML = "";
-          resNote.textContent = "";
-
-          if(mode === "倍率"){
-            const R = Number(ratio.value);
-            const T = toMilliLiters(totalVal.value, totalUnit.value);
-            if(!isFinite(R) || R <= 0 || !isFinite(T) || T <= 0){
-              resMain.textContent = "入力値を確認してください。";
-              return;
-            }
-            const product_mL = T / R;
-            const water_mL = T - product_mL;
-
-            resMain.innerHTML = `
-              <p><strong>原液（製剤）量：</strong> ${format(product_mL)} mL</p>
-              <p><strong>水の量：</strong> ${format(water_mL)} mL</p>
-              <p class="muted">合計 ${format(T)} mL（= ${format(T/1000)} L）</p>
-            `;
-
-            // 目安表（固定サイズ：500mL / 1L / 5L）
-            const sizes = [500, 1000, 5000];
-            const rows = sizes.map(s => {
-              const p = s / R;
-              const w = s - p;
-              return `<tr><td>${s} mL</td><td>${format(p)} mL</td><td>${format(w)} mL</td></tr>`;
-            }).join("");
-            resTableWrap.innerHTML = `
-              <table class="tbl">
-                <thead><tr><th>作る量</th><th>原液量</th><th>水量</th></tr></thead>
-                <tbody>${rows}</tbody>
-              </table>`;
-            resNote.textContent = "※ 体積加成の近似で計算しています。高精度が必要な場合は製品ラベルの手順を優先してください。";
-          }else{
-            // 規定量モード：比例換算
-            const RW = toMilliLiters(refWater.value, refWaterUnit.value);
-            const RD = Number(refDose.value);
-            const TW = toMilliLiters(targetWater.value, targetWaterUnit.value);
-            if(!isFinite(RW) || RW <= 0 || !isFinite(RD) || RD < 0 || !isFinite(TW) || TW <= 0){
-              resMain.textContent = "入力値を確認してください。";
-              return;
-            }
-            const need = TW / RW * RD; // g または mL
-            const doseUnit = refDoseUnit.value; // g or mL
-            resMain.innerHTML = `
-              <p><strong>必要な製剤量：</strong> ${format(need)} ${doseUnit}</p>
-              <p><strong>水の量：</strong> ${format(TW)} mL（= ${format(TW/1000)} L）</p>
-              <p class="muted">基準：水 ${format(RW)} mL に対して 製剤 ${format(RD)} ${doseUnit}</p>
-            `;
-
-            // 目安表：500mL / 1L / 5L の水量での必要量
-            const sizes = [500, 1000, 5000];
-            const rows = sizes.map(s => {
-              const n = s / RW * RD;
-              return `<tr><td>水 ${s} mL</td><td>${format(n)} ${doseUnit}</td></tr>`;
-            }).join("");
-            resTableWrap.innerHTML = `
-              <table class="tbl">
-                <thead><tr><th>目標の水量</th><th>必要な製剤量</th></tr></thead>
-                <tbody>${rows}</tbody>
-              </table>`;
-            resNote.textContent = "※ 粉剤・水和剤など「水◯Lに対して◯g（mL）」表記の換算に適します。";
-          }
-        }
-
-        calc();
-      })();
-    </script>
-
+    
+    
+    
   </article>
   <!--ここからサイドバー-->
   <aside class="article-sidebar">
