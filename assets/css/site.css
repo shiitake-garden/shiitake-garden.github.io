@@ -25,6 +25,55 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
   margin-bottom: 4px;     /* タイトルとの隙間を最小限に */
 }
 
+/*-----トップ　コーヒーカス   ---*/
+/* === コーヒーカス特集セクション === */
+.coffee-section {
+  margin: 40px 0;
+  padding: 20px;
+  background: #f7f5f2;
+  border-radius: 10px;
+}
+
+.coffee-section h2 {
+  font-size: 1.6em;
+  margin-bottom: 10px;
+}
+
+.section-desc {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.coffee-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.coffee-card {
+  flex: 1 1 250px;
+  background: white;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: 0.2s;
+}
+
+.coffee-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.card-content {
+  padding: 15px;
+}
+
+.coffee-card h3 {
+  margin-bottom: 8px;
+}
+
+
 /* ---- こんな方に向いています ---- */
 
 .for-you-wrapper {
@@ -316,6 +365,26 @@ section .content-list a:hover {
   }
 }
 
+/* スマホ最適化 */
+@media (max-width: 768px) {
+
+  .coffee-cards {
+    flex-direction: column;
+  }
+
+  .coffee-card {
+    width: 100%;
+  }
+
+  .coffee-section {
+    padding: 15px;
+  }
+
+  .coffee-section h2 {
+    font-size: 1.4em;
+  }
+
+}
 
 
 
