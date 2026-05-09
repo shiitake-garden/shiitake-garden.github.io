@@ -80,6 +80,41 @@ h2{border-left:3px solid var(--brand); padding-left:10px}
   border-radius: 10px 10px 0 0;
 }
 
+/*-----おすすめコンテンツ---------*/
+.recommend-section {
+  margin: 40px 0;
+}
+
+.recommend-section h2 {
+  margin-bottom: 15px;
+}
+
+/* グリッドで5列 */
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 15px;
+}
+
+/* カード */
+.recommend-card {
+  text-decoration: none;
+  color: #333;
+  display: block;
+}
+
+.recommend-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.recommend-card p {
+  font-size: 0.9em;
+  margin-top: 5px;
+}
+
 /* ---- こんな方に向いています ---- */
 
 .for-you-wrapper {
@@ -388,6 +423,18 @@ section .content-list a:hover {
 
   .coffee-section h2 {
     font-size: 1.4em;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .recommend-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .recommend-card img {
+    height: 90px;
   }
 
 }
