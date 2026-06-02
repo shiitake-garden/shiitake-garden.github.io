@@ -439,5 +439,24 @@ section .content-list a:hover {
 
 }
 
+/＊コーヒーカスたい肥用＊/
+
+.image-box {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.image-box img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.caption {
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 5px;
+}
+
 
 
