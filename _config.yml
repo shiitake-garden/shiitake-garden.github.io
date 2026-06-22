@@ -1,2 +1,5 @@
 title: Shiitake Garden
 description: 園芸データ検索サイト
+collections:
+  diary:
+    output: true
