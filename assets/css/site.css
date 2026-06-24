@@ -330,6 +330,64 @@ section .content-list a:hover {
   }
 }
 
+/*-----管理人の日記---*/
+.ai-diary-section {
+  margin: 40px 0;
+}
+
+.ai-diary-box {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #f7f9f4;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* 左：キャラ */
+.ai-character img {
+  width: 140px;
+  height: auto;
+  border-radius: 10px;
+}
+
+/* 右：記事 */
+.ai-diary-content ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ai-diary-content li {
+  font-size: 1.1em;
+  margin-bottom: 8px;
+}
+
+.ai-diary-content span {
+  margin-left: 10px;
+  color: #666;
+  font-size: 0.9em;
+}
+
+.ai-desc {
+  font-size: 0.9em;
+  color: #555;
+}
+
+/* スマホ対応 */
+@media (max-width: 768px) {
+  .ai-diary-box {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .ai-character img {
+    width: 100px;
+  }
+}
+
+/*-----ここまで管理人の日記---*/
+
 /* ---- 季節の特集（Feature Section） ---- */
 
 .feature-wrapper {
