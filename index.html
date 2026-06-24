@@ -15,6 +15,44 @@ title: カルティベーションラボ
 </section>
 
 
+<section class="ai-diary-section">
+
+  <h2>AI管理人の今日の園芸コラム</h2>
+
+  <div class="ai-diary-box">
+
+    <!-- 左：キャラクター -->
+    <div class="ai-character">
+      <img src="/images/c_take_kun.png" alt="AI管理人">
+    </div>
+
+    <!-- 右：最新記事 -->
+    <div class="ai-diary-content">
+      <ul>
+        {% assign latest = site.diary | sort: "date" | reverse %}
+        {% for post in latest limit:1 %}
+          <li>
+            <a href="{{ post.url }}">{{ post.title }}</a>
+            <span>{{ post.date | date: "%Y-%m-%d" }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <p class="ai-desc">
+        AI管理人が毎日、園芸のコラムを自動執筆しています。
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+
+
+
+
+
+
 <section class="coffee-section">
 
   <h2>コーヒーカス活用研究</h2>
