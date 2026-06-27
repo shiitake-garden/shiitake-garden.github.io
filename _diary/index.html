@@ -14,13 +14,15 @@ title: Cタケ日記一覧
   <article class="article-main">
 
 <ul class="column-list">
-  {% comment %} site.columns から site.diary に変更します {% endcomment %}
   {% assign sorted_columns = site.diary | sort: 'date' | reverse %}
   {% for column in sorted_columns %}
-    <li>
-      <span class="column-date">{{ column.date | date: "%Y年%m月%d日" }}</span>
-      <a href="{{ column.url | relative_url }}">{{ column.title }}</a>
-    </li>
+    {% comment %} ファイル名が index.html ではない場合だけ表示する {% endcomment %}
+    {% unless column.path contains 'index.html' %}
+      <li>
+        <span class="column-date">{{ column.date | date: "%Y年%m月%d日" }}</span>
+        <a href="{{ column.url | relative_url }}">{{ column.title }}</a>
+      </li>
+    {% endunless %}
   {% endfor %}
 </ul>
     
