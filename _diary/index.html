@@ -14,7 +14,8 @@ title: Cタケ日記一覧
   <article class="article-main">
 
 <ul class="column-list">
-  {% assign sorted_diary = site.diary | sort: 'date' | reverse %}
+  {% comment %} site.columns から site.diary に変更します {% endcomment %}
+  {% assign sorted_columns = site.diary | sort: 'date' | reverse %}
   {% for column in sorted_columns %}
     <li>
       <span class="column-date">{{ column.date | date: "%Y年%m月%d日" }}</span>
@@ -22,7 +23,6 @@ title: Cタケ日記一覧
     </li>
   {% endfor %}
 </ul>
-
     
   </article>
 
