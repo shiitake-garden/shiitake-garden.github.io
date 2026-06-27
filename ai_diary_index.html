@@ -1,0 +1,61 @@
+---
+layout: default_care
+title: Cタケ日記一覧
+---
+
+
+<!doctype html>
+<html lang="ja">
+
+<body>
+<!--ここから記事-->
+<section class="article-layout">
+
+  <article class="article-main">
+
+<ul class="column-list">
+  {% assign sorted_columns = site.diary | sort: 'date' | reverse %}
+  {% for column in sorted_columns %}
+    {% comment %} ファイル名が index.html ではない場合だけ表示する {% endcomment %}
+    {% unless column.path contains 'index.html' %}
+      <li>
+        <span class="column-date">{{ column.date | date: "%Y年%m月%d日" }}</span>
+        <a href="{{ column.url | relative_url }}">{{ column.title }}</a>
+      </li>
+    {% endunless %}
+  {% endfor %}
+</ul>
+    
+  </article>
+
+  <!--ここからサイドバー-->
+  <aside class="article-sidebar">
+
+    <div class="sidebar-block">
+      <h3>おすすめ記事</h3>
+      <ul>
+        <!--
+        <li><a href="#">家庭菜園の病害虫対策</a></li>
+        <li><a href="#">果樹の年間作業カレンダー</a></li>
+        <li><a href="#">初心者向け農薬の選び方</a></li>
+        -->
+      </ul>
+    </div>
+
+    <div class="sidebar-block">
+      <h3>おすすめ商品</h3>
+      <!-- Amazonアフィリエイトリンクをここに -->
+    </div>
+
+    <div class="sidebar-block">
+      <h3>広告</h3>
+      <!-- AdSense広告枠 -->
+
+    </div>
+
+  </aside>
+
+</section>
+
+</body>
+</html>
